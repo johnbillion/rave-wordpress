@@ -40,16 +40,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Download WordPress GitHub artifact
+      - name: Download artifacts
         uses: actions/download-artifact@v4
-        with:
-          name: wordpress-github
-          path: wordpress-github.zip
-      - name: Download WordPress.org artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: wordpress-org
-          path: wordpress-org.zip
+      - name: Debug artifacts
+        run: |
+          ls -l
       - name: Extract everything
         run: |
           unzip wordpress-github.zip -d wordpress-github
