@@ -45,6 +45,8 @@ jobs:
       - name: Debug artifacts
         run: |
           ls -l
+          ls -l wordpress-github
+          ls -l wordpress-org
       - name: Extract everything
         run: |
           unzip wordpress-github.zip -d wordpress-github
