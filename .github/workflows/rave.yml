@@ -9,6 +9,7 @@ on:
 
 jobs:
   download_wordpress_github:
+    name: Download WordPress from GitHub
     runs-on: ubuntu-latest
     steps:
       - name: Download build from GitHub
@@ -21,6 +22,7 @@ jobs:
           path: wordpress-github.zip
 
   download_wordpress_org:
+    name: Download WordPress from wordpress.org
     runs-on: ubuntu-latest
     steps:
       - name: Download distribution file from wordpress.org
@@ -33,6 +35,7 @@ jobs:
           path: wordpress-org.zip
 
   compare_files:
+    name: Compare releases
     runs-on: ubuntu-latest
     needs:
       - download_wordpress_org
