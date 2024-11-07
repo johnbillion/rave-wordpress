@@ -5,4 +5,4 @@ services:
     volumes:
       - ./source:/source:ro
       - ./distro:/distro:ro
-    command: /source /distro --exclude-directory-metadata yes
+    command: /source /distro --exclude-directory-metadata yes --text-color always
