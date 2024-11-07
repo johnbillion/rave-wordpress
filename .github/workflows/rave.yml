@@ -53,9 +53,11 @@ jobs:
       - name: Extract everything
         run: |
           unzip wordpress-github/wordpress-github.zip -d wordpress-github-files
+          mv wordpress-github-files/WordPress-${{ github.event.inputs.tag_name }} distro
           unzip wordpress-org/wordpress-org.zip -d wordpress-org-files
+          mv wordpress-org-files/wordpress source
       - name: Install diffoscope
         run: sudo apt-get install -y diffoscope
       - name: Compare files
         run: |
-          diffoscope wordpress-github-files/WordPress-${{ github.event.inputs.tag_name }} wordpress-org-files/wordpress
+          diffoscope distro source --exclude-directory-metadata yes
