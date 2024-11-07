@@ -52,10 +52,10 @@ jobs:
           ls -l wordpress-org
       - name: Extract everything
         run: |
-          unzip wordpress-github.zip -d wordpress-github
-          unzip wordpress-org.zip -d wordpress-org
+          unzip wordpress-github/wordpress-github.zip -d wordpress-github-files
+          unzip wordpress-org/wordpress-org.zip -d wordpress-org-files
       - name: Install diffoscope
         run: sudo apt-get update && sudo apt-get install -y diffoscope
       - name: Compare files
         run: |
-          diffoscope wordpress-github/WordPress-${{ github.event.inputs.tag_name }} wordpress-org/wordpress
+          diffoscope wordpress-github-files/WordPress-${{ github.event.inputs.tag_name }} wordpress-org-files/wordpress
