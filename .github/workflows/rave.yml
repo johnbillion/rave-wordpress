@@ -56,8 +56,6 @@ jobs:
           mv wordpress-github-files/WordPress-${{ github.event.inputs.tag_name }} distro
           unzip wordpress-org/wordpress-org.zip -d wordpress-org-files
           mv wordpress-org-files/wordpress source
-      - name: Install diffoscope
-        run: sudo apt-get install -y diffoscope
       - name: Compare files
         run: |
-          diffoscope distro source --exclude-directory-metadata yes
+          docker compose run diffoscope

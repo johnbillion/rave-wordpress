@@ -1,0 +1,8 @@
+services:
+  diffoscope:
+    image: registry.salsa.debian.org/reproducible-builds/diffoscope
+    container_name: diffoscope
+    volumes:
+      - ./source:/source:ro
+      - ./distro:/distro:ro
+    command: /source /distro --exclude-directory-metadata yes
