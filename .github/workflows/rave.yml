@@ -1,4 +1,4 @@
-name: Compare WordPress Releases
+name: Compare releases
 
 on:
   workflow_dispatch:
@@ -8,27 +8,27 @@ on:
         required: true
 
 jobs:
-  download_wordpress_github:
-    name: Download from GitHub
+  github-wordpress:
+    name: GitHub
     runs-on: ubuntu-latest
     steps:
       - name: Download build from GitHub
         run: |
-          wget -O wordpress-github.zip https://github.com/WordPress/WordPress/archive/refs/tags/${{ github.event.inputs.tag_name }}.zip
+          wget -O github-wordpress.zip https://github.com/WordPress/WordPress/archive/refs/tags/${{ github.event.inputs.tag_name }}.zip
       - name: Upload GitHub artifact
         uses: actions/upload-artifact@v4
         with:
-          name: wordpress-github
-          path: wordpress-github.zip
+          name: github-wordpress
+          path: github-wordpress.zip
 
-  download_wordpress_org:
-    name: Download from WordPress.org
+  wordpress-org:
+    name: WordPress.org
     runs-on: ubuntu-latest
     steps:
       - name: Download distribution file from wordpress.org
         run: |
           wget -O wordpress-org.zip https://wordpress.org/wordpress-${{ github.event.inputs.tag_name }}.zip
-      - name: Upload WordPress.org artifact
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: wordpress-org
@@ -38,8 +38,8 @@ jobs:
     name: Compare
     runs-on: ubuntu-latest
     needs:
-      - download_wordpress_org
-      - download_wordpress_github
+      - wordpress-org
+      - github-wordpress
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -48,12 +48,12 @@ jobs:
       - name: Debug artifacts
         run: |
           ls -l
-          ls -l wordpress-github
+          ls -l github-wordpress
           ls -l wordpress-org
       - name: Extract everything
         run: |
-          unzip wordpress-github/wordpress-github.zip -d wordpress-github-files
-          mv wordpress-github-files/WordPress-${{ github.event.inputs.tag_name }} distro
+          unzip github-wordpress/github-wordpress.zip -d github-wordpress-files
+          mv github-wordpress-files/WordPress-${{ github.event.inputs.tag_name }} distro
           unzip wordpress-org/wordpress-org.zip -d wordpress-org-files
           mv wordpress-org-files/wordpress source
       - name: Compare files
