@@ -18,25 +18,25 @@ RAVE stands for Reproduce And VErify.
 
 Type      | Official | Status | Source
 --------- | -------- | ------ | ------
-Package   | Yes      | Todo   | `wordpress.org/wordpress-{tag}.zip`
-Package   | Yes      | Todo   | `wordpress.org/wordpress-{tag}.tar.gz`
-Package   | Yes      | Todo   | `downloads.wordpress.org/release/wordpress-{tag}.zip`
-Package   | Yes      | Todo   | `github.com/WordPress/WordPress/archive/refs/tags/{tag}.zip`
-Package   | Yes      | Todo   | `github.com/WordPress/WordPress/archive/refs/tags/{tag}.tar.gz`
-Build     | Yes      | Todo   | `github.com/WordPress/WordPress/tree/{tag}`
-Source    | Yes      | Todo   | `github.com/WordPress/wordpress-develop/tree/{tag}/src`
-Source    | Yes      | Todo   | `core.trac.wordpress.org/browser/tags/{tag}/src?format=zip`
-Build     | Yes      | Todo   | `core.svn.wordpress.org/tags/{tag}/`
-Source    | Yes      | Todo   | `develop.svn.wordpress.org/tags/{tag}/src/`
-Build     | Yes      | Todo   | `core.git.wordpress.org` at `{tag}`
-Source    | Yes      | Todo   | `develop.git.wordpress.org` at `{tag}`
-Build     | Yes      | TBD    | `build.svn.wordpress.org` ??
-Build     | No       | Todo   | `packagist.org/packages/roots/wordpress-full` at `{tag}`
-Build     | No       | Todo   | `github.com/johnpbloch/wordpress-core/tree/{tag}`
-Build     | No       | Todo   | `packagist.org/packages/johnpbloch/wordpress` at `{tag}`
-Package   | Yes      | TBD    | `wordpress.org/latest.zip`
-Package   | Yes      | TBD    | `wordpress.org/latest.tar.gz`
-Container | No       | TBD    | `hub.docker.com/_/wordpress` at `{tag}`
+Package   | Yes      | ✅ Done   | `wordpress.org/wordpress-{tag}.zip`
+Package   | Yes      | ✅ Done   | `wordpress.org/wordpress-{tag}.tar.gz`
+Package   | Yes      | ⏳ Todo   | `downloads.wordpress.org/release/wordpress-{tag}.zip`
+Package   | Yes      | ⏳ Todo   | `downloads.wordpress.org/release/wordpress-{tag}.tar.gz`
+Package   | Yes      | ✅ Done   | `github.com/WordPress/WordPress/archive/refs/tags/{tag}.zip`
+Package   | Yes      | ⏳ Todo   | `github.com/WordPress/WordPress/archive/refs/tags/{tag}.tar.gz`
+Source    | Yes      | ✅ Done   | `github.com/WordPress/wordpress-develop/tree/{tag}/src`
+Source    | Yes      | ⏳ Todo   | `core.trac.wordpress.org/browser/tags/{tag}/src?format=zip`
+Build     | Yes      | ⏳ Todo   | `core.svn.wordpress.org/tags/{tag}/`
+Source    | Yes      | ⏳ Todo   | `develop.svn.wordpress.org/tags/{tag}/src/`
+Build     | Yes      | ⏳ Todo   | `core.git.wordpress.org` at `{tag}`
+Source    | Yes      | ⏳ Todo   | `develop.git.wordpress.org` at `{tag}`
+Build     | Yes      | 🤨 TBD    | `build.svn.wordpress.org` ??
+Build     | No       | ⏳ Todo   | `packagist.org/packages/roots/wordpress-full` at `{tag}`
+Build     | No       | ⏳ Todo   | `github.com/johnpbloch/wordpress-core/tree/{tag}`
+Build     | No       | ⏳ Todo   | `packagist.org/packages/johnpbloch/wordpress` at `{tag}`
+Package   | Yes      | 🤨 TBD    | `wordpress.org/latest.zip`
+Package   | Yes      | 🤨 TBD    | `wordpress.org/latest.tar.gz`
+Container | No       | 🤨 TBD    | `hub.docker.com/_/wordpress` at `{tag}`
 
 To investigate:
 
