@@ -17,14 +17,12 @@ jobs:
         with:
           ref: ${{ github.event.inputs.tag_name }}
           repository: WordPress/wordpress-develop
-          path: wordpress-develop
 
       - name: Set up Node.js
         uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
         with:
-          node-version-file: wordpress-develop/.nvmrc
+          node-version-file: .nvmrc
           cache: npm
-          cache-dependency-path: wordpress-develop/package-lock.json
 
       - name: Log debug information
         run: |
@@ -32,9 +30,6 @@ jobs:
           node --version
           curl --version
           git --version
-
-      - name: Switch to the WordPress directory
-        run: cd wordpress-develop
 
       - name: Install npm Dependencies
         run: npm ci
@@ -51,7 +46,7 @@ jobs:
         uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
         with:
           name: wordpress-build
-          path: wordpress-develop/build
+          path: build
           if-no-files-found: error
 
   github-wordpress:
