@@ -55,6 +55,8 @@ jobs:
     needs:
       - source
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
       - name: Download build from GitHub
         run: |
           wget -O github-wordpress.zip https://github.com/WordPress/WordPress/archive/refs/tags/${{ github.event.inputs.tag_name }}.zip
@@ -81,6 +83,8 @@ jobs:
     needs:
       - source
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
       - name: Download distribution file from wordpress.org
         run: |
           wget -O wordpress-org.zip https://wordpress.org/wordpress-${{ github.event.inputs.tag_name }}.zip
