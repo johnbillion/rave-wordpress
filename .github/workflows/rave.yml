@@ -62,12 +62,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: wordpress-build
+          path: source
       - name: Debug artifacts
         run: |
           ls -l
+          ls -l source
       - name: Extract
         run: |
-          unzip wordpress-build.zip -d source
           unzip github-wordpress.zip -d wordpress
           mv wordpress/WordPress-${{ github.event.inputs.tag_name }} distro
       - name: Compare files
@@ -83,12 +84,17 @@ jobs:
       - name: Download distribution file from wordpress.org
         run: |
           wget -O wordpress-org.zip https://wordpress.org/wordpress-${{ github.event.inputs.tag_name }}.zip
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: wordpress-build
+          path: source
       - name: Debug artifacts
         run: |
           ls -l
+          ls -l source
       - name: Extract
         run: |
-          unzip wordpress-build.zip -d source
           unzip wordpress-org.zip -d wordpress
           mv wordpress/wordpress distro
       - name: Compare files
