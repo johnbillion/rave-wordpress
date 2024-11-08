@@ -25,7 +25,7 @@ Package   | Yes      | ⏳ Todo   | `downloads.wordpress.org/release/wordpress-{
 Package   | Yes      | ✅ Done   | `github.com/WordPress/WordPress/archive/refs/tags/{tag}.zip`
 Package   | Yes      | ⏳ Todo   | `github.com/WordPress/WordPress/archive/refs/tags/{tag}.tar.gz`
 Source    | Yes      | ✅ Done   | `github.com/WordPress/wordpress-develop/tree/{tag}/src`
-Source    | Yes      | ⏳ Todo   | `core.trac.wordpress.org/browser/tags/{tag}/src?format=zip`
+Source    | Yes      | ✅ Done   | `core.trac.wordpress.org/browser/tags/{tag}/src?format=zip`
 Build     | Yes      | ⏳ Todo   | `core.svn.wordpress.org/tags/{tag}/`
 Source    | Yes      | ⏳ Todo   | `develop.svn.wordpress.org/tags/{tag}/src/`
 Build     | Yes      | ⏳ Todo   | `core.git.wordpress.org` at `{tag}`

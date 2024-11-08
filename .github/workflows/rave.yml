@@ -63,6 +63,7 @@ jobs:
           - github-wordpress
           - wordpress-org-zip
           - wordpress-org-tar
+          - wordpress-org-trac-zip
     needs:
       - source
     steps:
@@ -78,24 +79,31 @@ jobs:
       - name: Get zip file from GitHub
         if: matrix.distro == 'github-wordpress'
         run: |
-          wget -O github-wordpress.zip https://github.com/WordPress/WordPress/archive/refs/tags/${{ github.event.inputs.tag_name }}.zip
-          unzip github-wordpress.zip -d wordpress
+          wget -O distro.zip "https://github.com/WordPress/WordPress/archive/refs/tags/${{ github.event.inputs.tag_name }}.zip"
+          unzip distro.zip -d wordpress
           mv wordpress/WordPress-${{ github.event.inputs.tag_name }} distro
 
       - name: Get zip file from wordpress.org
         if: matrix.distro == 'wordpress-org-zip'
         run: |
-          wget -O wordpress-org.zip https://wordpress.org/wordpress-${{ github.event.inputs.tag_name }}.zip
-          unzip wordpress-org.zip -d wordpress
+          wget -O distro.zip "https://wordpress.org/wordpress-${{ github.event.inputs.tag_name }}.zip"
+          unzip distro.zip -d wordpress
           mv wordpress/wordpress distro
 
       - name: Get tar file from wordpress.org
         if: matrix.distro == 'wordpress-org-tar'
         run: |
-          wget -O wordpress-org.tar.gz https://wordpress.org/wordpress-6.6.2.tar.gz
+          wget -O distro.tar.gz "https://wordpress.org/wordpress-${{ github.event.inputs.tag_name }}.tar.gz"
           mkdir wordpress
-          tar -xzf wordpress-org.tar.gz -C wordpress
+          tar -xzf distro.tar.gz -C wordpress
           mv wordpress/wordpress distro
+
+      - name: Get Trac zip from wordpress.org
+        if: matrix.distro == 'wordpress-org-trac-zip'
+        run: |
+          wget -O distro.zip "https://core.trac.wordpress.org/browser/tags/${{ github.event.inputs.tag_name }}/src?format=zip"
+          unzip distro.zip -d wordpress
+          mv wordpress/src distro
 
       - name: Compare files
         run: |
