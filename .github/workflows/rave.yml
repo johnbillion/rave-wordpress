@@ -42,6 +42,11 @@ jobs:
       - name: Build WordPress
         run: npm run build
 
+      - name: Convert some line endings to CRLF
+        run: |
+          sed -i 's/$/\r/' build/license.txt
+          sed -i 's/$/\r/' build/wp-includes/images/crystal/license.txt
+
       - name: Upload artifact
         uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
         with:
