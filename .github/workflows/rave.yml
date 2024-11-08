@@ -8,54 +8,93 @@ on:
         required: true
 
 jobs:
-  github-wordpress:
-    name: GitHub
+  source:
+    name: Build source
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.tag_name }}
+          repository: WordPress/wordpress-develop
+          path: wordpress-develop
+
+      - name: Set up Node.js
+        uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
+        with:
+          node-version-file: 'wordpress-develop/.nvmrc'
+          cache: npm
+
+      - name: Log debug information
+        run: |
+          npm --version
+          node --version
+          curl --version
+          git --version
+
+      - name: Switch to the WordPress directory
+        run: cd wordpress-develop
+
+      - name: Install npm Dependencies
+        run: npm ci
+
+      - name: Run Emoji precommit task
+        run: npm run grunt precommit:emoji
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build WordPress
+        run: npm run build
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        with:
+          name: wordpress-build
+          path: wordpress-develop/build
+          if-no-files-found: error
+
+  github-wordpress:
+    name: Compare / GitHub
+    runs-on: ubuntu-latest
+    needs:
+      - source
     steps:
       - name: Download build from GitHub
         run: |
           wget -O github-wordpress.zip https://github.com/WordPress/WordPress/archive/refs/tags/${{ github.event.inputs.tag_name }}.zip
-      - name: Upload GitHub artifact
-        uses: actions/upload-artifact@v4
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
         with:
-          name: github-wordpress
-          path: github-wordpress.zip
+          name: wordpress-build
+      - name: Debug artifacts
+        run: |
+          ls -l
+      - name: Extract
+        run: |
+          unzip wordpress-build.zip -d source
+          unzip github-wordpress.zip -d wordpress
+          mv wordpress/WordPress-${{ github.event.inputs.tag_name }} distro
+      - name: Compare files
+        run: |
+          docker compose run diffoscope
 
   wordpress-org:
-    name: WordPress.org
+    name: Compare / WordPress.org
     runs-on: ubuntu-latest
+    needs:
+      - source
     steps:
       - name: Download distribution file from wordpress.org
         run: |
           wget -O wordpress-org.zip https://wordpress.org/wordpress-${{ github.event.inputs.tag_name }}.zip
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: wordpress-org
-          path: wordpress-org.zip
-
-  compare_files:
-    name: Compare
-    runs-on: ubuntu-latest
-    needs:
-      - wordpress-org
-      - github-wordpress
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
       - name: Debug artifacts
         run: |
           ls -l
-          ls -l github-wordpress
-          ls -l wordpress-org
-      - name: Extract everything
+      - name: Extract
         run: |
-          unzip github-wordpress/github-wordpress.zip -d github-wordpress-files
-          mv github-wordpress-files/WordPress-${{ github.event.inputs.tag_name }} distro
-          unzip wordpress-org/wordpress-org.zip -d wordpress-org-files
-          mv wordpress-org-files/wordpress source
+          unzip wordpress-build.zip -d source
+          unzip wordpress-org.zip -d wordpress
+          mv wordpress/wordpress distro
       - name: Compare files
         run: |
           docker compose run diffoscope
