@@ -9,7 +9,7 @@ on:
 
 jobs:
   source:
-    name: Build ${{ matrix.source }}
+    name: Build / ${{ matrix.source }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     strategy:
@@ -84,7 +84,7 @@ jobs:
           if-no-files-found: error
 
   compare:
-    name: ${{ matrix.source }} / ${{ matrix.distro }}
+    name: Compare / ${{ matrix.source }} / ${{ matrix.distro }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     strategy:
