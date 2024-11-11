@@ -63,7 +63,7 @@ jobs:
           if-no-files-found: error
 
   compare:
-    name: Compare / ${{ matrix.distro }}
+    name: ${{ matrix.method }} / ${{ matrix.distro }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     strategy:
@@ -74,6 +74,9 @@ jobs:
           - wordpress-org-zip
           - wordpress-org-tar
           - wordpress-org-trac-zip
+        method:
+          - diffoscope
+          - diff
     needs:
       - source
     steps:
@@ -135,6 +138,12 @@ jobs:
         run: |
           rm -rf distro/wp-content/plugins/akismet
 
-      - name: Compare files
+      - name: Compare files with Diffoscope
+        if: matrix.method == 'diffoscope'
         run: |
           docker compose run diffoscope
+
+      - name: Compare files with Diff
+        if: matrix.method == 'diff'
+        run: |
+          diff -r source distro
