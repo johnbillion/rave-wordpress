@@ -134,6 +134,7 @@ jobs:
 
       # @TODO this list only applies to 6.4 to 6.6
       - name: Handle known differences in bundled themes
+        if: matrix.distro != 'github-wordpress'
         run: |
           rm -rf source/wp-content/themes/twentyeleven
           rm -rf source/wp-content/themes/twentyfifteen
