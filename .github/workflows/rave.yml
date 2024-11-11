@@ -38,7 +38,9 @@ jobs:
         run: |
           wget -O distro.zip "https://core.trac.wordpress.org/browser/tags/${{ github.event.inputs.tag_name }}?format=zip"
           unzip distro.zip
+          shopt -s dotglob
           mv ${{ github.event.inputs.tag_name }}/* .
+          shopt -u dotglob
           rm -rf ${{ github.event.inputs.tag_name }}
           rm distro.zip
 
