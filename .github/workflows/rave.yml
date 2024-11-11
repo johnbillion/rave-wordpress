@@ -34,6 +34,12 @@ jobs:
       - name: Install npm Dependencies
         run: npm ci
 
+      - name: Manually fetch Twemoji list for debugging
+        run: |
+          gh api graphql -f 'query={repository(owner: "jdeckedzzz", name: "twemoji") {object(expression: "v15.0.3:assets/svg") {... on Tree {entries {name}}}}}'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Run Emoji precommit task
         run: npm run grunt precommit:emoji
         env:
