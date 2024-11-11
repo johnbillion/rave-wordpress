@@ -98,6 +98,8 @@ jobs:
           - github-wordpress
           - wordpress-org-zip
           - wordpress-org-tar
+          - downloads-wordpress-org-zip
+          - downloads-wordpress-org-tar
     needs:
       - source
     steps:
@@ -128,6 +130,21 @@ jobs:
         if: matrix.distro == 'wordpress-org-tar'
         run: |
           wget -O distro.tar.gz "https://wordpress.org/wordpress-${{ github.event.inputs.tag_name }}.tar.gz"
+          mkdir wordpress
+          tar -xzf distro.tar.gz -C wordpress
+          mv wordpress/wordpress distro
+
+      - name: Get zip file from downloads.wordpress.org
+        if: matrix.distro == 'downloads-wordpress-org-zip'
+        run: |
+          wget -O distro.zip "https://downloads.wordpress.org/release/wordpress-${{ github.event.inputs.tag_name }}.zip"
+          unzip distro.zip -d wordpress
+          mv wordpress/wordpress distro
+
+      - name: Get tar file from downloads.wordpress.org
+        if: matrix.distro == 'downloads-wordpress-org-tar'
+        run: |
+          wget -O distro.tar.gz "https://downloads.wordpress.org/release/wordpress-${{ github.event.inputs.tag_name }}.tar.gz"
           mkdir wordpress
           tar -xzf distro.tar.gz -C wordpress
           mv wordpress/wordpress distro
