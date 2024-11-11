@@ -6,10 +6,16 @@ on:
       tag_name:
         description: 'Tag name for WordPress release'
         required: true
+  push:
+    branches:
+      - trunk
+
+env:
+  WPVERSION: ${{ github.event.inputs.tag_name || '6.6.2' }}
 
 jobs:
   source:
-    name: 'Build ${{ github.event.inputs.tag_name }} / ${{ matrix.source }}'
+    name: "Build ${{ github.event.inputs.tag_name || '6.6.2' }} / ${{ matrix.source }}"
     runs-on: ubuntu-latest
     timeout-minutes: 10
     strategy:
@@ -24,24 +30,24 @@ jobs:
         if: matrix.source == 'github-wordpress-wordpress-develop'
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.tag_name }}
+          ref: ${{ env.WPVERSION }}
           repository: WordPress/wordpress-develop
 
       - name: SVN checkout develop.svn.wordpress.org
         if: matrix.source == 'develop.svn.wordpress.org'
         run: |
-          svn checkout https://develop.svn.wordpress.org/tags/${{ github.event.inputs.tag_name }} .
+          svn checkout https://develop.svn.wordpress.org/tags/${{ env.WPVERSION }} .
           rm -rf .svn
 
       - name: Download zip from core.trac.wordpress.org
         if: matrix.source == 'core.trac.wordpress.org'
         run: |
-          wget -O package.zip "https://core.trac.wordpress.org/browser/tags/${{ github.event.inputs.tag_name }}?format=zip"
+          wget -O package.zip "https://core.trac.wordpress.org/browser/tags/${{ env.WPVERSION }}?format=zip"
           unzip package.zip
           shopt -s dotglob
-          mv ${{ github.event.inputs.tag_name }}/* .
+          mv ${{ env.WPVERSION }}/* .
           shopt -u dotglob
-          rm -rf ${{ github.event.inputs.tag_name }}
+          rm -rf ${{ env.WPVERSION }}
           rm package.zip
 
       - name: Log file list
@@ -84,7 +90,7 @@ jobs:
           if-no-files-found: error
 
   compare:
-    name: 'Compare ${{ github.event.inputs.tag_name }} / Source: ${{ matrix.source }} / Package: ${{ matrix.package }}'
+    name: "Compare ${{ github.event.inputs.tag_name || '6.6.2' }} / Source: ${{ matrix.source }} / Package: ${{ matrix.package }}"
     runs-on: ubuntu-latest
     timeout-minutes: 10
     strategy:
@@ -117,29 +123,29 @@ jobs:
       - name: Get zip file from GitHub
         if: matrix.package == 'github-wordpress-wordpress-zip'
         run: |
-          wget -O package.zip "https://github.com/WordPress/WordPress/archive/refs/tags/${{ github.event.inputs.tag_name }}.zip"
+          wget -O package.zip "https://github.com/WordPress/WordPress/archive/refs/tags/${{ env.WPVERSION }}.zip"
           unzip package.zip -d wordpress
-          mv wordpress/WordPress-${{ github.event.inputs.tag_name }} package
+          mv wordpress/WordPress-${{ env.WPVERSION }} package
 
       - name: Get tar file from GitHub
         if: matrix.package == 'github-wordpress-wordpress-tar'
         run: |
-          wget -O package.tar.gz "https://github.com/WordPress/WordPress/archive/refs/tags/${{ github.event.inputs.tag_name }}.tar.gz"
+          wget -O package.tar.gz "https://github.com/WordPress/WordPress/archive/refs/tags/${{ env.WPVERSION }}.tar.gz"
           mkdir wordpress
           tar -xzf package.tar.gz -C wordpress
-          mv wordpress/WordPress-${{ github.event.inputs.tag_name }} package
+          mv wordpress/WordPress-${{ env.WPVERSION }} package
 
       - name: Get zip file from wordpress.org
         if: matrix.package == 'wordpress.org-zip'
         run: |
-          wget -O package.zip "https://wordpress.org/wordpress-${{ github.event.inputs.tag_name }}.zip"
+          wget -O package.zip "https://wordpress.org/wordpress-${{ env.WPVERSION }}.zip"
           unzip package.zip -d wordpress
           mv wordpress/wordpress package
 
       - name: Get tar file from wordpress.org
         if: matrix.package == 'wordpress.org-tar'
         run: |
-          wget -O package.tar.gz "https://wordpress.org/wordpress-${{ github.event.inputs.tag_name }}.tar.gz"
+          wget -O package.tar.gz "https://wordpress.org/wordpress-${{ env.WPVERSION }}.tar.gz"
           mkdir wordpress
           tar -xzf package.tar.gz -C wordpress
           mv wordpress/wordpress package
@@ -147,14 +153,14 @@ jobs:
       - name: Get zip file from downloads.wordpress.org
         if: matrix.package == 'downloads.wordpress.org-zip'
         run: |
-          wget -O package.zip "https://downloads.wordpress.org/release/wordpress-${{ github.event.inputs.tag_name }}.zip"
+          wget -O package.zip "https://downloads.wordpress.org/release/wordpress-${{ env.WPVERSION }}.zip"
           unzip package.zip -d wordpress
           mv wordpress/wordpress package
 
       - name: Get tar file from downloads.wordpress.org
         if: matrix.package == 'downloads.wordpress.org-tar'
         run: |
-          wget -O package.tar.gz "https://downloads.wordpress.org/release/wordpress-${{ github.event.inputs.tag_name }}.tar.gz"
+          wget -O package.tar.gz "https://downloads.wordpress.org/release/wordpress-${{ env.WPVERSION }}.tar.gz"
           mkdir wordpress
           tar -xzf package.tar.gz -C wordpress
           mv wordpress/wordpress package
@@ -162,9 +168,9 @@ jobs:
       - name: Download zip from build.trac.wordpress.org
         if: matrix.package == 'build.trac.wordpress.org'
         run: |
-          wget -O package.zip "https://build.trac.wordpress.org/browser/tags/${{ github.event.inputs.tag_name }}?format=zip"
+          wget -O package.zip "https://build.trac.wordpress.org/browser/tags/${{ env.WPVERSION }}?format=zip"
           unzip package.zip
-          mv ${{ github.event.inputs.tag_name }} package
+          mv ${{ env.WPVERSION }} package
 
       - name: Handle anomalies with build files in TT and TT1
         if: matrix.package == 'github-wordpress-wordpress-zip' || matrix.package == 'github-wordpress-wordpress-tar' || matrix.package == 'build.trac.wordpress.org'
