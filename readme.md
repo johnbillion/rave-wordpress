@@ -45,7 +45,7 @@ Package   | Yes      | ✅ Done   | `wordpress.org/wordpress-{tag}.tar.gz`
 Package   | Yes      | ✅ Done   | `downloads.wordpress.org/release/wordpress-{tag}.zip`
 Package   | Yes      | ✅ Done   | `downloads.wordpress.org/release/wordpress-{tag}.tar.gz`
 Package   | Yes      | ✅ Done   | `github.com/WordPress/WordPress/archive/refs/tags/{tag}.zip`
-Package   | Yes      | ⏳ Todo   | `github.com/WordPress/WordPress/archive/refs/tags/{tag}.tar.gz`
+Package   | Yes      | ✅ Done   | `github.com/WordPress/WordPress/archive/refs/tags/{tag}.tar.gz`
 Package   | Yes      | ✅ Done   | `build.trac.wordpress.org/browser/tags/{tag}/src?format=zip`
 Source    | Yes      | ✅ Done   | `github.com/WordPress/wordpress-develop/tree/{tag}/src`
 Source    | Yes      | ✅ Done   | `core.trac.wordpress.org/browser/tags/{tag}/src?format=zip`
