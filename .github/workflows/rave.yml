@@ -16,12 +16,12 @@ jobs:
       fail-fast: false
       matrix:
         source:
-          - github/wordpress/wordpress-develop
+          - github-wordpress-wordpress-develop
           - develop.svn.wordpress.org
           - core.trac.wordpress.org
     steps:
       - name: Checkout GitHub repository
-        if: matrix.source == 'github/wordpress/wordpress-develop'
+        if: matrix.source == 'github-wordpress-wordpress-develop'
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.inputs.tag_name }}
@@ -91,11 +91,11 @@ jobs:
       fail-fast: false
       matrix:
         source:
-          - github/wordpress/wordpress-develop
+          - github-wordpress-wordpress-develop
           - develop.svn.wordpress.org
           - core.trac.wordpress.org
         package:
-          - github/wordpress/wordpress-zip
+          - github-wordpress-wordpress-zip
           - wordpress.org-zip
           - wordpress.org-tar
           - downloads.wordpress.org-zip
@@ -113,7 +113,7 @@ jobs:
           path: source
 
       - name: Get zip file from GitHub
-        if: matrix.package == 'github/wordpress/wordpress-zip'
+        if: matrix.package == 'github-wordpress-wordpress-zip'
         run: |
           wget -O package.zip "https://github.com/WordPress/WordPress/archive/refs/tags/${{ github.event.inputs.tag_name }}.zip"
           unzip package.zip -d wordpress
@@ -150,7 +150,7 @@ jobs:
           mv wordpress/wordpress package
 
       - name: Handle anomalies with build files in TT and TT1
-        if: matrix.package == 'github/wordpress/wordpress-zip'
+        if: matrix.package == 'github-wordpress-wordpress-zip'
         run: |
           rm package/wp-content/themes/twentytwenty/.npmrc
           rm package/wp-content/themes/twentytwenty/.stylelintrc.json
@@ -161,7 +161,7 @@ jobs:
 
       # @TODO this list only applies to 6.4 to 6.6
       - name: Handle known differences in bundled themes
-        if: matrix.package != 'github/wordpress/wordpress-zip'
+        if: matrix.package != 'github-wordpress-wordpress-zip'
         run: |
           rm -rf source/wp-content/themes/twentyeleven
           rm -rf source/wp-content/themes/twentyfifteen
