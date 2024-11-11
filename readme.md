@@ -1,8 +1,8 @@
 # RAVE for WordPress
 
-RAVE is an automated tool which facilitates being able to verify that various distribution channels of WordPress are serving the legitimate code built from the canonical source code and that it hasn't been tampered with.
+RAVE is an automated tool which facilitates being able to verify that packages provided by various distribution channels of WordPress are serving the legitimate code built from the canonical source code and that it hasn't been tampered with.
 
-Tooling is included to run the verification yourself. A CI system runs on GitHub Actions which verifies a number of official sources and a number of official and unofficial distributions and compares them all against one another to identify any anomolies.
+Tooling is included to run the verification yourself. A CI system runs on GitHub Actions which verifies a number of official sources and a number of official and unofficial package distributions and compares them all against one another to identify any anomolies.
 
 RAVE stands for Reproduce And VErify.
 
