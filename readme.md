@@ -2,7 +2,7 @@
 
 RAVE is an automated tool which facilitates being able to verify that packages provided by various distribution channels of WordPress are serving the legitimate code built from the canonical source code and that it hasn't been tampered with.
 
-Tooling is included to run the verification yourself. A CI system runs on GitHub Actions which verifies a number of official sources and a number of official and unofficial package distributions and compares them all against one another to identify any anomolies.
+A CI system runs on GitHub Actions which verifies a number of official sources and a number of official and unofficial package distributions and compares them all against one another to identify any anomalies. A future version of this library will provide the tooling to run the checks outside of GitHub Actions.
 
 RAVE stands for Reproduce And VErify.
 
@@ -16,13 +16,19 @@ There are several opportunities for unofficial WordPress packages to be tampered
 
 ## How?
 
-By comparing the output of the distributed package at its various locations with the output of building the source code from its various locations, we can identify anomolies between them. This reduces the opportunity for malicious or unwanted code to be introduced into WordPress packages without it also being present in the source repos.
+By comparing the output of the distributed package at its various locations with the output of building the source code from its various locations, we can identify anomalies between them. This reduces the opportunity for malicious or unwanted code to be introduced into WordPress packages without it also being present in the source repos.
 
 ## Reproducible WordPress
 
 The process that builds and packages WordPress is reproducible, unfortunately this process itself is not open source. The process differs from the `npm run build` process in the source code because it makes some additions (eg. the Akismet plugin) and some exclusions (older default themes).
 
 ## Verifiable WordPress
+
+The WordPress.org website provides the md5 and sha1 hash of its WordPress package files. This is not enough to verify a package, because the hash only represents the zip or tar file. If WordPress.org was compromised then its published md5 and sha1 hashes could be altered too.
+
+The WordPress open source project does not make use of package signing which could be used to verify a package. See https://core.trac.wordpress.org/ticket/39309 for discussion on this topic.
+
+Therefore, this library has been created to provide a means of verifying that the contents of published packages matches the code in the official source code repos.
 
 ## What's tested?
 
@@ -47,7 +53,11 @@ Build     | No       | ⏳ Todo   | `packagist.org/packages/johnpbloch/wordpress
 Package   | Yes      | 🤨 TBD    | `wordpress.org/latest.zip`
 Package   | Yes      | 🤨 TBD    | `wordpress.org/latest.tar.gz`
 
-To investigate:
+## What's not tested?
+
+This approach does not enable detection of malicious or unwanted code that gets inserted into the Subversion or Git source code repos and makes it into the published package.
+
+## To investigate
 
 * WP-CLI
 * https://api.wordpress.org/core/version-check/1.7/
