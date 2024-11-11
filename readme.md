@@ -18,15 +18,21 @@ There are several opportunities for unofficial WordPress packages to be tampered
 
 By comparing the output of the distributed package at its various locations with the output of building the source code from its various locations, we can identify anomalies between them. This reduces the opportunity for malicious or unwanted code to be introduced into WordPress packages without it also being present in the source repos.
 
+If one of the GitHub Actions workflows in this repo fails, it should be investigated to see if the failure was caused by divergent code.
+
 ## Reproducible WordPress
 
-The process that builds and packages WordPress is reproducible, unfortunately this process itself is not open source. The process differs from the `npm run build` process in the source code because it makes some additions (eg. the Akismet plugin) and some exclusions (older default themes).
+From [reproducible-builds.org](https://reproducible-builds.org/):
+
+> Reproducible builds are a set of software development practices that create an independently-verifiable path from source to binary code.
+
+[The process that builds and packages WordPress](https://build.trac.wordpress.org/timeline) is reproducible, unfortunately the process itself is not open source. The process differs from the `npm run build` process in the source code because it makes some additions (eg. the Akismet plugin) and some exclusions (older default themes).
 
 ## Verifiable WordPress
 
-The WordPress.org website provides the md5 and sha1 hash of its WordPress package files. This is not enough to verify a package, because the hash only represents the zip or tar file. If WordPress.org was compromised then its published md5 and sha1 hashes could be altered too.
+The WordPress.org website [provides the md5 and sha1 hash of its WordPress package files](https://wordpress.org/download/releases/). This is not enough to verify a package, because the hash only represents the zip or tar file. If WordPress.org was compromised then its published md5 and sha1 hashes could also be altered.
 
-The WordPress open source project does not make use of package signing which could be used to verify a package. See https://core.trac.wordpress.org/ticket/39309 for discussion on this topic.
+The WordPress open source project does not make use of package signing which could be used to verify a package. [See ticket #39309 for discussion on this topic](https://core.trac.wordpress.org/ticket/39309).
 
 Therefore, this library has been created to provide a means of verifying that the contents of published packages matches the code in the official source code repos.
 
@@ -65,8 +71,3 @@ This approach does not enable detection of malicious or unwanted code that gets 
 * wp-env
 * What can we do with the md5 and sha1 hashes on .org?
 * The container at https://hub.docker.com/_/wordpress
-
-## Elsewhere
-
-* https://reproducible-builds.org/
-* https://core.trac.wordpress.org/ticket/39309
