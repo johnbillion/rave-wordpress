@@ -37,7 +37,7 @@ jobs:
 
       - name: Manually fetch Twemoji list for debugging
         run: |
-          gh api graphql -f 'query={repository(owner: "jdeckedzzz", name: "twemoji") {object(expression: "v15.0.3:assets/svg") {... on Tree {entries {name}}}}}'
+          gh api graphql -f 'query={repository(owner: "jdecked", name: "twemoji") {object(expression: "v15.0.3:assets/svg") {... on Tree {entries {name}}}}}'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
