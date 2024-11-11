@@ -6,11 +6,21 @@ Tooling is included to run the verification yourself. A CI system runs on GitHub
 
 RAVE stands for Reproduce And VErify.
 
-## Why?
+## Why test the official package?
+
+There are several opportunities for the official WordPress package to be tampered with so that it differs from the actual source code in the source control repos. This could come via an attack on the build server, on wordpress.org or downloads.wordpress.org, from external hackers, from those in control of the wordpress.org CDN, from disgruntled members of the meta or systems teams, from anyone who gains access to accounts or credentials of such team members, or from the project lead.
+
+## Why test unofficial packages?
+
+There are several opportunities for unofficial WordPress packages to be tampered with so they differ from the official package. This could come via an attack on the servers distributing the packages, from external hackers, from those in control of the packaging, or from anyone who gains access to accounts or credentials of people or processes involved in the packaging or distribution.
 
 ## How?
 
+By comparing the output of the distributed package at its various locations with the output of building the source code from its various locations, we can identify anomolies between them. This reduces the opportunity for malicious or unwanted code to be introduced into WordPress packages without it also being present in the source repos.
+
 ## Reproducible WordPress
+
+The process that builds and packages WordPress is reproducible, unfortunately this process itself is not open source. The process differs from the `npm run build` process in the source code because it makes some additions (eg. the Akismet plugin) and some exclusions (older default themes).
 
 ## Verifiable WordPress
 
