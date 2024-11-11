@@ -36,7 +36,6 @@ Build     | No       | ⏳ Todo   | `github.com/johnpbloch/wordpress-core/tree/{
 Build     | No       | ⏳ Todo   | `packagist.org/packages/johnpbloch/wordpress` at `{tag}`
 Package   | Yes      | 🤨 TBD    | `wordpress.org/latest.zip`
 Package   | Yes      | 🤨 TBD    | `wordpress.org/latest.tar.gz`
-Container | No       | 🤨 TBD    | `hub.docker.com/_/wordpress` at `{tag}`
 
 To investigate:
 
@@ -45,6 +44,7 @@ To investigate:
 * APT packages, eg `apt install wordpress`
 * wp-env
 * What can we do with the md5 and sha1 hashes on .org?
+* The container at https://hub.docker.com/_/wordpress
 
 ## Elsewhere
 
