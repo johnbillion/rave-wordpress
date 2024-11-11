@@ -9,7 +9,7 @@ on:
 
 jobs:
   source:
-    name: 'Build / Source: ${{ matrix.source }}'
+    name: 'Build ${{ github.event.inputs.tag_name }} / ${{ matrix.source }}'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     strategy:
@@ -84,7 +84,7 @@ jobs:
           if-no-files-found: error
 
   compare:
-    name: 'Compare / Source: ${{ matrix.source }} / Package: ${{ matrix.package }}'
+    name: 'Compare ${{ github.event.inputs.tag_name }} / Source: ${{ matrix.source }} / Package: ${{ matrix.package }}'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     strategy:
