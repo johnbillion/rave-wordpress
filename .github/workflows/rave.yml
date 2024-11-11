@@ -37,9 +37,9 @@ jobs:
         if: matrix.source == 'wordpress-org-trac'
         run: |
           wget -O distro.zip "https://core.trac.wordpress.org/browser/tags/${{ github.event.inputs.tag_name }}?format=zip"
-          unzip distro.zip -d wordpress
-          mv wordpress/${{ github.event.inputs.tag_name }} .
-          rm -rf wordpress
+          unzip distro.zip
+          mv ${{ github.event.inputs.tag_name }}/* .
+          rm -rf ${{ github.event.inputs.tag_name }}
           rm distro.zip
 
       - name: Log file list
