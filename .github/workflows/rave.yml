@@ -9,32 +9,32 @@ on:
 
 jobs:
   source:
-    name: Build / ${{ matrix.source }}
+    name: 'Build / Source: ${{ matrix.source }}'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
         source:
-          - github-wordpress-develop
-          - wordpress-org-svn
-          - wordpress-org-trac
+          - github/wordpress/wordpress-develop
+          - develop.svn.wordpress.org
+          - core.trac.wordpress.org
     steps:
       - name: Checkout GitHub repository
-        if: matrix.source == 'github-wordpress-develop'
+        if: matrix.source == 'github/wordpress/wordpress-develop'
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.inputs.tag_name }}
           repository: WordPress/wordpress-develop
 
       - name: Checkout SVN repository
-        if: matrix.source == 'wordpress-org-svn'
+        if: matrix.source == 'develop.svn.wordpress.org'
         run: |
           svn checkout https://develop.svn.wordpress.org/tags/${{ github.event.inputs.tag_name }} .
           rm -rf .svn
 
       - name: Get Trac zip from wordpress.org
-        if: matrix.source == 'wordpress-org-trac'
+        if: matrix.source == 'core.trac.wordpress.org'
         run: |
           wget -O package.zip "https://core.trac.wordpress.org/browser/tags/${{ github.event.inputs.tag_name }}?format=zip"
           unzip package.zip
@@ -84,22 +84,22 @@ jobs:
           if-no-files-found: error
 
   compare:
-    name: Compare / ${{ matrix.source }} / ${{ matrix.package }}
+    name: 'Compare / Source: ${{ matrix.source }} / Package: ${{ matrix.package }}'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
         source:
-          - github-wordpress-develop
-          - wordpress-org-svn
-          - wordpress-org-trac
+          - github/wordpress/wordpress-develop
+          - develop.svn.wordpress.org
+          - core.trac.wordpress.org
         package:
-          - github-wordpress
-          - wordpress-org-zip
-          - wordpress-org-tar
-          - downloads-wordpress-org-zip
-          - downloads-wordpress-org-tar
+          - github/wordpress/wordpress-zip
+          - wordpress.org-zip
+          - wordpress.org-tar
+          - downloads.wordpress.org-zip
+          - downloads.wordpress.org-tar
     needs:
       - source
     steps:
@@ -113,21 +113,21 @@ jobs:
           path: source
 
       - name: Get zip file from GitHub
-        if: matrix.package == 'github-wordpress'
+        if: matrix.package == 'github/wordpress/wordpress-zip'
         run: |
           wget -O package.zip "https://github.com/WordPress/WordPress/archive/refs/tags/${{ github.event.inputs.tag_name }}.zip"
           unzip package.zip -d wordpress
           mv wordpress/WordPress-${{ github.event.inputs.tag_name }} package
 
       - name: Get zip file from wordpress.org
-        if: matrix.package == 'wordpress-org-zip'
+        if: matrix.package == 'wordpress.org-zip'
         run: |
           wget -O package.zip "https://wordpress.org/wordpress-${{ github.event.inputs.tag_name }}.zip"
           unzip package.zip -d wordpress
           mv wordpress/wordpress package
 
       - name: Get tar file from wordpress.org
-        if: matrix.package == 'wordpress-org-tar'
+        if: matrix.package == 'wordpress.org-tar'
         run: |
           wget -O package.tar.gz "https://wordpress.org/wordpress-${{ github.event.inputs.tag_name }}.tar.gz"
           mkdir wordpress
@@ -135,14 +135,14 @@ jobs:
           mv wordpress/wordpress package
 
       - name: Get zip file from downloads.wordpress.org
-        if: matrix.package == 'downloads-wordpress-org-zip'
+        if: matrix.package == 'downloads.wordpress.org-zip'
         run: |
           wget -O package.zip "https://downloads.wordpress.org/release/wordpress-${{ github.event.inputs.tag_name }}.zip"
           unzip package.zip -d wordpress
           mv wordpress/wordpress package
 
       - name: Get tar file from downloads.wordpress.org
-        if: matrix.package == 'downloads-wordpress-org-tar'
+        if: matrix.package == 'downloads.wordpress.org-tar'
         run: |
           wget -O package.tar.gz "https://downloads.wordpress.org/release/wordpress-${{ github.event.inputs.tag_name }}.tar.gz"
           mkdir wordpress
@@ -151,7 +151,7 @@ jobs:
 
       # @TODO this list only applies to 6.4 to 6.6
       - name: Handle known differences in bundled themes
-        if: matrix.package != 'github-wordpress'
+        if: matrix.package != 'github/wordpress/wordpress-zip'
         run: |
           rm -rf source/wp-content/themes/twentyeleven
           rm -rf source/wp-content/themes/twentyfifteen
