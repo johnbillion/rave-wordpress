@@ -149,6 +149,16 @@ jobs:
           tar -xzf package.tar.gz -C wordpress
           mv wordpress/wordpress package
 
+      - name: Handle anomalies with build files in TT and TT1
+        if: matrix.package == 'github/wordpress/wordpress-zip'
+        run: |
+          rm package/wp-content/themes/twentytwenty/.npmrc
+          rm package/wp-content/themes/twentytwenty/.stylelintrc.json
+          rm package/wp-content/themes/twentytwentyone/.npmrc
+          rm package/wp-content/themes/twentytwentyone/.stylelintignore
+          rm package/wp-content/themes/twentytwentyone/.stylelintrc-css.json
+          rm package/wp-content/themes/twentytwentyone/.stylelintrc.json
+
       # @TODO this list only applies to 6.4 to 6.6
       - name: Handle known differences in bundled themes
         if: matrix.package != 'github/wordpress/wordpress-zip'
