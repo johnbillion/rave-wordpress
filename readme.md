@@ -54,9 +54,9 @@ Source    | Yes      | ⏳ Todo   | `develop.svn.wordpress.org/tags/{tag}/src/`
 Build     | Yes      | ⏳ Todo   | `core.git.wordpress.org` at `{tag}`
 Source    | Yes      | ⏳ Todo   | `develop.git.wordpress.org` at `{tag}`
 Build     | Yes      | 🤨 TBD    | `build.svn.wordpress.org` ??
-Build     | No       | ⏳ Todo   | `packagist.org/packages/roots/wordpress-full` at `{tag}`
-Build     | No       | ⏳ Todo   | `github.com/johnpbloch/wordpress-core/tree/{tag}`
-Build     | No       | ⏳ Todo   | `packagist.org/packages/johnpbloch/wordpress` at `{tag}`
+Package   | No       | ⏳ Todo   | `packagist.org/packages/roots/wordpress-full` at `{tag}`
+Package   | No       | ⏳ Todo   | `github.com/johnpbloch/wordpress-core/archive/refs/tags/{tag}.zip`
+Package   | No       | ⏳ Todo   | `packagist.org/packages/johnpbloch/wordpress` at `{tag}`
 Package   | Yes      | 🤨 TBD    | `wordpress.org/latest.zip`
 Package   | Yes      | 🤨 TBD    | `wordpress.org/latest.tar.gz`
 
