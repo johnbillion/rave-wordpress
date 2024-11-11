@@ -62,11 +62,9 @@ jobs:
       - name: Install npm Dependencies
         run: npm ci
 
-      - name: Manually fetch Twemoji list for debugging
+      - name: Update Twemoji processing for debugging
         run: |
-          gh api graphql -f 'query={repository(owner: "jdecked", name: "twemoji") {object(expression: "v15.0.3:assets/svg") {... on Tree {entries {name}}}}}'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          sed -i "s/'Unable to fetch Twemoji file list'/files.stderr.toString()/" Gruntfile.js
 
       - name: Run Emoji precommit task
         run: npm run grunt precommit:emoji
