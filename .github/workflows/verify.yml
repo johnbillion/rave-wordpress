@@ -1,4 +1,4 @@
-name: Compare releases
+name: Verify package
 
 on:
   workflow_call:
@@ -17,8 +17,8 @@ on:
         type: string
 
 jobs:
-  compare:
-    name: "Compare ${{ inputs.tag }} / Source: ${{ inputs.source }} / Package: ${{ inputs.package }}"
+  verify:
+    name: "Verify source: ${{ inputs.source }} / Package: ${{ inputs.package }}"
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:

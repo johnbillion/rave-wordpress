@@ -1,4 +1,4 @@
-name: Compare releases
+name: Verify packages
 
 on:
   push:
