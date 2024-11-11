@@ -11,6 +11,7 @@ jobs:
   source:
     name: Build source
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -63,6 +64,7 @@ jobs:
   compare:
     name: Compare / ${{ matrix.distro }}
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
