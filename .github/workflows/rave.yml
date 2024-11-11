@@ -6,8 +6,8 @@ on:
       - trunk
 
 jobs:
-  build:
-    name: "Build ${{ matrix.tag }} / ${{ matrix.source }}"
+  reproduce:
+    name: "Reproduce ${{ matrix.tag }} / ${{ matrix.source }}"
     strategy:
       matrix:
         tag:
@@ -18,14 +18,14 @@ jobs:
           - develop.svn.wordpress.org
           - core.trac.wordpress.org
       fail-fast: false
-    uses: johnbillion/rave/.github/workflows/build.yml@trunk
+    uses: johnbillion/rave/.github/workflows/reproduce.yml@trunk
     with:
       tag: ${{ matrix.tag }}
       source: ${{ matrix.source }}
-  compare:
-    name: "Compare ${{ matrix.tag }} / ${{ matrix.source }} / ${{ matrix.package }}"
+  verify:
+    name: "Verify ${{ matrix.tag }} / ${{ matrix.source }} / ${{ matrix.package }}"
     needs:
-      - build
+      - reproduce
     strategy:
       matrix:
         tag:
@@ -45,7 +45,7 @@ jobs:
           - build.trac.wordpress.org
 
       fail-fast: false
-    uses: johnbillion/rave/.github/workflows/compare.yml@trunk
+    uses: johnbillion/rave/.github/workflows/verify.yml@trunk
     with:
       tag: ${{ matrix.tag }}
       source: ${{ matrix.source }}
