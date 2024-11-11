@@ -9,15 +9,40 @@ on:
 
 jobs:
   source:
-    name: Build source
+    name: Build sources
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        source:
+          - github-wordpress-develop
+          - wordpress-org-svn
+          - wordpress-org-trac
     steps:
-      - name: Checkout repository
+      - name: Checkout GitHub repository
+        if: matrix.source == 'github-wordpress-develop'
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.inputs.tag_name }}
           repository: WordPress/wordpress-develop
+
+      - name: Checkout SVN repository
+        if: matrix.source == 'wordpress-org-svn'
+        run: |
+          svn checkout https://develop.svn.wordpress.org/tags/${{ github.event.inputs.tag_name }} .
+          rm -rf .svn
+
+      - name: Get Trac zip from wordpress.org
+        if: matrix.source == 'wordpress-org-trac'
+        run: |
+          wget -O distro.zip "https://core.trac.wordpress.org/browser/tags/${{ github.event.inputs.tag_name }}?format=zip"
+          unzip distro.zip -d .
+          rm distro.zip
+
+      - name: Log file list
+        run: |
+          ls -la
 
       - name: Set up Node.js
         uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
@@ -52,22 +77,25 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
         with:
-          name: wordpress-build
+          name: wordpress-build-${{ matrix.source }}
           path: build
           if-no-files-found: error
 
   compare:
-    name: Compare / ${{ matrix.distro }}
+    name: ${{ matrix.source }} / ${{ matrix.distro }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
+        source:
+          - github-wordpress-develop
+          - wordpress-org-svn
+          - wordpress-org-trac
         distro:
           - github-wordpress
           - wordpress-org-zip
           - wordpress-org-tar
-          - wordpress-org-trac-zip
     needs:
       - source
     steps:
@@ -77,7 +105,7 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
-          name: wordpress-build
+          name: wordpress-build-${{ matrix.source }}
           path: source
 
       - name: Get zip file from GitHub
@@ -101,13 +129,6 @@ jobs:
           mkdir wordpress
           tar -xzf distro.tar.gz -C wordpress
           mv wordpress/wordpress distro
-
-      - name: Get Trac zip from wordpress.org
-        if: matrix.distro == 'wordpress-org-trac-zip'
-        run: |
-          wget -O distro.zip "https://core.trac.wordpress.org/browser/tags/${{ github.event.inputs.tag_name }}/src?format=zip"
-          unzip distro.zip -d wordpress
-          mv wordpress/src distro
 
       # @TODO this list only applies to 6.4 to 6.6
       - name: Handle known differences in bundled themes
