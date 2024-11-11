@@ -20,20 +20,20 @@ jobs:
           - develop.svn.wordpress.org
           - core.trac.wordpress.org
     steps:
-      - name: Checkout GitHub repository
+      - name: Git checkout github.com/wordpress/wordpress-develop
         if: matrix.source == 'github-wordpress-wordpress-develop'
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.inputs.tag_name }}
           repository: WordPress/wordpress-develop
 
-      - name: Checkout SVN repository
+      - name: SVN checkout develop.svn.wordpress.org
         if: matrix.source == 'develop.svn.wordpress.org'
         run: |
           svn checkout https://develop.svn.wordpress.org/tags/${{ github.event.inputs.tag_name }} .
           rm -rf .svn
 
-      - name: Get Trac zip from wordpress.org
+      - name: Download zip from core.trac.wordpress.org
         if: matrix.source == 'core.trac.wordpress.org'
         run: |
           wget -O package.zip "https://core.trac.wordpress.org/browser/tags/${{ github.event.inputs.tag_name }}?format=zip"
