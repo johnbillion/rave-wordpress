@@ -100,6 +100,7 @@ jobs:
           - wordpress.org-tar
           - downloads.wordpress.org-zip
           - downloads.wordpress.org-tar
+          - build.trac.wordpress.org
     needs:
       - source
     steps:
@@ -148,6 +149,13 @@ jobs:
           mkdir wordpress
           tar -xzf package.tar.gz -C wordpress
           mv wordpress/wordpress package
+
+      - name: Download zip from build.trac.wordpress.org
+        if: matrix.package == 'build.trac.wordpress.org'
+        run: |
+          wget -O package.zip "https://build.trac.wordpress.org/browser/tags/${{ github.event.inputs.tag_name }}?format=zip"
+          unzip package.zip
+          mv ${{ github.event.inputs.tag_name }} package
 
       - name: Handle anomalies with build files in TT and TT1
         if: matrix.package == 'github-wordpress-wordpress-zip'
