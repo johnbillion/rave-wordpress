@@ -7,7 +7,7 @@ on:
 
 jobs:
   reproduce:
-    name: "Reproduce ${{ matrix.tag }} / ${{ matrix.source }}"
+    name: "A ${{ matrix.tag }} / B ${{ matrix.source }}"
     strategy:
       matrix:
         tag:
@@ -23,7 +23,7 @@ jobs:
       tag: ${{ matrix.tag }}
       source: ${{ matrix.source }}
   verify:
-    name: "Verify ${{ matrix.tag }} ${{ matrix.package }} / ${{ matrix.source }}"
+    name: "C ${{ matrix.tag }} ${{ matrix.package }} / D ${{ matrix.source }}"
     needs:
       - reproduce
     strategy:

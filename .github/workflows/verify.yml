@@ -18,6 +18,7 @@ on:
 
 jobs:
   verify:
+    name: "G ${{ inputs.source }} / H ${{ inputs.package }}"
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
