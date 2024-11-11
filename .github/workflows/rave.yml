@@ -158,7 +158,7 @@ jobs:
           mv ${{ github.event.inputs.tag_name }} package
 
       - name: Handle anomalies with build files in TT and TT1
-        if: matrix.package == 'github-wordpress-wordpress-zip'
+        if: matrix.package == 'github-wordpress-wordpress-zip' || matrix.package == 'build.trac.wordpress.org'
         run: |
           rm package/wp-content/themes/twentytwenty/.npmrc
           rm package/wp-content/themes/twentytwenty/.stylelintrc.json
@@ -169,7 +169,7 @@ jobs:
 
       # @TODO this list only applies to 6.4 to 6.6
       - name: Handle known differences in bundled themes
-        if: matrix.package != 'github-wordpress-wordpress-zip'
+        if: matrix.package != 'github-wordpress-wordpress-zip' && matrix.package != 'build.trac.wordpress.org'
         run: |
           rm -rf source/wp-content/themes/twentyeleven
           rm -rf source/wp-content/themes/twentyfifteen
