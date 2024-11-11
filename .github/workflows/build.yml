@@ -1,0 +1,82 @@
+name: Build
+
+on:
+  workflow_call:
+    inputs:
+      tag:
+        description: Tag name for WordPress release
+        required: true
+        type: string
+      source:
+        description: Source for WordPress release
+        required: true
+        type: string
+
+jobs:
+  source:
+    name: "${{ inputs.tag }} / ${{ inputs.source }}"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Git checkout github.com/wordpress/wordpress-develop
+        if: inputs.source == 'github-wordpress-wordpress-develop'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag }}
+          repository: WordPress/wordpress-develop
+
+      - name: SVN checkout develop.svn.wordpress.org
+        if: inputs.source == 'develop.svn.wordpress.org'
+        run: |
+          svn checkout https://develop.svn.wordpress.org/tags/${{ inputs.tag }} .
+          rm -rf .svn
+
+      - name: Download zip from core.trac.wordpress.org
+        if: inputs.source == 'core.trac.wordpress.org'
+        run: |
+          wget -O package.zip "https://core.trac.wordpress.org/browser/tags/${{ inputs.tag }}?format=zip"
+          unzip package.zip
+          shopt -s dotglob
+          mv ${{ inputs.tag }}/* .
+          shopt -u dotglob
+          rm -rf ${{ inputs.tag }}
+          rm package.zip
+
+      - name: Log file list
+        run: |
+          ls -la
+
+      - name: Set up Node.js
+        uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Log debug information
+        run: |
+          npm --version
+          node --version
+          curl --version
+          git --version
+
+      - name: Install npm Dependencies
+        run: npm ci
+
+      - name: Update Twemoji processing for debugging
+        run: |
+          sed -i "s/'Unable to fetch Twemoji file list'/files.stderr.toString()/" Gruntfile.js
+
+      - name: Run Emoji precommit task
+        run: npm run grunt precommit:emoji
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build WordPress
+        run: npm run build
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        with:
+          name: wordpress-${{ inputs.tag }}-${{ inputs.source }}
+          path: build
+          if-no-files-found: error

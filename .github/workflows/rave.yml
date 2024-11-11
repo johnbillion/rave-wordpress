@@ -1,101 +1,36 @@
 name: Compare releases
 
 on:
-  workflow_dispatch:
-    inputs:
-      tag_name:
-        description: 'Tag name for WordPress release'
-        required: true
   push:
     branches:
       - trunk
 
-env:
-  WPVERSION: ${{ github.event.inputs.tag_name || '6.6.2' }}
-
 jobs:
-  source:
-    name: "Build ${{ github.event.inputs.tag_name || '6.6.2' }} / ${{ matrix.source }}"
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
+  build:
+    name: "Build ${{ matrix.tag }} / ${{ matrix.source }}"
     strategy:
-      fail-fast: false
       matrix:
+        tag:
+          - '6.6.2'
+          - '6.5.5'
         source:
           - github-wordpress-wordpress-develop
           - develop.svn.wordpress.org
           - core.trac.wordpress.org
-    steps:
-      - name: Git checkout github.com/wordpress/wordpress-develop
-        if: matrix.source == 'github-wordpress-wordpress-develop'
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ env.WPVERSION }}
-          repository: WordPress/wordpress-develop
-
-      - name: SVN checkout develop.svn.wordpress.org
-        if: matrix.source == 'develop.svn.wordpress.org'
-        run: |
-          svn checkout https://develop.svn.wordpress.org/tags/${{ env.WPVERSION }} .
-          rm -rf .svn
-
-      - name: Download zip from core.trac.wordpress.org
-        if: matrix.source == 'core.trac.wordpress.org'
-        run: |
-          wget -O package.zip "https://core.trac.wordpress.org/browser/tags/${{ env.WPVERSION }}?format=zip"
-          unzip package.zip
-          shopt -s dotglob
-          mv ${{ env.WPVERSION }}/* .
-          shopt -u dotglob
-          rm -rf ${{ env.WPVERSION }}
-          rm package.zip
-
-      - name: Log file list
-        run: |
-          ls -la
-
-      - name: Set up Node.js
-        uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-
-      - name: Log debug information
-        run: |
-          npm --version
-          node --version
-          curl --version
-          git --version
-
-      - name: Install npm Dependencies
-        run: npm ci
-
-      - name: Update Twemoji processing for debugging
-        run: |
-          sed -i "s/'Unable to fetch Twemoji file list'/files.stderr.toString()/" Gruntfile.js
-
-      - name: Run Emoji precommit task
-        run: npm run grunt precommit:emoji
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build WordPress
-        run: npm run build
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
-        with:
-          name: wordpress-build-${{ matrix.source }}
-          path: build
-          if-no-files-found: error
-
-  compare:
-    name: "Compare ${{ github.event.inputs.tag_name || '6.6.2' }} / Source: ${{ matrix.source }} / Package: ${{ matrix.package }}"
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    strategy:
       fail-fast: false
+    uses: johnbillion/rave/.github/workflows/build.yml@trunk
+    with:
+      tag: ${{ matrix.tag }}
+      source: ${{ matrix.source }}
+  compare:
+    name: "Compare ${{ matrix.tag }} / ${{ matrix.source }} / ${{ matrix.package }}"
+    needs:
+      - build
+    strategy:
       matrix:
+        tag:
+          - '6.6.2'
+          - '6.5.5'
         source:
           - github-wordpress-wordpress-develop
           - develop.svn.wordpress.org
@@ -108,101 +43,10 @@ jobs:
           - downloads.wordpress.org-zip
           - downloads.wordpress.org-tar
           - build.trac.wordpress.org
-    needs:
-      - source
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
 
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: wordpress-build-${{ matrix.source }}
-          path: source
-
-      - name: Get zip file from GitHub
-        if: matrix.package == 'github-wordpress-wordpress-zip'
-        run: |
-          wget -O package.zip "https://github.com/WordPress/WordPress/archive/refs/tags/${{ env.WPVERSION }}.zip"
-          unzip package.zip -d wordpress
-          mv wordpress/WordPress-${{ env.WPVERSION }} package
-
-      - name: Get tar file from GitHub
-        if: matrix.package == 'github-wordpress-wordpress-tar'
-        run: |
-          wget -O package.tar.gz "https://github.com/WordPress/WordPress/archive/refs/tags/${{ env.WPVERSION }}.tar.gz"
-          mkdir wordpress
-          tar -xzf package.tar.gz -C wordpress
-          mv wordpress/WordPress-${{ env.WPVERSION }} package
-
-      - name: Get zip file from wordpress.org
-        if: matrix.package == 'wordpress.org-zip'
-        run: |
-          wget -O package.zip "https://wordpress.org/wordpress-${{ env.WPVERSION }}.zip"
-          unzip package.zip -d wordpress
-          mv wordpress/wordpress package
-
-      - name: Get tar file from wordpress.org
-        if: matrix.package == 'wordpress.org-tar'
-        run: |
-          wget -O package.tar.gz "https://wordpress.org/wordpress-${{ env.WPVERSION }}.tar.gz"
-          mkdir wordpress
-          tar -xzf package.tar.gz -C wordpress
-          mv wordpress/wordpress package
-
-      - name: Get zip file from downloads.wordpress.org
-        if: matrix.package == 'downloads.wordpress.org-zip'
-        run: |
-          wget -O package.zip "https://downloads.wordpress.org/release/wordpress-${{ env.WPVERSION }}.zip"
-          unzip package.zip -d wordpress
-          mv wordpress/wordpress package
-
-      - name: Get tar file from downloads.wordpress.org
-        if: matrix.package == 'downloads.wordpress.org-tar'
-        run: |
-          wget -O package.tar.gz "https://downloads.wordpress.org/release/wordpress-${{ env.WPVERSION }}.tar.gz"
-          mkdir wordpress
-          tar -xzf package.tar.gz -C wordpress
-          mv wordpress/wordpress package
-
-      - name: Download zip from build.trac.wordpress.org
-        if: matrix.package == 'build.trac.wordpress.org'
-        run: |
-          wget -O package.zip "https://build.trac.wordpress.org/browser/tags/${{ env.WPVERSION }}?format=zip"
-          unzip package.zip
-          mv ${{ env.WPVERSION }} package
-
-      - name: Handle anomalies with build files in TT and TT1
-        if: matrix.package == 'github-wordpress-wordpress-zip' || matrix.package == 'github-wordpress-wordpress-tar' || matrix.package == 'build.trac.wordpress.org'
-        run: |
-          rm package/wp-content/themes/twentytwenty/.npmrc
-          rm package/wp-content/themes/twentytwenty/.stylelintrc.json
-          rm package/wp-content/themes/twentytwentyone/.npmrc
-          rm package/wp-content/themes/twentytwentyone/.stylelintignore
-          rm package/wp-content/themes/twentytwentyone/.stylelintrc-css.json
-          rm package/wp-content/themes/twentytwentyone/.stylelintrc.json
-
-      # @TODO this list only applies to 6.4 to 6.6
-      - name: Handle known differences in bundled themes
-        if: matrix.package != 'github-wordpress-wordpress-zip' && matrix.package != 'github-wordpress-wordpress-tar' && matrix.package != 'build.trac.wordpress.org'
-        run: |
-          rm -rf source/wp-content/themes/twentyeleven
-          rm -rf source/wp-content/themes/twentyfifteen
-          rm -rf source/wp-content/themes/twentyfourteen
-          rm -rf source/wp-content/themes/twentynineteen
-          rm -rf source/wp-content/themes/twentyseventeen
-          rm -rf source/wp-content/themes/twentysixteen
-          rm -rf source/wp-content/themes/twentyten
-          rm -rf source/wp-content/themes/twentythirteen
-          rm -rf source/wp-content/themes/twentytwelve
-          rm -rf source/wp-content/themes/twentytwenty
-          rm -rf source/wp-content/themes/twentytwentyone
-
-      # @TODO this needs to be removed once the build step is updated to include Akismet at the correct version
-      - name: Handle known differences in bundled plugins
-        run: |
-          rm -rf package/wp-content/plugins/akismet
-
-      - name: Compare files
-        run: |
-          diff --strip-trailing-cr --recursive source package
+      fail-fast: false
+    uses: johnbillion/rave/.github/workflows/compare.yml@trunk
+    with:
+      tag: ${{ matrix.tag }}
+      source: ${{ matrix.source }}
+      package: ${{ matrix.package }}

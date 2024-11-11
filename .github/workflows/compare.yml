@@ -1,0 +1,119 @@
+name: Compare releases
+
+on:
+  workflow_call:
+    inputs:
+      tag:
+        description: Tag name for WordPress release
+        required: true
+        type: string
+      source:
+        description: Source for WordPress release
+        required: true
+        type: string
+      package:
+        description: Package for WordPress release
+        required: true
+        type: string
+
+jobs:
+  compare:
+    name: "Compare ${{ inputs.tag }} / Source: ${{ inputs.source }} / Package: ${{ inputs.package }}"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: wordpress-${{ inputs.tag }}-${{ inputs.source }}
+          path: source
+
+      - name: Get zip file from GitHub
+        if: inputs.package == 'github-wordpress-wordpress-zip'
+        run: |
+          wget -O package.zip "https://github.com/WordPress/WordPress/archive/refs/tags/${{ inputs.tag }}.zip"
+          unzip package.zip -d wordpress
+          mv wordpress/WordPress-${{ inputs.tag }} package
+
+      - name: Get tar file from GitHub
+        if: inputs.package == 'github-wordpress-wordpress-tar'
+        run: |
+          wget -O package.tar.gz "https://github.com/WordPress/WordPress/archive/refs/tags/${{ inputs.tag }}.tar.gz"
+          mkdir wordpress
+          tar -xzf package.tar.gz -C wordpress
+          mv wordpress/WordPress-${{ inputs.tag }} package
+
+      - name: Get zip file from wordpress.org
+        if: inputs.package == 'wordpress.org-zip'
+        run: |
+          wget -O package.zip "https://wordpress.org/wordpress-${{ inputs.tag }}.zip"
+          unzip package.zip -d wordpress
+          mv wordpress/wordpress package
+
+      - name: Get tar file from wordpress.org
+        if: inputs.package == 'wordpress.org-tar'
+        run: |
+          wget -O package.tar.gz "https://wordpress.org/wordpress-${{ inputs.tag }}.tar.gz"
+          mkdir wordpress
+          tar -xzf package.tar.gz -C wordpress
+          mv wordpress/wordpress package
+
+      - name: Get zip file from downloads.wordpress.org
+        if: inputs.package == 'downloads.wordpress.org-zip'
+        run: |
+          wget -O package.zip "https://downloads.wordpress.org/release/wordpress-${{ inputs.tag }}.zip"
+          unzip package.zip -d wordpress
+          mv wordpress/wordpress package
+
+      - name: Get tar file from downloads.wordpress.org
+        if: inputs.package == 'downloads.wordpress.org-tar'
+        run: |
+          wget -O package.tar.gz "https://downloads.wordpress.org/release/wordpress-${{ inputs.tag }}.tar.gz"
+          mkdir wordpress
+          tar -xzf package.tar.gz -C wordpress
+          mv wordpress/wordpress package
+
+      - name: Download zip from build.trac.wordpress.org
+        if: inputs.package == 'build.trac.wordpress.org'
+        run: |
+          wget -O package.zip "https://build.trac.wordpress.org/browser/tags/${{ inputs.tag }}?format=zip"
+          unzip package.zip
+          mv ${{ inputs.tag }} package
+
+      - name: Handle anomalies with build files in TT and TT1
+        if: inputs.package == 'github-wordpress-wordpress-zip' || inputs.package == 'github-wordpress-wordpress-tar' || inputs.package == 'build.trac.wordpress.org'
+        run: |
+          rm package/wp-content/themes/twentytwenty/.npmrc
+          rm package/wp-content/themes/twentytwenty/.stylelintrc.json
+          rm package/wp-content/themes/twentytwentyone/.npmrc
+          rm package/wp-content/themes/twentytwentyone/.stylelintignore
+          rm package/wp-content/themes/twentytwentyone/.stylelintrc-css.json
+          rm package/wp-content/themes/twentytwentyone/.stylelintrc.json
+
+      # @TODO this list only applies to 6.4 to 6.6
+      - name: Handle known differences in bundled themes
+        if: inputs.package != 'github-wordpress-wordpress-zip' && inputs.package != 'github-wordpress-wordpress-tar' && inputs.package != 'build.trac.wordpress.org'
+        run: |
+          rm -rf source/wp-content/themes/twentyeleven
+          rm -rf source/wp-content/themes/twentyfifteen
+          rm -rf source/wp-content/themes/twentyfourteen
+          rm -rf source/wp-content/themes/twentynineteen
+          rm -rf source/wp-content/themes/twentyseventeen
+          rm -rf source/wp-content/themes/twentysixteen
+          rm -rf source/wp-content/themes/twentyten
+          rm -rf source/wp-content/themes/twentythirteen
+          rm -rf source/wp-content/themes/twentytwelve
+          rm -rf source/wp-content/themes/twentytwenty
+          rm -rf source/wp-content/themes/twentytwentyone
+
+      # @TODO this needs to be removed once the build step is updated to include Akismet at the correct version
+      - name: Handle known differences in bundled plugins
+        run: |
+          rm -rf package/wp-content/plugins/akismet
+
+      - name: Compare files
+        run: |
+          diff --strip-trailing-cr --recursive source package
