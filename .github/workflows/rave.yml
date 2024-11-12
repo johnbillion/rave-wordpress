@@ -74,7 +74,7 @@ jobs:
           - build.trac.wordpress.org
           - github-zip
           - github-tar
-
+          - roots-wordpress-full
       fail-fast: false
     uses: johnbillion/rave-wordpress/.github/workflows/verify.yml@trunk
     with:

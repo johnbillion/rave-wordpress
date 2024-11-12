@@ -32,7 +32,7 @@ RAVE stands for Reproduce And Verify.
 ### Unofficial packages
 
 * ⏳ Todo: `roots/wordpress:{tag}` on Packagist
-* ⏳ Todo: `roots/wordpress-full:{tag}` on Packagist
+* ✅ `roots/wordpress-full:{tag}` on Packagist
 * ⏳ Todo: `johnpbloch/wordpress:{tag}` on Packagist
 
 ## When do the tests run?

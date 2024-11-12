@@ -79,6 +79,12 @@ jobs:
           unzip package.zip
           mv ${{ inputs.tag }} package
 
+      - name: Download roots/wordpress-full
+        if: inputs.package == 'roots-wordpress-full'
+        run: |
+          composer require "roots/wordpress-full:${{ inputs.tag }}" --prefer-dist --no-progress --no-suggest
+          mv vendor/roots/wordpress-full package
+
       - name: Handle anomalies with build files in TT and TT1
         if: inputs.package == 'github-zip' || inputs.package == 'github-tar' || inputs.package == 'build.trac.wordpress.org'
         run: |

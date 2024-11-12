@@ -1,4 +1,8 @@
-/distro
+/package
 /source
+/vendor
+
+/composer.lock
 
 *.zip
+*.tar.gz
