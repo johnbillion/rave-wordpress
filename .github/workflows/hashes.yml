@@ -22,8 +22,10 @@ jobs:
         run: |
           export LONG_TAG="${{ inputs.tag }}"
           export SHORT_TAG="${LONG_TAG%.0}"
+          export BRANCH_NUMBER="${LONG_TAG%.*}"
           echo "short=$SHORT_TAG" >> "$GITHUB_OUTPUT"
           echo "long=$LONG_TAG" >> "$GITHUB_OUTPUT"
+          echo "branch=$BRANCH_NUMBER" >> "$GITHUB_OUTPUT"
 
       - name: Download zip and hashes from wordpress.org
         run: |
@@ -48,8 +50,10 @@ jobs:
         run: |
           export LONG_TAG="${{ inputs.tag }}"
           export SHORT_TAG="${LONG_TAG%.0}"
+          export BRANCH_NUMBER="${LONG_TAG%.*}"
           echo "short=$SHORT_TAG" >> "$GITHUB_OUTPUT"
           echo "long=$LONG_TAG" >> "$GITHUB_OUTPUT"
+          echo "branch=$BRANCH_NUMBER" >> "$GITHUB_OUTPUT"
 
       - name: Download tar.gz and hashes from wordpress.org
         run: |

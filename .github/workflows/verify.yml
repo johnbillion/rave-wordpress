@@ -126,12 +126,12 @@ jobs:
           rm -rf source/wp-content/themes/twentyfifteen
           rm -rf source/wp-content/themes/twentysixteen
           rm -rf source/wp-content/themes/twentyseventeen
-          if [[ "${{ steps.tag.outputs.branch }}" >= "6.4" ]]; then
+          if [[ ${{ steps.tag.outputs.branch }} -ge 6.4 ]]; then
             rm -rf source/wp-content/themes/twentynineteen
             rm -rf source/wp-content/themes/twentytwenty
             rm -rf source/wp-content/themes/twentytwentyone
           fi
-          if [[ "${{ steps.tag.outputs.branch }}" >= "6.7" ]]; then
+          if [[ ${{ steps.tag.outputs.branch }} -ge 6.7 ]]; then
             rm -rf source/wp-content/themes/twentytwentytwo
           fi
 
