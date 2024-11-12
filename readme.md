@@ -18,7 +18,8 @@ RAVE stands for Reproduce And Verify.
 ### Official packages
 
 * ✅ `wordpress.org/wordpress-{tag}.zip` / `.tar.gz`
-* ✅ Published md5 and sha1 hashes for the above
+* ✅ md5 and sha1 hashes published on wordpress.org for the above
+* ✅ File checksums published on api.wordpress.org for the above
 * ✅ `downloads.wordpress.org/release/wordpress-{tag}.zip` / `.tar.gz`
 * ✅ `build.trac.wordpress.org/browser/tags/{tag}/src?format=zip`
 * ✅ `github.com/wordpress/wordpress/archive/refs/tags/{tag}.zip` / `.tar.gz`
@@ -82,7 +83,7 @@ The WordPress open source project does not make use of package signing which cou
 
 Therefore, this library has been created to provide a means of verifying that the contents of published packages matches the code in the official source code repos.
 
-Checksums for core files are provided by the WordPress.org API at `https://api.wordpress.org/core/checksums/1.0/?version={tag}`. These are not yet verified by this library but will be soon.
+Checksums for core files are provided by the WordPress.org API at `https://api.wordpress.org/core/checksums/1.0/?version={tag}`. These are also verified by this library.
 
 ## To investigate
 
@@ -90,7 +91,6 @@ Checksums for core files are provided by the WordPress.org API at `https://api.w
 * https://api.wordpress.org/core/version-check/1.7/
 * APT packages, eg `apt install wordpress`
 * wp-env
-* Verify published checksums for files: `https://api.wordpress.org/core/checksums/1.0/?version={tag}`
 * The container at https://hub.docker.com/_/wordpress
 
 ## License
