@@ -14,7 +14,7 @@ on:
 
 jobs:
   reproduce:
-    name: "E ${{ inputs.tag }} / F ${{ inputs.source }}"
+    name: "${{ inputs.source }}"
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
