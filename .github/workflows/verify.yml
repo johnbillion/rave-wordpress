@@ -21,7 +21,7 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: wordpress-${{ inputs.tag }}-develop.svn.w.org
+          name: wordpress-${{ inputs.tag }}-develop.svn.wordpress.org
           path: source
 
       - name: Get zip file from GitHub
@@ -40,14 +40,14 @@ jobs:
           mv wordpress/WordPress-${{ inputs.tag }} package
 
       - name: Get zip file from wordpress.org
-        if: inputs.package == 'w.org-zip'
+        if: inputs.package == 'wordpress.org-zip'
         run: |
           wget -O package.zip "https://wordpress.org/wordpress-${{ inputs.tag }}.zip"
           unzip package.zip -d wordpress
           mv wordpress/wordpress package
 
       - name: Get tar file from wordpress.org
-        if: inputs.package == 'w.org-tar'
+        if: inputs.package == 'wordpress.org-tar'
         run: |
           wget -O package.tar.gz "https://wordpress.org/wordpress-${{ inputs.tag }}.tar.gz"
           mkdir wordpress
@@ -55,14 +55,14 @@ jobs:
           mv wordpress/wordpress package
 
       - name: Get zip file from downloads.wordpress.org
-        if: inputs.package == 'downloads.w.org-zip'
+        if: inputs.package == 'downloads.wordpress.org-zip'
         run: |
           wget -O package.zip "https://downloads.wordpress.org/release/wordpress-${{ inputs.tag }}.zip"
           unzip package.zip -d wordpress
           mv wordpress/wordpress package
 
       - name: Get tar file from downloads.wordpress.org
-        if: inputs.package == 'downloads.w.org-tar'
+        if: inputs.package == 'downloads.wordpress.org-tar'
         run: |
           wget -O package.tar.gz "https://downloads.wordpress.org/release/wordpress-${{ inputs.tag }}.tar.gz"
           mkdir wordpress
@@ -70,14 +70,14 @@ jobs:
           mv wordpress/wordpress package
 
       - name: Download zip from build.trac.wordpress.org
-        if: inputs.package == 'build.trac.w.org'
+        if: inputs.package == 'build.trac.wordpress.org'
         run: |
           wget -O package.zip "https://build.trac.wordpress.org/browser/tags/${{ inputs.tag }}?format=zip"
           unzip package.zip
           mv ${{ inputs.tag }} package
 
       - name: Handle anomalies with build files in TT and TT1
-        if: inputs.package == 'github-zip' || inputs.package == 'github-tar' || inputs.package == 'build.trac.w.org'
+        if: inputs.package == 'github-zip' || inputs.package == 'github-tar' || inputs.package == 'build.trac.wordpress.org'
         run: |
           rm package/wp-content/themes/twentytwenty/.npmrc
           rm package/wp-content/themes/twentytwenty/.stylelintrc.json
@@ -88,7 +88,7 @@ jobs:
 
       # @TODO this list only applies to 6.4 to 6.6
       - name: Handle known differences in bundled themes
-        if: inputs.package != 'github-zip' && inputs.package != 'github-tar' && inputs.package != 'build.trac.w.org'
+        if: inputs.package != 'github-zip' && inputs.package != 'github-tar' && inputs.package != 'build.trac.wordpress.org'
         run: |
           rm -rf source/wp-content/themes/twentyeleven
           rm -rf source/wp-content/themes/twentyfifteen

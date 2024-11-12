@@ -21,8 +21,8 @@ jobs:
       - name: Download canonical source artifact
         uses: actions/download-artifact@v4
         with:
-          name: wordpress-${{ inputs.tag }}-develop.svn.w.org
-          path: develop.svn.w.org
+          name: wordpress-${{ inputs.tag }}-develop.svn.wordpress.org
+          path: develop.svn.wordpress.org
 
       - name: Download comparison source artifact
         uses: actions/download-artifact@v4
@@ -32,4 +32,4 @@ jobs:
 
       - name: Compare files
         run: |
-          diff --strip-trailing-cr --recursive develop.svn.w.org ${{ inputs.source }}
+          diff --strip-trailing-cr --recursive develop.svn.wordpress.org ${{ inputs.source }}

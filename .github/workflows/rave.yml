@@ -14,9 +14,9 @@ jobs:
           - '6.6.2'
           - '6.5.5'
         source:
-          - develop.svn.w.org
+          - develop.svn.wordpress.org
           - github-wordpress-develop
-          - core.trac.w.org
+          - core.trac.wordpress.org
       fail-fast: false
     uses: johnbillion/rave/.github/workflows/reproduce.yml@trunk
     with:
@@ -33,7 +33,7 @@ jobs:
           - '6.5.5'
         source:
           - github-wordpress-develop
-          - core.trac.w.org
+          - core.trac.wordpress.org
       fail-fast: false
     uses: johnbillion/rave/.github/workflows/compare.yml@trunk
     with:
@@ -49,11 +49,11 @@ jobs:
           - '6.6.2'
           - '6.5.5'
         package:
-          - w.org-zip
-          - w.org-tar
-          - downloads.w.org-zip
-          - downloads.w.org-tar
-          - build.trac.w.org
+          - wordpress.org-zip
+          - wordpress.org-tar
+          - downloads.wordpress.org-zip
+          - downloads.wordpress.org-tar
+          - build.trac.wordpress.org
           - github-zip
           - github-tar
 
