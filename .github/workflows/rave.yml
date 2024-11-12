@@ -59,8 +59,8 @@ jobs:
     with:
       tag: ${{ matrix.tag }}
       source: ${{ matrix.source }}
-  verify:
-    name: "Verify ${{ matrix.tag }}"
+  verify-packages:
+    name: "Verify ${{ matrix.tag }} packages"
     needs:
       - reproduce
     strategy:
@@ -83,51 +83,14 @@ jobs:
     with:
       tag: ${{ matrix.tag }}
       package: ${{ matrix.package }}
-  test-zip-hashes:
-    name: "Test zip hashes / ${{ matrix.tag }}"
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
+  verify-hashes:
+    name: "Verify ${{ matrix.tag }} hashes"
     strategy:
       matrix:
         tag:
           - '6.6.2'
           - '6.5.5'
       fail-fast: false
-    steps:
-      - name: Download zip and hashes from wordpress.org
-        run: |
-          wget -O package.zip "https://wordpress.org/wordpress-${{ matrix.tag }}.zip"
-          wget -O package.zip.md5 "https://wordpress.org/wordpress-${{ matrix.tag }}.zip.md5"
-          wget -O package.zip.sha1 "https://wordpress.org/wordpress-${{ matrix.tag }}.zip.sha1"
-
-      - name: Check the md5 hash
-        run: |
-          echo "$(cat package.zip.md5) package.zip" | md5sum -c -
-
-      - name: Check the sha1 hash
-        run: |
-          echo "$(cat package.zip.sha1) package.zip" | sha1sum -c -
-  test-tar-hashes:
-    name: "Test tar hashes / ${{ matrix.tag }}"
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    strategy:
-      matrix:
-        tag:
-          - '6.6.2'
-          - '6.5.5'
-      fail-fast: false
-    steps:
-      - name: Download tar.gz and hashes from wordpress.org
-        run: |
-          wget -O package.tar.gz "https://wordpress.org/wordpress-${{ matrix.tag }}.tar.gz"
-          wget -O package.tar.gz.md5 "https://wordpress.org/wordpress-${{ matrix.tag }}.tar.gz.md5"
-          wget -O package.tar.gz.sha1 "https://wordpress.org/wordpress-${{ matrix.tag }}.tar.gz.sha1"
-
-      - name: Check the md5 hash
-        run: |
-          echo "$(cat package.tar.gz.md5) package.tar.gz" | md5sum -c -
-
-      - name: Check the sha1 hash
-        run: |
-          echo "$(cat package.tar.gz.sha1) package.tar.gz" | sha1sum -c -
+    uses: ./.github/workflows/hashes.yml
+    with:
+      tag: ${{ matrix.tag }}
