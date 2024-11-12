@@ -20,6 +20,9 @@ on:
     #        │  │  │  │  │
     - cron: '0  *  *  *  *'
 
+permissions:
+  contents: read
+
 jobs:
   reproduce:
     name: "Reproduce ${{ matrix.tag }}"
