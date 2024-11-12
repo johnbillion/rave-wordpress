@@ -23,15 +23,15 @@ jobs:
     steps:
       - name: Git checkout github.com/wordpress/wordpress-develop
         if: inputs.source == 'github-wordpress-develop'
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.tag }}
-          repository: WordPress/wordpress-develop
+        run: |
+          git clone --no-checkout https://github.com/wordpress/wordpress-develop/ .
+          git checkout tags/${{ inputs.tag }} -b ${{ inputs.tag }}
 
       - name: Git checkout develop.git.wordpress.org
         if: inputs.source == 'develop.git.wordpress.org'
         run: |
-          git clone --depth 1 --branch ${{ inputs.tag }} git://develop.git.wordpress.org/ .
+          git clone --no-checkout git://develop.git.wordpress.org/ .
+          git checkout tags/${{ inputs.tag }} -b ${{ inputs.tag }}
 
       - name: SVN checkout develop.svn.wordpress.org
         if: inputs.source == 'develop.svn.wordpress.org'
