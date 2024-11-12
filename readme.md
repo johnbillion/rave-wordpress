@@ -4,7 +4,7 @@ RAVE is an automated tool which facilitates being able to verify that packages p
 
 A CI system runs on GitHub Actions which verifies a number of official sources and a number of official and unofficial package distributions and compares them all against one another to identify any anomalies. A future version of this library will provide the tooling to run the checks outside of GitHub Actions.
 
-RAVE stands for Reproduce And VErify.
+RAVE stands for Reproduce And Verify.
 
 ## Why test the official package?
 
