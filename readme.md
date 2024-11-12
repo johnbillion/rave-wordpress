@@ -36,29 +36,36 @@ The WordPress open source project does not make use of package signing which cou
 
 Therefore, this library has been created to provide a means of verifying that the contents of published packages matches the code in the official source code repos.
 
+Checksums for core files are provided by the WordPress.org API at `https://api.wordpress.org/core/checksums/1.0/?version={tag}`. These are not yet verified by this library but will be soon.
+
 ## What's tested?
 
-Type      | Official | Status | Source
---------- | -------- | ------ | ------
-Package   | Yes      | ✅ Done   | `wordpress.org/wordpress-{tag}.zip`
-Package   | Yes      | ✅ Done   | `wordpress.org/wordpress-{tag}.tar.gz`
-Package   | Yes      | ✅ Done   | `downloads.wordpress.org/release/wordpress-{tag}.zip`
-Package   | Yes      | ✅ Done   | `downloads.wordpress.org/release/wordpress-{tag}.tar.gz`
-Package   | Yes      | ✅ Done   | `github.com/WordPress/WordPress/archive/refs/tags/{tag}.zip`
-Package   | Yes      | ✅ Done   | `github.com/WordPress/WordPress/archive/refs/tags/{tag}.tar.gz`
-Package   | Yes      | ✅ Done   | `build.trac.wordpress.org/browser/tags/{tag}/src?format=zip`
-Source    | Yes      | ✅ Done   | `github.com/WordPress/wordpress-develop/tree/{tag}/src`
-Source    | Yes      | ✅ Done   | `core.trac.wordpress.org/browser/tags/{tag}/src?format=zip`
-Build     | Yes      | ⏳ Todo   | `core.svn.wordpress.org/tags/{tag}/`
-Source    | Yes      | ⏳ Todo   | `develop.svn.wordpress.org/tags/{tag}/src/`
-Build     | Yes      | ⏳ Todo   | `core.git.wordpress.org` at `{tag}`
-Source    | Yes      | ⏳ Todo   | `develop.git.wordpress.org` at `{tag}`
-Build     | Yes      | 🤨 TBD    | `build.svn.wordpress.org` ??
-Package   | No       | ⏳ Todo   | `packagist.org/packages/roots/wordpress-full` at `{tag}`
-Package   | No       | ⏳ Todo   | `github.com/johnpbloch/wordpress-core/archive/refs/tags/{tag}.zip`
-Package   | No       | ⏳ Todo   | `packagist.org/packages/johnpbloch/wordpress` at `{tag}`
-Package   | Yes      | 🤨 TBD    | `wordpress.org/latest.zip`
-Package   | Yes      | 🤨 TBD    | `wordpress.org/latest.tar.gz`
+### Source code
+
+* ✅ `develop.svn.wordpress.org/tags/{tag}/src`
+* ✅ `github.com/wordpress/wordpress-develop/tree/{tag}/src`
+* ✅ `core.trac.wordpress.org/browser/tags/{tag}/src?format=zip`
+* ⏳ Todo: `develop.git.wordpress.org` at `{tag}`
+
+### Official packages
+
+* ✅ `wordpress.org/wordpress-{tag}.zip` / `.tar.gz`
+* ✅ `downloads.wordpress.org/release/wordpress-{tag}.zip` / `.tar.gz`
+* ✅ `build.trac.wordpress.org/browser/tags/{tag}/src?format=zip`
+* ✅ `github.com/wordpress/wordpress/archive/refs/tags/{tag}.zip` / `.tar.gz`
+* ⏳ Todo: `wordpress.org/latest.zip` / `.tar.gz`
+
+### Official builds
+
+* ⏳ Todo: `core.git.wordpress.org` at `{tag}`
+* ⏳ Todo: `core.svn.wordpress.org` at `{tag}`
+* ⏳ ???: `build.svn.wordpress.org` at `{tag}`
+
+### Unofficial packages
+
+* ⏳ Todo: `roots/wordpress:{tag}` on Packagist
+* ⏳ Todo: `roots/wordpress-full:{tag}` on Packagist
+* ⏳ Todo: `johnpbloch/wordpress:{tag}` on Packagist
 
 ## What's not tested?
 
@@ -70,5 +77,6 @@ This approach does not enable detection of malicious or unwanted code that gets 
 * https://api.wordpress.org/core/version-check/1.7/
 * APT packages, eg `apt install wordpress`
 * wp-env
-* What can we do with the md5 and sha1 hashes on .org?
+* Verify the md5 and sha1 hashes on .org
+* Verify published checksums for files: `https://api.wordpress.org/core/checksums/1.0/?version={tag}`
 * The container at https://hub.docker.com/_/wordpress
