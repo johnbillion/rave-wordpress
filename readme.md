@@ -62,10 +62,11 @@ If one of the GitHub Actions workflows in this repo fails, it should be investig
 
 ## What's not tested?
 
-This approach does not enable detection of:
+This approach does *not*:
 
-* Malicious or unwanted code that gets inserted into the Subversion or Git source code repos and makes it into the published package.
-* A targeted attack that causes the package to vary based on a factor such as the IP address of the requestor.
+* Detect malicious or unwanted code that gets inserted into the Subversion or Git source code repos and subsequently makes it into the published package.
+* Detect a targeted attack that can vary the contents of the package based on a parameter such as the IP address making the request.
+* Deal with build provenance, attestation, software signing, SBOMs, or make tea.
 
 ## Reproducible WordPress
 
