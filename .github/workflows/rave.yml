@@ -36,7 +36,7 @@ jobs:
           - github-wordpress-develop
           - core.trac.wordpress.org
       fail-fast: false
-    uses: johnbillion/rave-wordpress/.github/workflows/reproduce.yml@trunk
+    uses: ./.github/workflows/reproduce.yml
     with:
       tag: ${{ matrix.tag }}
       source: ${{ matrix.source }}
@@ -53,7 +53,7 @@ jobs:
           - github-wordpress-develop
           - core.trac.wordpress.org
       fail-fast: false
-    uses: johnbillion/rave-wordpress/.github/workflows/compare.yml@trunk
+    uses: ./.github/workflows/compare.yml
     with:
       tag: ${{ matrix.tag }}
       source: ${{ matrix.source }}
@@ -76,7 +76,7 @@ jobs:
           - github-tar
           - roots-wordpress-full
       fail-fast: false
-    uses: johnbillion/rave-wordpress/.github/workflows/verify.yml@trunk
+    uses: ./.github/workflows/verify.yml
     with:
       tag: ${{ matrix.tag }}
       package: ${{ matrix.package }}
