@@ -19,7 +19,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Git checkout github.com/wordpress/wordpress-develop
-        if: inputs.source == 'github-wordpress-wordpress-develop'
+        if: inputs.source == 'github-wordpress-develop'
         uses: actions/checkout@v4
         with:
           ref: ${{ inputs.tag }}

@@ -14,7 +14,7 @@ jobs:
           - '6.6.2'
           - '6.5.5'
         source:
-          - github-wordpress-wordpress-develop
+          - github-wordpress-develop
           - develop.svn.wordpress.org
           - core.trac.wordpress.org
       fail-fast: false
@@ -23,7 +23,7 @@ jobs:
       tag: ${{ matrix.tag }}
       source: ${{ matrix.source }}
   verify:
-    name: "Verify ${{ matrix.tag }} ${{ matrix.source }}"
+    name: "${{ matrix.tag }} ${{ matrix.source }}"
     needs:
       - reproduce
     strategy:
@@ -32,12 +32,12 @@ jobs:
           - '6.6.2'
           - '6.5.5'
         source:
-          - github-wordpress-wordpress-develop
+          - github-wordpress-develop
           - develop.svn.wordpress.org
           - core.trac.wordpress.org
         package:
-          - github-wordpress-wordpress-zip
-          - github-wordpress-wordpress-tar
+          - github-zip
+          - github-tar
           - wordpress.org-zip
           - wordpress.org-tar
           - downloads.wordpress.org-zip

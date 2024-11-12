@@ -32,14 +32,14 @@ jobs:
           path: source
 
       - name: Get zip file from GitHub
-        if: inputs.package == 'github-wordpress-wordpress-zip'
+        if: inputs.package == 'github-zip'
         run: |
           wget -O package.zip "https://github.com/WordPress/WordPress/archive/refs/tags/${{ inputs.tag }}.zip"
           unzip package.zip -d wordpress
           mv wordpress/WordPress-${{ inputs.tag }} package
 
       - name: Get tar file from GitHub
-        if: inputs.package == 'github-wordpress-wordpress-tar'
+        if: inputs.package == 'github-tar'
         run: |
           wget -O package.tar.gz "https://github.com/WordPress/WordPress/archive/refs/tags/${{ inputs.tag }}.tar.gz"
           mkdir wordpress
@@ -84,7 +84,7 @@ jobs:
           mv ${{ inputs.tag }} package
 
       - name: Handle anomalies with build files in TT and TT1
-        if: inputs.package == 'github-wordpress-wordpress-zip' || inputs.package == 'github-wordpress-wordpress-tar' || inputs.package == 'build.trac.wordpress.org'
+        if: inputs.package == 'github-zip' || inputs.package == 'github-tar' || inputs.package == 'build.trac.wordpress.org'
         run: |
           rm package/wp-content/themes/twentytwenty/.npmrc
           rm package/wp-content/themes/twentytwenty/.stylelintrc.json
@@ -95,7 +95,7 @@ jobs:
 
       # @TODO this list only applies to 6.4 to 6.6
       - name: Handle known differences in bundled themes
-        if: inputs.package != 'github-wordpress-wordpress-zip' && inputs.package != 'github-wordpress-wordpress-tar' && inputs.package != 'build.trac.wordpress.org'
+        if: inputs.package != 'github-zip' && inputs.package != 'github-tar' && inputs.package != 'build.trac.wordpress.org'
         run: |
           rm -rf source/wp-content/themes/twentyeleven
           rm -rf source/wp-content/themes/twentyfifteen
