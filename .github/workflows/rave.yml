@@ -94,3 +94,14 @@ jobs:
     uses: ./.github/workflows/hashes.yml
     with:
       tag: ${{ matrix.tag }}
+  verify-checksums:
+    name: "Verify ${{ matrix.tag }} checksums"
+    strategy:
+      matrix:
+        tag:
+          - '6.6.2'
+          - '6.5.5'
+      fail-fast: false
+    uses: ./.github/workflows/checksums.yml
+    with:
+      tag: ${{ matrix.tag }}

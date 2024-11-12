@@ -1,0 +1,35 @@
+name: Verify file checksums
+
+on:
+  workflow_call:
+    inputs:
+      tag:
+        description: Tag name for WordPress release
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  checksums:
+    name: "Verify checksums"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Download checksums from wordpress.org
+        run: |
+          wget -O checksums.json "https://api.wordpress.org/core/checksums/1.0/?version=${{ inputs.tag }}"
+
+      - name: Download and extract zip from wordpress.org
+        run: |
+          wget "https://wordpress.org/wordpress-${{ inputs.tag }}.zip"
+          unzip -q wordpress-${{ inputs.tag }}.zip
+
+      - name: Convert checksums.json into format that can be used by md5sum
+        run: |
+          jq -r '.checksums."${{ inputs.tag }}" | to_entries[] | "\(.value)  wordpress/\(.key)"' checksums.json > checksums.md5
+
+      - name: Verify checksums
+        run: |
+          md5sum -c checksums.md5
