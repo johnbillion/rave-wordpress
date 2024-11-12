@@ -21,43 +21,41 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      - name: Prepare tag name
+        id: tag
+        run: |
+          export LONG_TAG="${{ inputs.tag }}"
+          export SHORT_TAG="${LONG_TAG%.0}"
+          echo "short=$SHORT_TAG" >> "$GITHUB_OUTPUT"
+          echo "long=$LONG_TAG" >> "$GITHUB_OUTPUT"
+
       - name: Git checkout github.com/wordpress/wordpress-develop
         if: inputs.source == 'github-wordpress-develop'
         run: |
-          if [[ ${{ inputs.tag }} =~ ^[0-9]+\.[0-9]+$ ]]; then
-            export TAG="${{ inputs.tag }}.0"
-          else
-            export TAG="${{ inputs.tag }}"
-          fi
           git clone --no-checkout https://github.com/wordpress/wordpress-develop/ .
-          git checkout "tags/$TAG" -b "$TAG"
+          git checkout "tags/${{ steps.tag.outputs.long }}" -b "${{ steps.tag.outputs.long }}"
 
       - name: Git checkout develop.git.wordpress.org
         if: inputs.source == 'develop.git.wordpress.org'
         run: |
-          if [[ ${{ inputs.tag }} =~ ^[0-9]+\.[0-9]+$ ]]; then
-            export TAG="${{ inputs.tag }}.0"
-          else
-            export TAG="${{ inputs.tag }}"
-          fi
           git clone --no-checkout git://develop.git.wordpress.org/ .
-          git checkout "tags/$TAG" -b "$TAG"
+          git checkout "tags/${{ steps.tag.outputs.long }}" -b "${{ steps.tag.outputs.long }}"
 
       - name: SVN checkout develop.svn.wordpress.org
         if: inputs.source == 'develop.svn.wordpress.org'
         run: |
-          svn checkout https://develop.svn.wordpress.org/tags/${{ inputs.tag }} .
+          svn checkout https://develop.svn.wordpress.org/tags/${{ steps.tag.outputs.short }} .
           rm -rf .svn
 
       - name: Download zip from core.trac.wordpress.org
         if: inputs.source == 'core.trac.wordpress.org'
         run: |
-          wget -O package.zip "https://core.trac.wordpress.org/browser/tags/${{ inputs.tag }}?format=zip"
+          wget -O package.zip "https://core.trac.wordpress.org/browser/tags/${{ steps.tag.outputs.short }}?format=zip"
           unzip package.zip
           shopt -s dotglob
-          mv ${{ inputs.tag }}/* .
+          mv ${{ steps.tag.outputs.short }}/* .
           shopt -u dotglob
-          rm -rf ${{ inputs.tag }}
+          rm -rf ${{ steps.tag.outputs.short }}
           rm package.zip
 
       - name: Log file list
@@ -95,6 +93,6 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
         with:
-          name: wordpress-${{ inputs.tag }}-${{ inputs.source }}
+          name: wordpress-${{ steps.tag.outputs.long }}-${{ inputs.source }}
           path: build
           if-no-files-found: error

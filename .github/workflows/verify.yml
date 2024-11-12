@@ -21,41 +21,49 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      - name: Prepare tag name
+        id: tag
+        run: |
+          export LONG_TAG="${{ inputs.tag }}"
+          export SHORT_TAG="${LONG_TAG%.0}"
+          echo "short=$SHORT_TAG" >> "$GITHUB_OUTPUT"
+          echo "long=$LONG_TAG" >> "$GITHUB_OUTPUT"
+
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: wordpress-${{ inputs.tag }}-develop.svn.wordpress.org
+          name: wordpress-${{ steps.tag.outputs.long }}-develop.svn.wordpress.org
           path: source
 
       - name: Get zip file from GitHub
         if: inputs.package == 'github-zip'
         run: |
-          wget -O package.zip "https://github.com/WordPress/WordPress/archive/refs/tags/${{ inputs.tag }}.zip"
+          wget -O package.zip "https://github.com/WordPress/WordPress/archive/refs/tags/${{ steps.tag.outputs.long }}.zip"
           unzip package.zip -d wordpress
-          mv wordpress/WordPress-${{ inputs.tag }} package
+          mv wordpress/WordPress-${{ steps.tag.outputs.long }} package
 
       - name: Get tar file from GitHub
         if: inputs.package == 'github-tar'
         run: |
-          wget -O package.tar.gz "https://github.com/WordPress/WordPress/archive/refs/tags/${{ inputs.tag }}.tar.gz"
+          wget -O package.tar.gz "https://github.com/WordPress/WordPress/archive/refs/tags/${{ steps.tag.outputs.long }}.tar.gz"
           mkdir wordpress
           tar -xzf package.tar.gz -C wordpress
-          mv wordpress/WordPress-${{ inputs.tag }} package
+          mv wordpress/WordPress-${{ steps.tag.outputs.long }} package
 
       - name: Get zip file from wordpress.org
         if: inputs.package == 'wordpress.org-zip'
         run: |
-          wget -O package.zip "https://wordpress.org/wordpress-${{ inputs.tag }}.zip"
+          wget -O package.zip "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip"
           unzip package.zip -d wordpress
           mv wordpress/wordpress package
 
       - name: Get tar file from wordpress.org
         if: inputs.package == 'wordpress.org-tar'
         run: |
-          wget -O package.tar.gz "https://wordpress.org/wordpress-${{ inputs.tag }}.tar.gz"
+          wget -O package.tar.gz "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz"
           mkdir wordpress
           tar -xzf package.tar.gz -C wordpress
           mv wordpress/wordpress package
@@ -63,14 +71,14 @@ jobs:
       - name: Get zip file from downloads.wordpress.org
         if: inputs.package == 'downloads.wordpress.org-zip'
         run: |
-          wget -O package.zip "https://downloads.wordpress.org/release/wordpress-${{ inputs.tag }}.zip"
+          wget -O package.zip "https://downloads.wordpress.org/release/wordpress-${{ steps.tag.outputs.short }}.zip"
           unzip package.zip -d wordpress
           mv wordpress/wordpress package
 
       - name: Get tar file from downloads.wordpress.org
         if: inputs.package == 'downloads.wordpress.org-tar'
         run: |
-          wget -O package.tar.gz "https://downloads.wordpress.org/release/wordpress-${{ inputs.tag }}.tar.gz"
+          wget -O package.tar.gz "https://downloads.wordpress.org/release/wordpress-${{ steps.tag.outputs.short }}.tar.gz"
           mkdir wordpress
           tar -xzf package.tar.gz -C wordpress
           mv wordpress/wordpress package
@@ -78,20 +86,20 @@ jobs:
       - name: Download zip from build.trac.wordpress.org
         if: inputs.package == 'build.trac.wordpress.org'
         run: |
-          wget -O package.zip "https://build.trac.wordpress.org/browser/tags/${{ inputs.tag }}?format=zip"
+          wget -O package.zip "https://build.trac.wordpress.org/browser/tags/${{ steps.tag.outputs.short }}?format=zip"
           unzip package.zip
-          mv ${{ inputs.tag }} package
+          mv ${{ steps.tag.outputs.short }} package
 
       - name: Download roots/wordpress-full
         if: inputs.package == 'roots-wordpress-full'
         run: |
-          composer require "roots/wordpress-full:${{ inputs.tag }}" --prefer-dist --no-progress --no-suggest
+          composer require "roots/wordpress-full:${{ steps.tag.outputs.long }}" --prefer-dist --no-progress --no-suggest
           mv vendor/roots/wordpress-full package
 
       - name: Download johnpbloch/wordpress
         if: inputs.package == 'johnpbloch-wordpress'
         run: |
-          composer require "johnpbloch/wordpress:${{ inputs.tag }}" --prefer-dist --no-progress --no-suggest
+          composer require "johnpbloch/wordpress:${{ steps.tag.outputs.long }}" --prefer-dist --no-progress --no-suggest
           mv wordpress package
           rm package/composer.json
 
