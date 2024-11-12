@@ -18,6 +18,7 @@ RAVE stands for Reproduce And Verify.
 ### Official packages
 
 * ✅ `wordpress.org/wordpress-{tag}.zip` / `.tar.gz`
+* ✅ Published md5 and sha1 hashes for the above
 * ✅ `downloads.wordpress.org/release/wordpress-{tag}.zip` / `.tar.gz`
 * ✅ `build.trac.wordpress.org/browser/tags/{tag}/src?format=zip`
 * ✅ `github.com/wordpress/wordpress/archive/refs/tags/{tag}.zip` / `.tar.gz`
@@ -75,7 +76,7 @@ To quote [reproducible-builds.org](https://reproducible-builds.org/):
 
 ## Verifiable WordPress
 
-The WordPress.org website [provides the md5 and sha1 hash of its WordPress package files](https://wordpress.org/download/releases/). This is not enough to verify a package, because the hash only represents the zip or tar file. If a package on WordPress.org was altered then its published md5 and sha1 hashes could be altered too.
+The WordPress.org website [provides the md5 and sha1 hash of its WordPress package files](https://wordpress.org/download/releases/). This is not enough to verify a package on its own, because the hash only represents the zip or tar file and if a package on WordPress.org was altered then its published md5 and sha1 hashes could be altered too.
 
 The WordPress open source project does not make use of package signing which could be used to verify a package. [See ticket #39309 for discussion on this topic](https://core.trac.wordpress.org/ticket/39309).
 
@@ -89,7 +90,6 @@ Checksums for core files are provided by the WordPress.org API at `https://api.w
 * https://api.wordpress.org/core/version-check/1.7/
 * APT packages, eg `apt install wordpress`
 * wp-env
-* Verify the md5 and sha1 hashes on .org
 * Verify published checksums for files: `https://api.wordpress.org/core/checksums/1.0/?version={tag}`
 * The container at https://hub.docker.com/_/wordpress
 
