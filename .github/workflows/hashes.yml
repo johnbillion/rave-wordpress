@@ -17,11 +17,19 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      - name: Prepare tag name
+        id: tag
+        run: |
+          export LONG_TAG="${{ inputs.tag }}"
+          export SHORT_TAG="${LONG_TAG%.0}"
+          echo "short=$SHORT_TAG" >> "$GITHUB_OUTPUT"
+          echo "long=$LONG_TAG" >> "$GITHUB_OUTPUT"
+
       - name: Download zip and hashes from wordpress.org
         run: |
-          wget -O package.zip "https://wordpress.org/wordpress-${{ inputs.tag }}.zip"
-          wget -O package.zip.md5 "https://wordpress.org/wordpress-${{ inputs.tag }}.zip.md5"
-          wget -O package.zip.sha1 "https://wordpress.org/wordpress-${{ inputs.tag }}.zip.sha1"
+          wget -O package.zip "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip"
+          wget -O package.zip.md5 "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip.md5"
+          wget -O package.zip.sha1 "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip.sha1"
 
       - name: Check the md5 hash
         run: |
@@ -35,11 +43,19 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      - name: Prepare tag name
+        id: tag
+        run: |
+          export LONG_TAG="${{ inputs.tag }}"
+          export SHORT_TAG="${LONG_TAG%.0}"
+          echo "short=$SHORT_TAG" >> "$GITHUB_OUTPUT"
+          echo "long=$LONG_TAG" >> "$GITHUB_OUTPUT"
+
       - name: Download tar.gz and hashes from wordpress.org
         run: |
-          wget -O package.tar.gz "https://wordpress.org/wordpress-${{ inputs.tag }}.tar.gz"
-          wget -O package.tar.gz.md5 "https://wordpress.org/wordpress-${{ inputs.tag }}.tar.gz.md5"
-          wget -O package.tar.gz.sha1 "https://wordpress.org/wordpress-${{ inputs.tag }}.tar.gz.sha1"
+          wget -O package.tar.gz "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz"
+          wget -O package.tar.gz.md5 "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz.md5"
+          wget -O package.tar.gz.sha1 "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz.sha1"
 
       - name: Check the md5 hash
         run: |

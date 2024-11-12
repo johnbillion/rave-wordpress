@@ -41,17 +41,17 @@ jobs:
       - name: Get zip file from GitHub
         if: inputs.package == 'github-zip'
         run: |
-          wget -O package.zip "https://github.com/WordPress/WordPress/archive/refs/tags/${{ steps.tag.outputs.long }}.zip"
+          wget -O package.zip "https://github.com/WordPress/WordPress/archive/refs/tags/${{ steps.tag.outputs.short }}.zip"
           unzip package.zip -d wordpress
-          mv wordpress/WordPress-${{ steps.tag.outputs.long }} package
+          mv wordpress/WordPress-${{ steps.tag.outputs.short }} package
 
       - name: Get tar file from GitHub
         if: inputs.package == 'github-tar'
         run: |
-          wget -O package.tar.gz "https://github.com/WordPress/WordPress/archive/refs/tags/${{ steps.tag.outputs.long }}.tar.gz"
+          wget -O package.tar.gz "https://github.com/WordPress/WordPress/archive/refs/tags/${{ steps.tag.outputs.short }}.tar.gz"
           mkdir wordpress
           tar -xzf package.tar.gz -C wordpress
-          mv wordpress/WordPress-${{ steps.tag.outputs.long }} package
+          mv wordpress/WordPress-${{ steps.tag.outputs.short }} package
 
       - name: Get zip file from wordpress.org
         if: inputs.package == 'wordpress.org-zip'

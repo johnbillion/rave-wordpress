@@ -17,18 +17,26 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      - name: Prepare tag name
+        id: tag
+        run: |
+          export LONG_TAG="${{ inputs.tag }}"
+          export SHORT_TAG="${LONG_TAG%.0}"
+          echo "short=$SHORT_TAG" >> "$GITHUB_OUTPUT"
+          echo "long=$LONG_TAG" >> "$GITHUB_OUTPUT"
+
       - name: Download checksums from wordpress.org
         run: |
-          wget -O checksums.json "https://api.wordpress.org/core/checksums/1.0/?version=${{ inputs.tag }}"
+          wget -O checksums.json "https://api.wordpress.org/core/checksums/1.0/?version=${{ steps.tag.outputs.short }}"
 
       - name: Download and extract zip from wordpress.org
         run: |
-          wget "https://wordpress.org/wordpress-${{ inputs.tag }}.zip"
-          unzip -q wordpress-${{ inputs.tag }}.zip
+          wget "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip"
+          unzip -q wordpress-${{ steps.tag.outputs.short }}.zip
 
       - name: Convert checksums.json into format that can be used by md5sum
         run: |
-          jq -r '.checksums."${{ inputs.tag }}" | to_entries[] | "\(.value)  wordpress/\(.key)"' checksums.json > checksums.md5
+          jq -r '.checksums."${{ steps.tag.outputs.short }}" | to_entries[] | "\(.value)  wordpress/\(.key)"' checksums.json > checksums.md5
 
       - name: Verify checksums
         run: |
