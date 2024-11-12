@@ -92,3 +92,7 @@ Checksums for core files are provided by the WordPress.org API at `https://api.w
 * Verify the md5 and sha1 hashes on .org
 * Verify published checksums for files: `https://api.wordpress.org/core/checksums/1.0/?version={tag}`
 * The container at https://hub.docker.com/_/wordpress
+
+## License
+
+MIT
