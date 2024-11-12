@@ -88,6 +88,13 @@ jobs:
           composer require "roots/wordpress-full:${{ inputs.tag }}" --prefer-dist --no-progress --no-suggest
           mv vendor/roots/wordpress-full package
 
+      - name: Download johnpbloch/wordpress
+        if: inputs.package == 'johnpbloch-wordpress'
+        run: |
+          composer require "johnpbloch/wordpress:${{ inputs.tag }}" --prefer-dist --no-progress --no-suggest
+          mv wordpress package
+          rm package/composer.json
+
       - name: Handle anomalies with build files in TT and TT1
         if: inputs.package == 'github-zip' || inputs.package == 'github-tar' || inputs.package == 'build.trac.wordpress.org'
         run: |

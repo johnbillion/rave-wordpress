@@ -75,6 +75,7 @@ jobs:
           - github-zip
           - github-tar
           - roots-wordpress-full
+          - johnpbloch-wordpress
       fail-fast: false
     uses: ./.github/workflows/verify.yml
     with:
