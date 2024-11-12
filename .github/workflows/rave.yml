@@ -23,7 +23,7 @@ jobs:
       tag: ${{ matrix.tag }}
       source: ${{ matrix.source }}
   verify:
-    name: "Verify ${{ matrix.tag }} ${{ matrix.package }}"
+    name: "Verify ${{ matrix.tag }} ${{ matrix.source }}"
     needs:
       - reproduce
     strategy:
