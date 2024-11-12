@@ -87,7 +87,7 @@ Checksums for core files are provided by the WordPress.org API at `https://api.w
 
 ## To investigate
 
-* WP-CLI
+* WP-CLI (eg. `wp core download` and `wp core verify-checksums`)
 * https://api.wordpress.org/core/version-check/1.7/
 * APT packages, eg `apt install wordpress`
 * wp-env
