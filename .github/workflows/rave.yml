@@ -82,7 +82,7 @@ jobs:
       tag: ${{ matrix.tag }}
       package: ${{ matrix.package }}
   test-zip-hashes:
-    name: "Test zip hashes ${{ matrix.tag }}"
+    name: "Test zip hashes / ${{ matrix.tag }}"
     runs-on: ubuntu-latest
     timeout-minutes: 10
     strategy:
@@ -106,7 +106,7 @@ jobs:
         run: |
           echo "$(cat package.zip.sha1) package.zip" | sha1sum -c -
   test-tar-hashes:
-    name: "Test tar hashes ${{ matrix.tag }}"
+    name: "Test tar hashes / ${{ matrix.tag }}"
     runs-on: ubuntu-latest
     timeout-minutes: 10
     strategy:
