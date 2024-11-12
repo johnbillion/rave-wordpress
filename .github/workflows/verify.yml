@@ -26,8 +26,10 @@ jobs:
         run: |
           export LONG_TAG="${{ inputs.tag }}"
           export SHORT_TAG="${LONG_TAG%.0}"
+          export BRANCH_NUMBER="${LONG_TAG%.*}"
           echo "short=$SHORT_TAG" >> "$GITHUB_OUTPUT"
           echo "long=$LONG_TAG" >> "$GITHUB_OUTPUT"
+          echo "branch=$BRANCH_NUMBER" >> "$GITHUB_OUTPUT"
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -124,12 +126,12 @@ jobs:
           rm -rf source/wp-content/themes/twentyfifteen
           rm -rf source/wp-content/themes/twentysixteen
           rm -rf source/wp-content/themes/twentyseventeen
-          if [[ "${{ steps.tag.outputs.short }}" >= "6.4" ]]; then
+          if [[ "${{ steps.tag.outputs.branch }}" >= "6.4" ]]; then
             rm -rf source/wp-content/themes/twentynineteen
             rm -rf source/wp-content/themes/twentytwenty
             rm -rf source/wp-content/themes/twentytwentyone
           fi
-          if [[ "${{ steps.tag.outputs.short }}" >= "6.7" ]]; then
+          if [[ "${{ steps.tag.outputs.branch }}" >= "6.7" ]]; then
             rm -rf source/wp-content/themes/twentytwentytwo
           fi
 
