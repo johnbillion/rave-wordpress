@@ -81,6 +81,9 @@ jobs:
           - github-tar
           - roots-wordpress-full
           - johnpbloch-wordpress
+        exclude:
+          - tag: '6.7.0'
+            package: johnpbloch-wordpress
       fail-fast: false
     uses: ./.github/workflows/verify.yml
     with:
