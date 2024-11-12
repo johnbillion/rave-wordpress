@@ -24,14 +24,24 @@ jobs:
       - name: Git checkout github.com/wordpress/wordpress-develop
         if: inputs.source == 'github-wordpress-develop'
         run: |
+          if [[ ${{ inputs.tag }} =~ ^[0-9]+\.[0-9]+$ ]]; then
+            export TAG="${{ inputs.tag }}.0"
+          else
+            export TAG="${{ inputs.tag }}"
+          fi
           git clone --no-checkout https://github.com/wordpress/wordpress-develop/ .
-          git checkout tags/${{ inputs.tag }} -b ${{ inputs.tag }}
+          git checkout "tags/$TAG" -b "$TAG"
 
       - name: Git checkout develop.git.wordpress.org
         if: inputs.source == 'develop.git.wordpress.org'
         run: |
+          if [[ ${{ inputs.tag }} =~ ^[0-9]+\.[0-9]+$ ]]; then
+            export TAG="${{ inputs.tag }}.0"
+          else
+            export TAG="${{ inputs.tag }}"
+          fi
           git clone --no-checkout git://develop.git.wordpress.org/ .
-          git checkout tags/${{ inputs.tag }} -b ${{ inputs.tag }}
+          git checkout "tags/$TAG" -b "$TAG"
 
       - name: SVN checkout develop.svn.wordpress.org
         if: inputs.source == 'develop.svn.wordpress.org'
