@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - trunk
+  pull_request:
+    branches:
+      - '**'
   schedule:
     # Hourly schedule.
     #
