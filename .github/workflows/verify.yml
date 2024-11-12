@@ -113,23 +113,26 @@ jobs:
           rm package/wp-content/themes/twentytwentyone/.stylelintrc-css.json
           rm package/wp-content/themes/twentytwentyone/.stylelintrc.json
 
-      # @TODO this list only applies to 6.4 to 6.6
       - name: Handle known differences in bundled themes
         if: inputs.package != 'github-zip' && inputs.package != 'github-tar' && inputs.package != 'build.trac.wordpress.org'
         run: |
-          rm -rf source/wp-content/themes/twentyeleven
-          rm -rf source/wp-content/themes/twentyfifteen
-          rm -rf source/wp-content/themes/twentyfourteen
-          rm -rf source/wp-content/themes/twentynineteen
-          rm -rf source/wp-content/themes/twentyseventeen
-          rm -rf source/wp-content/themes/twentysixteen
           rm -rf source/wp-content/themes/twentyten
-          rm -rf source/wp-content/themes/twentythirteen
+          rm -rf source/wp-content/themes/twentyeleven
           rm -rf source/wp-content/themes/twentytwelve
-          rm -rf source/wp-content/themes/twentytwenty
-          rm -rf source/wp-content/themes/twentytwentyone
+          rm -rf source/wp-content/themes/twentythirteen
+          rm -rf source/wp-content/themes/twentyfourteen
+          rm -rf source/wp-content/themes/twentyfifteen
+          rm -rf source/wp-content/themes/twentysixteen
+          rm -rf source/wp-content/themes/twentyseventeen
+          if [[ "${{ steps.tag.outputs.short }}" >= "6.4" ]]; then
+            rm -rf source/wp-content/themes/twentynineteen
+            rm -rf source/wp-content/themes/twentytwenty
+            rm -rf source/wp-content/themes/twentytwentyone
+          fi
+          if [[ "${{ steps.tag.outputs.short }}" >= "6.7" ]]; then
+            rm -rf source/wp-content/themes/twentytwentytwo
+          fi
 
-      # @TODO this needs to be removed once the build step is updated to include Akismet at the correct version
       - name: Handle known differences in bundled plugins
         run: |
           rm -rf package/wp-content/plugins/akismet
