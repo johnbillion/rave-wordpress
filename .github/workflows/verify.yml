@@ -7,10 +7,6 @@ on:
         description: Tag name for WordPress release
         required: true
         type: string
-      source:
-        description: Source for WordPress release
-        required: true
-        type: string
       package:
         description: Package for WordPress release
         required: true
@@ -18,17 +14,14 @@ on:
 
 jobs:
   verify:
-    name: "${{ inputs.source }}"
+    name: "${{ inputs.package }}"
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Download artifacts
+      - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: wordpress-${{ inputs.tag }}-${{ inputs.source }}
+          name: wordpress-${{ inputs.tag }}-develop.svn.w.org
           path: source
 
       - name: Get zip file from GitHub

@@ -1,4 +1,4 @@
-name: Verify packages
+name: Reproduce and verify packages
 
 on:
   push:
@@ -14,16 +14,16 @@ jobs:
           - '6.6.2'
           - '6.5.5'
         source:
-          - github-wordpress-develop
           - develop.svn.w.org
+          - github-wordpress-develop
           - core.trac.w.org
       fail-fast: false
     uses: johnbillion/rave/.github/workflows/reproduce.yml@trunk
     with:
       tag: ${{ matrix.tag }}
       source: ${{ matrix.source }}
-  verify:
-    name: "Verify ${{ matrix.tag }} ${{ matrix.package }}"
+  compare:
+    name: "Compare ${{ matrix.tag }}"
     needs:
       - reproduce
     strategy:
@@ -33,20 +33,32 @@ jobs:
           - '6.5.5'
         source:
           - github-wordpress-develop
-          - develop.svn.w.org
           - core.trac.w.org
+      fail-fast: false
+    uses: johnbillion/rave/.github/workflows/compare.yml@trunk
+    with:
+      tag: ${{ matrix.tag }}
+      source: ${{ matrix.source }}
+  verify:
+    name: "Verify ${{ matrix.tag }}"
+    needs:
+      - reproduce
+    strategy:
+      matrix:
+        tag:
+          - '6.6.2'
+          - '6.5.5'
         package:
-          - github-zip
-          - github-tar
           - w.org-zip
           - w.org-tar
           - downloads.w.org-zip
           - downloads.w.org-tar
           - build.trac.w.org
+          - github-zip
+          - github-tar
 
       fail-fast: false
     uses: johnbillion/rave/.github/workflows/verify.yml@trunk
     with:
       tag: ${{ matrix.tag }}
-      source: ${{ matrix.source }}
       package: ${{ matrix.package }}
