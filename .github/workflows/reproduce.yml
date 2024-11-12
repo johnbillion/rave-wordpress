@@ -26,13 +26,13 @@ jobs:
           repository: WordPress/wordpress-develop
 
       - name: SVN checkout develop.svn.wordpress.org
-        if: inputs.source == 'develop.svn.wordpress.org'
+        if: inputs.source == 'develop.svn.w.org'
         run: |
           svn checkout https://develop.svn.wordpress.org/tags/${{ inputs.tag }} .
           rm -rf .svn
 
       - name: Download zip from core.trac.wordpress.org
-        if: inputs.source == 'core.trac.wordpress.org'
+        if: inputs.source == 'core.trac.w.org'
         run: |
           wget -O package.zip "https://core.trac.wordpress.org/browser/tags/${{ inputs.tag }}?format=zip"
           unzip package.zip

@@ -15,15 +15,15 @@ jobs:
           - '6.5.5'
         source:
           - github-wordpress-develop
-          - develop.svn.wordpress.org
-          - core.trac.wordpress.org
+          - develop.svn.w.org
+          - core.trac.w.org
       fail-fast: false
     uses: johnbillion/rave/.github/workflows/reproduce.yml@trunk
     with:
       tag: ${{ matrix.tag }}
       source: ${{ matrix.source }}
   verify:
-    name: "${{ matrix.tag }} ${{ matrix.source }}"
+    name: "Verify ${{ matrix.tag }} ${{ matrix.package }}"
     needs:
       - reproduce
     strategy:
@@ -33,16 +33,16 @@ jobs:
           - '6.5.5'
         source:
           - github-wordpress-develop
-          - develop.svn.wordpress.org
-          - core.trac.wordpress.org
+          - develop.svn.w.org
+          - core.trac.w.org
         package:
           - github-zip
           - github-tar
-          - wordpress.org-zip
-          - wordpress.org-tar
-          - downloads.wordpress.org-zip
-          - downloads.wordpress.org-tar
-          - build.trac.wordpress.org
+          - w.org-zip
+          - w.org-tar
+          - downloads.w.org-zip
+          - downloads.w.org-tar
+          - build.trac.w.org
 
       fail-fast: false
     uses: johnbillion/rave/.github/workflows/verify.yml@trunk
