@@ -41,10 +41,9 @@ RAVE stands for Reproduce And Verify.
 
 The GitHub Actions workflows run once an hour and currently test:
 
+* WordPress 6.7.0
 * WordPress 6.6.2
 * WordPress 6.5.5
-
-WordPress 6.7 will be added to the test matrix as soon as it's released.
 
 ## Why test the official package?
 
