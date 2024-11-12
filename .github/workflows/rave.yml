@@ -33,6 +33,7 @@ jobs:
           - '6.5.5'
         source:
           - develop.svn.wordpress.org
+          - develop.git.wordpress.org
           - github-wordpress-develop
           - core.trac.wordpress.org
       fail-fast: false
@@ -50,6 +51,7 @@ jobs:
           - '6.6.2'
           - '6.5.5'
         source:
+          - develop.git.wordpress.org
           - github-wordpress-develop
           - core.trac.wordpress.org
       fail-fast: false
