@@ -41,11 +41,22 @@ jobs:
           name: wordpress-${{ steps.tag.outputs.long }}-develop.svn.wordpress.org
           path: source
 
+      - name: Download versions artifact
+        if: inputs.tag == 'latest'
+        uses: actions/download-artifact@v4
+        with:
+          name: versions
+
+      - name: Extract the latest version number from versions.json
+        if: inputs.tag == 'latest'
+        run: |
+          export LATEST=$(jq -r '.[0]' versions.json)
+
       - name: Download latest artifact
         if: inputs.tag == 'latest'
         uses: actions/download-artifact@v4
         with:
-          name: wordpress-6.7.0-develop.svn.wordpress.org
+          name: "wordpress-$LATEST-develop.svn.wordpress.org"
           path: source
 
       - name: Get zip file from GitHub

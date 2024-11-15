@@ -40,6 +40,12 @@ jobs:
           # Map each version and if the number is in major.minor syntax, append a .0
           versions=$(echo $versions | jq -c 'map(. | capture("(?<major>\\d+)\\.(?<minor>\\d+)(\\.(?<patch>\\d+))?") | .major + "." + .minor + "." + (.patch // "0") )')
           echo "versions=$versions" >> $GITHUB_ENV
+          echo "$versions" > versions.json
+      - name: Save artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: versions
+          path: versions.json
   reproduce:
     name: "Reproduce ${{ matrix.tag }}"
     needs:
@@ -98,7 +104,7 @@ jobs:
       tag: ${{ matrix.tag }}
       package: ${{ matrix.package }}
   verify-latest-package:
-    name: "Verify ${{ matrix.tag }} package"
+    name: "Verify ${{ matrix.tag }} packages"
     needs:
       - reproduce
     strategy:
