@@ -24,14 +24,29 @@ permissions:
   contents: read
 
 jobs:
+  versions:
+    name: Determine latest branch numbers
+    runs-on: ubuntu-latest
+    outputs:
+      versions: ${{ steps.fetch.outputs.versions }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Fetch API data
+        id: fetch
+        run: |
+          # Fetches the version number from the first three objects which have a `response` of `autoupdate`
+          versions=$(curl -s https://api.wordpress.org/core/version-check/1.7/ | jq -c '.offers | map(select(.response == "autoupdate")) | .[0:3] | map(.version)')
+          # Map each version and if the number is in major.minor syntax, append a .0
+          versions=$(echo $versions | jq -c 'map(. | capture("(?<major>\\d+)\\.(?<minor>\\d+)(\\.(?<patch>\\d+))?") | .major + "." + .minor + "." + (.patch // "0") )')
+          echo "::set-output name=versions::$versions"
   reproduce:
     name: "Reproduce ${{ matrix.tag }}"
+    needs:
+      - versions
     strategy:
       matrix:
-        tag:
-          - '6.7.0'
-          - '6.6.2'
-          - '6.5.5'
+        tag: ${{ fromJson(needs.versions.outputs.versions) }}
         source:
           - develop.svn.wordpress.org
           - develop.git.wordpress.org
@@ -46,12 +61,10 @@ jobs:
     name: "Compare ${{ matrix.tag }}"
     needs:
       - reproduce
+      - versions
     strategy:
       matrix:
-        tag:
-          - '6.7.0'
-          - '6.6.2'
-          - '6.5.5'
+        tag: ${{ fromJson(needs.versions.outputs.versions) }}
         source:
           - develop.git.wordpress.org
           - github-wordpress-develop
@@ -65,12 +78,10 @@ jobs:
     name: "Verify ${{ matrix.tag }} packages"
     needs:
       - reproduce
+      - versions
     strategy:
       matrix:
-        tag:
-          - '6.7.0'
-          - '6.6.2'
-          - '6.5.5'
+        tag: ${{ fromJson(needs.versions.outputs.versions) }}
         package:
           - wordpress.org-zip
           - wordpress.org-tar
@@ -104,24 +115,22 @@ jobs:
       package: ${{ matrix.package }}
   verify-hashes:
     name: "Verify ${{ matrix.tag }} hashes"
+    needs:
+      - versions
     strategy:
       matrix:
-        tag:
-          - '6.7.0'
-          - '6.6.2'
-          - '6.5.5'
+        tag: ${{ fromJson(needs.versions.outputs.versions) }}
       fail-fast: false
     uses: ./.github/workflows/hashes.yml
     with:
       tag: ${{ matrix.tag }}
   verify-checksums:
     name: "Verify ${{ matrix.tag }} checksums"
+    needs:
+      - versions
     strategy:
       matrix:
-        tag:
-          - '6.7.0'
-          - '6.6.2'
-          - '6.5.5'
+        tag: ${{ fromJson(needs.versions.outputs.versions) }}
       fail-fast: false
     uses: ./.github/workflows/checksums.yml
     with:
