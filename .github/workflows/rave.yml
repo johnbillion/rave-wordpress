@@ -87,18 +87,20 @@ jobs:
       tag: ${{ matrix.tag }}
       package: ${{ matrix.package }}
   verify-latest-package:
-    name: Verify latest package
+    name: "Verify ${{ matrix.tag }} package"
     needs:
       - reproduce
     strategy:
       matrix:
+        tag:
+          - 'latest'
         package:
           - wordpress.org-zip
           - wordpress.org-tar
       fail-fast: false
     uses: ./.github/workflows/verify.yml
     with:
-      tag: latest
+      tag: ${{ matrix.tag }}
       package: ${{ matrix.package }}
   verify-hashes:
     name: "Verify ${{ matrix.tag }} hashes"
