@@ -10,32 +10,31 @@ RAVE stands for Reproduce And Verify.
 
 ### Source code
 
-* ✅ `develop.svn.wordpress.org/tags/{tag}/src`
-* ✅ `develop.git.wordpress.org` at `{tag}`
-* ✅ `github.com/wordpress/wordpress-develop/tree/{tag}/src`
-* ✅ `core.trac.wordpress.org/browser/tags/{tag}/src?format=zip`
+* ✅ `develop.svn.wordpress.org`
+* ✅ `develop.git.wordpress.org`
+* ✅ `github.com/wordpress/wordpress-develop`
+* ✅ `core.trac.wordpress.org`
 
 ### Official packages
 
-* ✅ `wordpress.org/wordpress-{tag}.zip` / `.tar.gz`
-* ✅ md5 and sha1 hashes published on wordpress.org for the above
-* ✅ File checksums published on api.wordpress.org for the above
-* ✅ `downloads.wordpress.org/release/wordpress-{tag}.zip` / `.tar.gz`
-* ✅ `build.trac.wordpress.org/browser/tags/{tag}/src?format=zip`
-* ✅ `github.com/wordpress/wordpress/archive/refs/tags/{tag}.zip` / `.tar.gz`
-* ✅ `wordpress.org/latest.zip` / `.tar.gz`
+* ✅ `wordpress.org/latest.zip`
+* ✅ `wordpress.org/wordpress-{tag}.zip`
+* ✅ `downloads.wordpress.org/release/wordpress-{tag}.zip`
+* ✅ `github.com/wordpress/wordpress`
+* ✅ `build.trac.wordpress.org`
+
+The md5 hashes, sha1 hashes, and file checksums published on wordpress.org are also verified for the wordpress.org packages.
 
 ### Official builds
 
-* ⏳ Todo: `core.git.wordpress.org` at `{tag}`
-* ⏳ Todo: `core.svn.wordpress.org` at `{tag}`
-* ⏳ ???: `build.svn.wordpress.org` at `{tag}`
+* ⏳ Todo: `core.git.wordpress.org`
+* ⏳ Todo: `core.svn.wordpress.org`
+* ⏳ ???: `build.svn.wordpress.org`
 
 ### Unofficial packages
 
-* ✅ `johnpbloch/wordpress:{tag}` on Packagist
-* ✅ `roots/wordpress-full:{tag}` on Packagist
-* ⏳ Todo: `roots/wordpress:{tag}` on Packagist
+* ✅ `roots/wordpress-full` on Packagist
+* ✅ `johnpbloch/wordpress` on Packagist
 
 ## When do the tests run?
 
