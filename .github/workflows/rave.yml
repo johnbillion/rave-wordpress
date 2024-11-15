@@ -4,9 +4,15 @@ on:
   push:
     branches:
       - trunk
+    paths:
+      - .github/workflows/*
+      - composer.json
   pull_request:
     branches:
       - '**'
+    paths:
+      - .github/workflows/*
+      - composer.json
   schedule:
     # Hourly schedule.
     #
