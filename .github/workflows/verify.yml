@@ -35,9 +35,17 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download artifact
+        if: inputs.tag != 'latest'
         uses: actions/download-artifact@v4
         with:
           name: wordpress-${{ steps.tag.outputs.long }}-develop.svn.wordpress.org
+          path: source
+
+      - name: Download latest artifact
+        if: inputs.tag == 'latest'
+        uses: actions/download-artifact@v4
+        with:
+          name: wordpress-6.7.0-develop.svn.wordpress.org
           path: source
 
       - name: Get zip file from GitHub
@@ -56,16 +64,31 @@ jobs:
           mv wordpress/WordPress-${{ steps.tag.outputs.short }} package
 
       - name: Get zip file from wordpress.org
-        if: inputs.package == 'wordpress.org-zip'
+        if: inputs.package == 'wordpress.org-zip' && inputs.tag != 'latest'
         run: |
           wget -O package.zip "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip"
           unzip package.zip -d wordpress
           mv wordpress/wordpress package
 
       - name: Get tar file from wordpress.org
-        if: inputs.package == 'wordpress.org-tar'
+        if: inputs.package == 'wordpress.org-tar' && inputs.tag != 'latest'
         run: |
           wget -O package.tar.gz "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz"
+          mkdir wordpress
+          tar -xzf package.tar.gz -C wordpress
+          mv wordpress/wordpress package
+
+      - name: Get latest zip file from wordpress.org
+        if: inputs.package == 'wordpress.org-zip' && inputs.tag == 'latest'
+        run: |
+          wget -O package.zip "https://wordpress.org/latest.zip"
+          unzip package.zip -d wordpress
+          mv wordpress/wordpress package
+
+      - name: Get latest tar file from wordpress.org
+        if: inputs.package == 'wordpress.org-tar' && inputs.tag == 'latest'
+        run: |
+          wget -O package.tar.gz "https://wordpress.org/latest.tar.gz"
           mkdir wordpress
           tar -xzf package.tar.gz -C wordpress
           mv wordpress/wordpress package
@@ -126,12 +149,12 @@ jobs:
           rm -rf source/wp-content/themes/twentyfifteen
           rm -rf source/wp-content/themes/twentysixteen
           rm -rf source/wp-content/themes/twentyseventeen
-          if (( $(echo "${{ steps.tag.outputs.branch }} >= 6.4" | bc -l) )); then
+          if [[ "${{ inputs.tag }}" == "latest" ]] || (( $(echo "${{ steps.tag.outputs.branch }} >= 6.4" | bc -l) )); then
             rm -rf source/wp-content/themes/twentynineteen
             rm -rf source/wp-content/themes/twentytwenty
             rm -rf source/wp-content/themes/twentytwentyone
           fi
-          if (( $(echo "${{ steps.tag.outputs.branch }} >= 6.7" | bc -l) )); then
+          if [[ "${{ inputs.tag }}" == "latest" ]] || (( $(echo "${{ steps.tag.outputs.branch }} >= 6.7" | bc -l) )); then
             rm -rf source/wp-content/themes/twentytwentytwo
           fi
 

@@ -23,7 +23,7 @@ RAVE stands for Reproduce And Verify.
 * ✅ `downloads.wordpress.org/release/wordpress-{tag}.zip` / `.tar.gz`
 * ✅ `build.trac.wordpress.org/browser/tags/{tag}/src?format=zip`
 * ✅ `github.com/wordpress/wordpress/archive/refs/tags/{tag}.zip` / `.tar.gz`
-* ⏳ Todo: `wordpress.org/latest.zip` / `.tar.gz`
+* ✅ `wordpress.org/latest.zip` / `.tar.gz`
 
 ### Official builds
 
