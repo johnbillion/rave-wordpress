@@ -49,14 +49,15 @@ jobs:
 
       - name: Extract the latest version number from versions.json
         if: inputs.tag == 'latest'
+        id: extract
         run: |
-          export LATEST=$(jq -r '.[0]' versions.json)
+          echo "latest=$(jq -r '.[0]' versions.json)" >> "$GITHUB_OUTPUT"
 
       - name: Download latest artifact
         if: inputs.tag == 'latest'
         uses: actions/download-artifact@v4
         with:
-          name: "wordpress-$LATEST-develop.svn.wordpress.org"
+          name: "wordpress-${{ steps.extract.outputs.latest }}-develop.svn.wordpress.org"
           path: source
 
       - name: Get zip file from GitHub
