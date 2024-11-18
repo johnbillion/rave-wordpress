@@ -28,7 +28,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: Tag name for WordPress release. Use `x.y` for majors and `x.y.z` for minors.
+        description: Full semver tag name for WordPress release in `x.y.z` format.
         required: true
         type: string
 
@@ -37,7 +37,7 @@ permissions:
 
 jobs:
   versions:
-    name: Determine latest branch numbers
+    name: Determine branch numbers
     runs-on: ubuntu-latest
     outputs:
       versions: ${{ steps.fetch.outputs.versions }}
