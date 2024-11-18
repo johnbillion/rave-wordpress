@@ -25,6 +25,12 @@ on:
     #        │  │  │  │  │
     #        │  │  │  │  │
     - cron: '0  *  *  *  *'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Tag name for WordPress release. Use `x.y` for majors and `x.y.z` for minors.
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -36,17 +42,22 @@ jobs:
     outputs:
       versions: ${{ steps.fetch.outputs.versions }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Fetch API data
-        id: fetch
-        run: |
+      - name: Fetch versions matrix from API data
+        if: ${{ github.event_name != 'workflow_dispatch' }}
+        run: | #shell
           # Fetches the version number from the first three objects which have a `response` of `autoupdate`
           versions=$(curl -s https://api.wordpress.org/core/version-check/1.7/ | jq -c '.offers | map(select(.response == "autoupdate")) | .[0:3] | map(.version)')
           # Map each version and if the number is in major.minor syntax, append a .0
           versions=$(echo $versions | jq -c 'map(. | capture("(?<major>\\d+)\\.(?<minor>\\d+)(\\.(?<patch>\\d+))?") | .major + "." + .minor + "." + (.patch // "0") )')
-          echo "versions=$versions" >> "$GITHUB_OUTPUT"
           echo "$versions" > versions.json
+      - name: Fetch version matrix from workflow input
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        run: | #shell
+          echo '["${{ inputs.version }}"]' > versions.json
+      - name: Output versions from versions.json
+        id: fetch
+        run: | #shell
+          echo "versions=$(cat versions.json)" >> "$GITHUB_OUTPUT"
       - name: Save artifact
         uses: actions/upload-artifact@v4
         with:
