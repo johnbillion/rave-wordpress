@@ -72,7 +72,7 @@ To quote [reproducible-builds.org](https://reproducible-builds.org/):
 
 > Reproducible builds are a set of software development practices that create an independently-verifiable path from source to binary code.
 
-[The process that builds and packages WordPress](https://build.trac.wordpress.org/timeline) is reproducible as far as the built code is concerned, although I believe that the ZIP file generation does not result in a stable hash between invocations. Unfortunately the process itself is not open source. The process differs from the `npm run build` process in the source code because it makes some additions (eg. the Akismet plugin) and some exclusions (older default themes). The verification performed by this repo take this into account.
+[The process that builds and packages WordPress](https://build.trac.wordpress.org/timeline) is reproducible as far as the built code is concerned, although I believe that the ZIP file generation does not result in a stable hash between invocations. Unfortunately the process itself is not open source. The process differs from the `npm run build` process in the source code because it makes some additions (eg. the Akismet plugin) and some exclusions (older default themes). The verifications performed by this repo take this into account.
 
 ## Verifiable WordPress
 
