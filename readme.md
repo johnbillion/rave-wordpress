@@ -21,7 +21,7 @@ RAVE stands for Reproduce And Verify.
 * ✅ `wordpress.org/wordpress-{tag}.zip`
 * ✅ `downloads.wordpress.org/release/wordpress-{tag}.zip`
 * ✅ `github.com/wordpress/wordpress`
-* ✅ `build.trac.wordpress.org`
+* ⚠️ `build.trac.wordpress.org` (fully implemented but temporarily disabled while I investigate rate limits being hit)
 
 The md5 hashes, sha1 hashes, and file checksums published on wordpress.org are also verified for the wordpress.org packages.
 
