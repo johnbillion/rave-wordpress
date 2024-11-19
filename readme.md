@@ -13,7 +13,7 @@ RAVE stands for Reproduce And Verify.
 * ✅ `develop.svn.wordpress.org`
 * ✅ `develop.git.wordpress.org`
 * ✅ `github.com/wordpress/wordpress-develop`
-* ✅ `core.trac.wordpress.org`
+* ⚠️ `core.trac.wordpress.org` (fully implemented but temporarily disabled while I investigate rate limits being hit)
 
 ### Official packages
 
