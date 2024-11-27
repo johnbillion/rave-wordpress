@@ -1,0 +1,53 @@
+name: Verify the update offers
+
+on:
+  workflow_call:
+    inputs:
+      tag:
+        description: Tag name for WordPress release
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: "${{ inputs.tag }}"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Prepare tag name
+        id: tag
+        run: | #shell
+          export LONG_TAG="${{ inputs.tag }}"
+          export SHORT_TAG="${LONG_TAG%.0}"
+          export BRANCH_NUMBER="${LONG_TAG%.*}"
+          echo "short=$SHORT_TAG" >> "$GITHUB_OUTPUT"
+          echo "long=$LONG_TAG" >> "$GITHUB_OUTPUT"
+          echo "branch=$BRANCH_NUMBER" >> "$GITHUB_OUTPUT"
+
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: offers
+
+      - name: Verify the offer URLs
+        run: | #shell
+          TAG="${{ steps.tag.outputs.short }}"
+          EXPECTED_URL="https://downloads.w.org/release/wordpress-${TAG}.zip"
+          MATCHING_OBJECT=$(jq --arg tag "$TAG" '.[] | select(.version == $tag)' offers.json)
+          if [ -z "$MATCHING_OBJECT" ]; then
+            echo "No matching version found for tag $TAG"
+            exit 1
+          fi
+          DOWNLOAD_URL=$(echo "$MATCHING_OBJECT" | jq -r '.download')
+          if [ "$DOWNLOAD_URL" != "$EXPECTED_URL" ]; then
+            echo "Download URL $DOWNLOAD_URL does not match the expected $EXPECTED_URL"
+            exit 1
+          fi
+          PACKAGE_URL=$(echo "$MATCHING_OBJECT" | jq -r '.packages.full')
+          if [ "$PACKAGE_URL" != "$EXPECTED_URL" ]; then
+            echo "Package URL $PACKAGE_URL does not match the expected $EXPECTED_URL"
+            exit 1
+          fi
