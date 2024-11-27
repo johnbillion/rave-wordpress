@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   zip:
-    name: "Verify zip hashes"
+    name: "${{ inputs.tag }} zip hashes"
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -41,7 +41,7 @@ jobs:
         run: |
           echo "$(cat package.zip.sha1) package.zip" | sha1sum -c -
   tar:
-    name: "Verify tar hashes"
+    name: "${{ inputs.tag }} tar hashes"
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:

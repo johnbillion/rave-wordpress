@@ -103,7 +103,7 @@ jobs:
       tag: ${{ matrix.tag }}
       source: ${{ matrix.source }}
   offers:
-    name: "Verify ${{ matrix.tag }} offers"
+    name: Verify offers
     needs:
       - versions
     strategy:
@@ -155,7 +155,7 @@ jobs:
       tag: ${{ matrix.tag }}
       package: ${{ matrix.package }}
   verify-hashes:
-    name: "Verify ${{ matrix.tag }} hashes"
+    name: Verify hashes
     needs:
       - versions
     strategy:
@@ -166,7 +166,7 @@ jobs:
     with:
       tag: ${{ matrix.tag }}
   verify-checksums:
-    name: "Verify ${{ matrix.tag }} checksums"
+    name: Verify checksums
     needs:
       - versions
     strategy:

@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   verify:
-    name: Verify URLs
+    name: "${{ inputs.tag }} URLs"
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
