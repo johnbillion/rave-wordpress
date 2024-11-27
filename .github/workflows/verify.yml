@@ -120,6 +120,21 @@ jobs:
           tar -xzf package.tar.gz -C wordpress
           mv wordpress/wordpress package
 
+      - name: Get zip file from downloads.w.org
+        if: inputs.package == 'downloads.w.org-zip'
+        run: |
+          wget -O package.zip "https://downloads.w.org/release/wordpress-${{ steps.tag.outputs.short }}.zip"
+          unzip package.zip -d wordpress
+          mv wordpress/wordpress package
+
+      - name: Get tar file from downloads.w.org
+        if: inputs.package == 'downloads.w.org-tar'
+        run: |
+          wget -O package.tar.gz "https://downloads.w.org/release/wordpress-${{ steps.tag.outputs.short }}.tar.gz"
+          mkdir wordpress
+          tar -xzf package.tar.gz -C wordpress
+          mv wordpress/wordpress package
+
       - name: Download zip from build.trac.wordpress.org
         if: inputs.package == 'build.trac.wordpress.org'
         run: |

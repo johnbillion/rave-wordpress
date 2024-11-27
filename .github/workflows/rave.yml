@@ -110,6 +110,8 @@ jobs:
           - wordpress.org-tar
           - downloads.wordpress.org-zip
           - downloads.wordpress.org-tar
+          - downloads.w.org-zip
+          - downloads.w.org-tar
           # - build.trac.wordpress.org # temporarily disabled while I investigate rate limiting
           - github-zip
           - github-tar
