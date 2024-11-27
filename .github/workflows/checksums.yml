@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   checksums:
-    name: "${{ inputs.tag }} checksums"
+    name: ${{ inputs.tag }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:

@@ -103,12 +103,14 @@ jobs:
       tag: ${{ matrix.tag }}
       source: ${{ matrix.source }}
   offers:
-    name: Verify offers
+    name: ${{ matrix.label }}
     needs:
       - versions
     strategy:
       matrix:
         tag: ${{ fromJson(needs.versions.outputs.versions) }}
+        label:
+          - Verify offers
       fail-fast: false
     uses: ./.github/workflows/offer.yml
     with:
@@ -155,23 +157,27 @@ jobs:
       tag: ${{ matrix.tag }}
       package: ${{ matrix.package }}
   verify-hashes:
-    name: Verify hashes
+    name: ${{ matrix.label }}
     needs:
       - versions
     strategy:
       matrix:
         tag: ${{ fromJson(needs.versions.outputs.versions) }}
+        label:
+          - Verify hashes
       fail-fast: false
     uses: ./.github/workflows/hashes.yml
     with:
       tag: ${{ matrix.tag }}
   verify-checksums:
-    name: Verify checksums
+    name: ${{ matrix.label }}
     needs:
       - versions
     strategy:
       matrix:
         tag: ${{ fromJson(needs.versions.outputs.versions) }}
+        label:
+          - Verify checksums
       fail-fast: false
     uses: ./.github/workflows/checksums.yml
     with:
