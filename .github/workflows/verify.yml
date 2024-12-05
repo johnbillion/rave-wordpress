@@ -147,7 +147,7 @@ jobs:
         run: |
           wget -O package.zip "https://core-updates.wpengine.com/wordpress-${{ steps.tag.outputs.short }}.zip"
           unzip package.zip
-          mv ${{ steps.tag.outputs.short }} package
+          mv wordpress package
 
       - name: Download roots/wordpress-full
         if: inputs.package == 'roots-wordpress-full'
