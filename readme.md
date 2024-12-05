@@ -34,6 +34,7 @@ The md5 hashes, sha1 hashes, and file checksums published on wordpress.org are a
 
 ### Unofficial packages
 
+* ✅ `core-updates.wpengine.com` from WPEngine
 * ✅ `roots/wordpress-full` on Packagist
 * ✅ `johnpbloch/wordpress` on Packagist
 
