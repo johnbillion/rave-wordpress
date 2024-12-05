@@ -133,6 +133,7 @@ jobs:
           # - build.trac.wordpress.org # temporarily disabled while I investigate rate limiting
           - github-zip
           - github-tar
+          - wpengine-zip
           - roots-wordpress-full
           - johnpbloch-wordpress
       fail-fast: false
