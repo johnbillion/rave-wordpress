@@ -34,6 +34,7 @@ The md5 hashes, sha1 hashes, and file checksums published on wordpress.org are a
 
 ### Unofficial packages
 
+* ✅ `wordpress` image from Docker Hub
 * ✅ `core-updates.wpengine.com` from WPEngine
 * ✅ `roots/wordpress-full` on Packagist
 * ✅ `johnpbloch/wordpress` on Packagist
@@ -91,7 +92,6 @@ Checksums for core files are provided by the WordPress.org API at `https://api.w
 * WP-CLI (eg. `wp core download` and `wp core verify-checksums`)
 * APT packages, eg `apt install wordpress`
 * wp-env
-* The container at https://hub.docker.com/_/wordpress
 
 ## License
 
