@@ -4,7 +4,7 @@
 
 RAVE for WordPress is an automated tool which compares the contents of published packages of WordPress with the canonical source code to verify they have not been tampered with. The package from WordPress.org, GitHub, and some unofficial packages are all tested.
 
-A CI system runs on GitHub Actions which runs the build process from the canonical sources, fetches published packages from various locations, and compares them all against one another to identify any anomalies. A future version of this library will provide the tooling to run the checks outside of GitHub Actions.
+A CI system runs on GitHub Actions which reproduces the build from the canonical sources, fetches published packages from various locations, and compares them all against one another to verify their integrity and identify any anomalies.
 
 RAVE stands for Reproduce And Verify.
 
@@ -15,7 +15,7 @@ RAVE stands for Reproduce And Verify.
 * ✅ `develop.svn.wordpress.org`
 * ✅ `develop.git.wordpress.org`
 * ✅ `github.com/wordpress/wordpress-develop`
-* ✅⚠️ `core.trac.wordpress.org` (fully implemented but partially disabled due to rate limiting)
+* ✅ `core.trac.wordpress.org`
 
 ### Official packages
 
@@ -24,7 +24,7 @@ RAVE stands for Reproduce And Verify.
 * ✅ `downloads.wordpress.org/release/wordpress-{tag}.zip`
 * ✅ `downloads.w.org/release/wordpress-{tag}.zip`
 * ✅ `github.com/wordpress/wordpress`
-* ✅⚠️ `build.trac.wordpress.org` (fully implemented but partially disabled due to rate limiting)
+* ✅ `build.trac.wordpress.org`
 
 ### Official builds
 
@@ -47,11 +47,13 @@ RAVE stands for Reproduce And Verify.
 
 ## When do the tests run?
 
-The GitHub Actions workflow runs once an hour. It tests the latest version in the three most recent branches, which is currently:
+The GitHub Actions workflow runs once an hour. It verifies the latest version in the three most recent branches, which is currently:
 
 * WordPress 6.7
 * WordPress 6.6
 * WordPress 6.5
+
+_Note:_ Due to request rate limiting on wordpress.org, the `core.trac.wordpress.org` source and the `build.trac.wordpress.org` package are only verified in the most recent branch. All other sources and packages are verified in the three most recent branches.
 
 ## Why test the official package?
 
