@@ -80,7 +80,7 @@ jobs:
           - develop.git.wordpress.org
           - github-wordpress-develop
         include:
-          # Only reproduce the latest tag from develop.svn.wordpress.org due to rate limiting
+          # Only reproduce the latest tag from core.trac.wordpress.org due to rate limiting
           - tag: ${{ fromJson(needs.versions.outputs.versions)[0] }}
             source: core.trac.wordpress.org
       fail-fast: false
@@ -99,7 +99,10 @@ jobs:
         source:
           - develop.git.wordpress.org
           - github-wordpress-develop
-          # - core.trac.wordpress.org # temporarily disabled while I investigate rate limiting
+        include:
+          # Only compare the latest tag from core.trac.wordpress.org due to rate limiting
+          - tag: ${{ fromJson(needs.versions.outputs.versions)[0] }}
+            source: core.trac.wordpress.org
       fail-fast: false
     uses: ./.github/workflows/compare.yml
     with:
@@ -133,13 +136,16 @@ jobs:
           - downloads.wordpress.org-tar
           - downloads.w.org-zip
           - downloads.w.org-tar
-          # - build.trac.wordpress.org # temporarily disabled while I investigate rate limiting
           - github-zip
           - github-tar
           - docker-wordpress
           - wpengine-zip
           - roots-wordpress-full
           - johnpbloch-wordpress
+        include:
+          # Only verify the latest tag from build.trac.wordpress.org due to rate limiting
+          - tag: ${{ fromJson(needs.versions.outputs.versions)[0] }}
+            package: build.trac.wordpress.org
       fail-fast: false
     uses: ./.github/workflows/verify.yml
     with:
