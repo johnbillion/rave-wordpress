@@ -148,6 +148,7 @@ jobs:
           mkdir package
           docker run -d \
             -v ./package:/var/www/html \
+            --user "$(id -u):$(id -g)" \
             "wordpress:${{ steps.tag.outputs.long }}"
 
       - name: Download zip from core-updates.wpengine.com
