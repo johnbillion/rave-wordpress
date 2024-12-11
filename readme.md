@@ -1,3 +1,5 @@
+[![Reproduce and verify packages](https://github.com/johnbillion/rave-wordpress/actions/workflows/rave.yml/badge.svg?event=schedule)](https://github.com/johnbillion/rave-wordpress/actions/workflows/rave.yml)
+
 # RAVE for WordPress
 
 RAVE for WordPress is an automated tool which compares the contents of published packages of WordPress with the canonical source code to verify they have not been tampered with. The package from WordPress.org, GitHub, and some unofficial packages are all tested.
