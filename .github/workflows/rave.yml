@@ -79,7 +79,10 @@ jobs:
           - develop.svn.wordpress.org
           - develop.git.wordpress.org
           - github-wordpress-develop
-          # - core.trac.wordpress.org # temporarily disabled while I investigate rate limiting
+        include:
+          # Only reproduce the latest tag from develop.svn.wordpress.org due to rate limiting
+          - tag: ${{ fromJson(needs.versions.outputs.versions)[0] }}
+            source: core.trac.wordpress.org
       fail-fast: false
     uses: ./.github/workflows/reproduce.yml
     with:
