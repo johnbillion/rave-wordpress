@@ -148,8 +148,12 @@ jobs:
           mkdir package
           docker run -d \
             -v ./package:/var/www/html \
+            --name my_wordpress \
             --user "$(id -u):$(id -g)" \
             "wordpress:${{ steps.tag.outputs.long }}"
+          docker exec my_wordpress rm -f /var/www/html/.htaccess
+          docker exec my_wordpress rm -f /var/www/html/wp-config-docker.php
+          docker exec my_wordpress rm -rf /var/www/html/wp-content/plugins/akismet
 
       - name: Download zip from core-updates.wpengine.com
         if: inputs.package == 'wpengine-zip'
