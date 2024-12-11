@@ -1,0 +1,7 @@
+services:
+
+  wordpress:
+    image: wordpress:${WP_VERSION-latest}
+    container_name: wordpress
+    volumes:
+      - ./package:/var/www/html

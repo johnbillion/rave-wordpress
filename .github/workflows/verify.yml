@@ -145,15 +145,12 @@ jobs:
       - name: Download Docker image
         if: inputs.package == 'docker-wordpress'
         run: |
-          mkdir package
-          docker run -d \
-            -v ./package:/usr/src/wordpress \
-            --name my_wordpress \
-            --user "$(id -u):$(id -g)" \
-            "wordpress:${{ steps.tag.outputs.long }}"
-          docker exec my_wordpress rm /usr/src/wordpress/.htaccess
-          docker exec my_wordpress rm /usr/src/wordpress/wp-config-docker.php
-          docker exec my_wordpress rm -r /usr/src/wordpress/wp-content/plugins/akismet
+          docker compose up -d wordpress
+          docker compose run --rm wordpress -- rm /var/www/html/.htaccess
+          docker compose run --rm wordpress -- rm /var/www/html/wp-config-docker.php
+          docker compose run --rm wordpress -- rm -r /var/www/html/wp-content/plugins/akismet
+        env:
+          WP_VERSION: ${{ steps.tag.outputs.long }}
 
       - name: Download zip from core-updates.wpengine.com
         if: inputs.package == 'wpengine-zip'
