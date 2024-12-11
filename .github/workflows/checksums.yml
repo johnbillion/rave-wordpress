@@ -29,11 +29,13 @@ jobs:
 
       - name: Download checksums from wordpress.org
         run: |
-          wget -O checksums.json "https://api.wordpress.org/core/checksums/1.0/?version=${{ steps.tag.outputs.short }}"
+          wget -O checksums.json "https://api.wordpress.org/core/checksums/1.0/?version=${{ steps.tag.outputs.short }}" \
+            --user-agent="WordPress/${{ steps.tag.outputs.branch }}"
 
       - name: Download and extract zip from wordpress.org
         run: |
-          wget "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip"
+          wget "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip" \
+            --user-agent="WordPress/${{ steps.tag.outputs.branch }}"
           unzip -q wordpress-${{ steps.tag.outputs.short }}.zip
 
       - name: Convert checksums.json into format that can be used by md5sum

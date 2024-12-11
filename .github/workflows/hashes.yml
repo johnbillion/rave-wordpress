@@ -29,9 +29,12 @@ jobs:
 
       - name: Download zip and hashes from wordpress.org
         run: |
-          wget -O package.zip "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip"
-          wget -O package.zip.md5 "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip.md5"
-          wget -O package.zip.sha1 "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip.sha1"
+          wget -O package.zip "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip" \
+            --user-agent="WordPress/${{ steps.tag.outputs.branch }}"
+          wget -O package.zip.md5 "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip.md5" \
+            --user-agent="WordPress/${{ steps.tag.outputs.branch }}"
+          wget -O package.zip.sha1 "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip.sha1" \
+            --user-agent="WordPress/${{ steps.tag.outputs.branch }}"
 
       - name: Check the md5 hash
         run: |
@@ -57,9 +60,12 @@ jobs:
 
       - name: Download tar.gz and hashes from wordpress.org
         run: |
-          wget -O package.tar.gz "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz"
-          wget -O package.tar.gz.md5 "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz.md5"
-          wget -O package.tar.gz.sha1 "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz.sha1"
+          wget -O package.tar.gz "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz" \
+            --user-agent="WordPress/${{ steps.tag.outputs.branch }}"
+          wget -O package.tar.gz.md5 "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz.md5" \
+            --user-agent="WordPress/${{ steps.tag.outputs.branch }}"
+          wget -O package.tar.gz.sha1 "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz.sha1" \
+            --user-agent="WordPress/${{ steps.tag.outputs.branch }}"
 
       - name: Check the md5 hash
         run: |

@@ -52,7 +52,8 @@ jobs:
       - name: Download zip from core.trac.wordpress.org
         if: inputs.source == 'core.trac.wordpress.org'
         run: |
-          wget -O package.zip "https://core.trac.wordpress.org/browser/tags/${{ steps.tag.outputs.short }}?format=zip" --user-agent="WordPress/${{ steps.tag.outputs.branch }}"
+          wget -O package.zip "https://core.trac.wordpress.org/browser/tags/${{ steps.tag.outputs.short }}?format=zip" \
+            --user-agent="WordPress/${{ steps.tag.outputs.branch }}"
           unzip package.zip
           shopt -s dotglob
           mv ${{ steps.tag.outputs.short }}/* .
