@@ -12,13 +12,13 @@ on:
         required: true
         type: string
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
   reproduce:
     name: "${{ inputs.source }}"
     runs-on: ubuntu-latest
+    permissions: {}
     timeout-minutes: 10
     steps:
       - name: Prepare tag name

@@ -8,13 +8,13 @@ on:
         required: true
         type: string
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
   zip:
     name: "${{ inputs.tag }} zip"
     runs-on: ubuntu-latest
+    permissions: {}
     timeout-minutes: 10
     steps:
       - name: Prepare tag name
@@ -43,9 +43,11 @@ jobs:
       - name: Check the sha1 hash
         run: |
           echo "$(cat package.zip.sha1) package.zip" | sha1sum -c -
+
   tar:
     name: "${{ inputs.tag }} tar"
     runs-on: ubuntu-latest
+    permissions: {}
     timeout-minutes: 10
     steps:
       - name: Prepare tag name

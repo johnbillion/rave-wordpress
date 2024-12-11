@@ -32,13 +32,13 @@ on:
         required: true
         type: string
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
   versions:
     name: Determine branch numbers
     runs-on: ubuntu-latest
+    permissions: {}
     outputs:
       versions: ${{ steps.fetch.outputs.versions }}
     steps:
@@ -68,8 +68,10 @@ jobs:
         with:
           name: offers
           path: offers.json
+
   reproduce:
     name: "Reproduce ${{ matrix.tag }}"
+    permissions: {}
     needs:
       - versions
     strategy:
@@ -88,8 +90,10 @@ jobs:
     with:
       tag: ${{ matrix.tag }}
       source: ${{ matrix.source }}
+
   compare:
     name: "Compare ${{ matrix.tag }}"
+    permissions: {}
     needs:
       - reproduce
       - versions
@@ -108,8 +112,10 @@ jobs:
     with:
       tag: ${{ matrix.tag }}
       source: ${{ matrix.source }}
+
   offers:
     name: ${{ matrix.label }}
+    permissions: {}
     needs:
       - versions
     strategy:
@@ -121,8 +127,11 @@ jobs:
     uses: ./.github/workflows/offer.yml
     with:
       tag: ${{ matrix.tag }}
+
   verify-packages:
     name: "Verify ${{ matrix.tag }} packages"
+    permissions:
+      contents: read
     needs:
       - reproduce
       - versions
@@ -151,8 +160,11 @@ jobs:
     with:
       tag: ${{ matrix.tag }}
       package: ${{ matrix.package }}
+
   verify-latest-package:
     name: "Verify ${{ matrix.tag }} packages"
+    permissions:
+      contents: read
     needs:
       - reproduce
     strategy:
@@ -167,8 +179,10 @@ jobs:
     with:
       tag: ${{ matrix.tag }}
       package: ${{ matrix.package }}
+
   verify-hashes:
     name: ${{ matrix.label }}
+    permissions: {}
     needs:
       - versions
     strategy:
@@ -180,8 +194,10 @@ jobs:
     uses: ./.github/workflows/hashes.yml
     with:
       tag: ${{ matrix.tag }}
+
   verify-checksums:
     name: ${{ matrix.label }}
+    permissions: {}
     needs:
       - versions
     strategy:
