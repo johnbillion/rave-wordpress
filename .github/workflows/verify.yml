@@ -145,6 +145,7 @@ jobs:
       - name: Download Docker image
         if: inputs.package == 'docker-wordpress'
         run: |
+          mkdir package
           docker run -d \
             -v ./package:/var/www/html \
             wordpress:latest
@@ -202,6 +203,14 @@ jobs:
       - name: Handle known differences in bundled plugins
         run: |
           rm -rf package/wp-content/plugins/akismet
+
+      - name: Tree source
+        run: |
+          tree source
+
+      - name: Tree package
+        run: |
+          tree package
 
       - name: Compare files
         run: |
