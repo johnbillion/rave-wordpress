@@ -206,11 +206,11 @@ jobs:
 
       - name: Tree source
         run: |
-          tree source
+          tree source || true
 
       - name: Tree package
         run: |
-          tree package
+          tree package || true
 
       - name: Compare files
         run: |
