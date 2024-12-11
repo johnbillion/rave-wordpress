@@ -24,8 +24,6 @@ RAVE stands for Reproduce And Verify.
 * ✅ `github.com/wordpress/wordpress`
 * ⚠️ `build.trac.wordpress.org` (fully implemented but temporarily disabled while I investigate rate limits being hit)
 
-The md5 hashes, sha1 hashes, and file checksums published on wordpress.org are also verified for the wordpress.org packages.
-
 ### Official builds
 
 * ⏳ Todo: `core.git.wordpress.org`
@@ -38,6 +36,12 @@ The md5 hashes, sha1 hashes, and file checksums published on wordpress.org are a
 * ✅ `core-updates.wpengine.com` from WPEngine
 * ✅ `roots/wordpress-full` on Packagist
 * ✅ `johnpbloch/wordpress` on Packagist
+
+### Other verifications
+
+* The md5 hashes and sha1 hashes published on wordpress.org are verified against the wordpress.org packages
+* The checksums returned by `api.wordpress.org/core/checksums/1.0/?version={tag}` are verified against file contents
+* Update offer URLs returned by `api.wordpress.org/core/version-check` are verified against expected URLs
 
 ## When do the tests run?
 
@@ -84,8 +88,6 @@ The WordPress.org website [provides the md5 and sha1 hash of its WordPress packa
 The WordPress open source project does not make use of package signing which could be used to verify a package. [See ticket #39309 for discussion on this topic](https://core.trac.wordpress.org/ticket/39309).
 
 Therefore, this library has been created to provide a means of verifying that the contents of published packages matches the code in the official source code repos.
-
-Checksums for core files are provided by the WordPress.org API at `https://api.wordpress.org/core/checksums/1.0/?version={tag}`. These are also verified by this library.
 
 ## To investigate
 
