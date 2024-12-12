@@ -9,10 +9,13 @@ inputs:
 outputs:
   short:
     description: Short tag name, eg 6.7 or 6.7.1
+    value: ${{ steps.tag.outputs.short }}
   long:
     description: Long tag name, eg. 6.7.0 or 6.7.1
+    value: ${{ steps.tag.outputs.long }}
   branch:
     description: Branch number, eg. 6.7
+    value: ${{ steps.tag.outputs.branch }}
 
 runs:
   using: composite
