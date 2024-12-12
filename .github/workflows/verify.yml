@@ -18,8 +18,7 @@ jobs:
   verify:
     name: "${{ inputs.package }}"
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
+    permissions: {}
     timeout-minutes: 10
     steps:
       - name: Prepare tag name
@@ -27,9 +26,6 @@ jobs:
         uses: johnbillion/rave-wordpress/.github/actions/prepare-tag-name@trunk
         with:
           tag: ${{ inputs.tag }}
-
-      - name: Checkout
-        uses: actions/checkout@v4
 
       - name: Download artifact
         if: inputs.tag != 'latest'
