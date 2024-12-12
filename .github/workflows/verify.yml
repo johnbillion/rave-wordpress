@@ -185,6 +185,7 @@ jobs:
           {
             echo 'services:'
             echo '  wordpress:'
+            # shellcheck disable=SC2016
             echo '    image: wordpress:${WP_VERSION-latest}'
             echo '    container_name: wordpress'
             echo '    volumes:'
