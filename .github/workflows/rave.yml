@@ -56,7 +56,7 @@ jobs:
         env:
           VERSION: ${{ github.event.inputs.version }}
         run: | #shell
-          echo "[\"${VERSION}\"]" > versions.json
+          jq --null-input --compact-output --arg version "${VERSION}" '[$version]' > versions.json
 
       - name: Output versions from versions.json
         id: fetch
