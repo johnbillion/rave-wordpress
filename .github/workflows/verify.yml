@@ -24,13 +24,7 @@ jobs:
     steps:
       - name: Prepare tag name
         id: tag
-        run: |
-          export LONG_TAG="${{ inputs.tag }}"
-          export SHORT_TAG="${LONG_TAG%.0}"
-          export BRANCH_NUMBER="${LONG_TAG%.*}"
-          echo "short=$SHORT_TAG" >> "$GITHUB_OUTPUT"
-          echo "long=$LONG_TAG" >> "$GITHUB_OUTPUT"
-          echo "branch=$BRANCH_NUMBER" >> "$GITHUB_OUTPUT"
+        uses: ./.github/actions/prepare-tag-name
 
       - name: Checkout
         uses: actions/checkout@v4

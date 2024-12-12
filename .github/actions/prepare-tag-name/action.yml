@@ -1,0 +1,31 @@
+name: Prepare tag name
+description: Prepare the tag name given a WordPress version number
+
+inputs:
+  tag:
+    description: Tag name for WordPress release
+    required: true
+    type: string
+outputs:
+  short:
+    description: Short tag name, eg 6.7 or 6.7.1
+    type: string
+  long:
+    description: Long tag name, eg. 6.7.0 or 6.7.1
+    type: string
+  branch:
+    description: Branch number, eg. 6.7
+    type: string
+
+runs:
+  using: composite
+  steps:
+    - name: Prepare tag name
+      shell: bash
+      run: | #shell
+        export LONG_TAG="${{ inputs.tag }}"
+        export SHORT_TAG="${LONG_TAG%.0}"
+        export BRANCH_NUMBER="${LONG_TAG%.*}"
+        echo short="$SHORT_TAG" >> "$GITHUB_OUTPUT"
+        echo long="$LONG_TAG" >> "$GITHUB_OUTPUT"
+        echo branch="$BRANCH_NUMBER" >> "$GITHUB_OUTPUT"
