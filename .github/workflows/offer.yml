@@ -30,7 +30,6 @@ jobs:
 
       - name: Verify the offer URLs
         run: | #shell
-          TAG="${{ steps.tag.outputs.short }}"
           EXPECTED_URL="https://downloads.w.org/release/wordpress-${TAG}.zip"
           MATCHING_OBJECT=$(jq --arg tag "$TAG" '.[] | select(.version == $tag)' offers.json)
           if [ -z "$MATCHING_OBJECT" ]; then
@@ -47,3 +46,5 @@ jobs:
             echo "Package URL $PACKAGE_URL does not match the expected $EXPECTED_URL"
             exit 1
           fi
+        env:
+          TAG: ${{ steps.tag.outputs.short }}

@@ -35,4 +35,6 @@ jobs:
 
       - name: Compare files
         run: |
-          diff --strip-trailing-cr --recursive develop.svn.wordpress.org ${{ inputs.source }}
+          diff --strip-trailing-cr --recursive develop.svn.wordpress.org "${SOURCE}"
+        env:
+          SOURCE: ${{ inputs.source }}

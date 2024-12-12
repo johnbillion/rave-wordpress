@@ -50,19 +50,25 @@ jobs:
           # Map each version and if the number is in major.minor syntax, append a .0
           versions=$(jq -c '. | map(.version | capture("(?<major>\\d+)\\.(?<minor>\\d+)(\\.(?<patch>\\d+))?") | .major + "." + .minor + "." + (.patch // "0") )' offers.json)
           echo "$versions" > versions.json
+
       - name: Fetch version matrix from workflow input
         if: ${{ github.event_name == 'workflow_dispatch' }}
         run: | #shell
-          echo '["${{ inputs.version }}"]' > versions.json
+          echo "[\"${VERSION}\"]" > versions.json
+        env:
+          VERSION: ${{ github.event.inputs.version }}
+
       - name: Output versions from versions.json
         id: fetch
         run: | #shell
           echo "versions=$(cat versions.json)" >> "$GITHUB_OUTPUT"
+
       - name: Save versions.json
         uses: actions/upload-artifact@v4
         with:
           name: versions
           path: versions.json
+
       - name: Save offers.json
         uses: actions/upload-artifact@v4
         with:

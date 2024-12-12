@@ -29,36 +29,45 @@ jobs:
 
       - name: Git checkout github.com/wordpress/wordpress-develop
         if: inputs.source == 'github-wordpress-develop'
-        run: |
+        run: | #shell
           git clone --no-checkout https://github.com/wordpress/wordpress-develop/ .
-          git checkout "tags/${{ steps.tag.outputs.long }}" -b "${{ steps.tag.outputs.long }}"
+          git checkout "tags/${TAG}" -b "${TAG}"
+        env:
+            TAG: ${{ steps.tag.outputs.long }}
 
       - name: Git checkout develop.git.wordpress.org
         if: inputs.source == 'develop.git.wordpress.org'
-        run: |
+        run: | #shell
           git clone --no-checkout git://develop.git.wordpress.org/ .
-          git checkout "tags/${{ steps.tag.outputs.long }}" -b "${{ steps.tag.outputs.long }}"
+          git checkout "tags/${TAG}" -b "${TAG}"
+        env:
+          TAG: ${{ steps.tag.outputs.long }}
 
       - name: SVN checkout develop.svn.wordpress.org
         if: inputs.source == 'develop.svn.wordpress.org'
-        run: |
-          svn checkout https://develop.svn.wordpress.org/tags/${{ steps.tag.outputs.short }} .
+        run: | #shell
+          svn checkout "https://develop.svn.wordpress.org/tags/${TAG}" .
           rm -rf .svn
+        env:
+          TAG: ${{ steps.tag.outputs.short }}
 
       - name: Download zip from core.trac.wordpress.org
         if: inputs.source == 'core.trac.wordpress.org'
-        run: |
-          wget -O package.zip "https://core.trac.wordpress.org/browser/tags/${{ steps.tag.outputs.short }}?format=zip" \
-            --user-agent="WordPress/${{ steps.tag.outputs.branch }}"
+        run: | #shell
+          wget -O package.zip "https://core.trac.wordpress.org/browser/tags/${TAG}?format=zip" \
+            --user-agent="WordPress/${BRANCH}"
           unzip package.zip
           shopt -s dotglob
-          mv ${{ steps.tag.outputs.short }}/* .
+          mv "${TAG}/*" .
           shopt -u dotglob
-          rm -rf ${{ steps.tag.outputs.short }}
+          rm -rf "${TAG}"
           rm package.zip
+        env:
+          TAG: ${{ steps.tag.outputs.long }}
+          BRANCH: ${{ steps.tag.outputs.branch }}
 
       - name: Log file list
-        run: |
+        run: | #shell
           ls -la
 
       - name: Set up Node.js
@@ -68,7 +77,7 @@ jobs:
           cache: npm
 
       - name: Log debug information
-        run: |
+        run: | #shell
           npm --version
           node --version
           curl --version
@@ -78,7 +87,7 @@ jobs:
         run: npm ci
 
       - name: Update Twemoji processing for debugging
-        run: |
+        run: | #shell
           sed -i "s/'Unable to fetch Twemoji file list'/files.stderr.toString()/" Gruntfile.js
 
       - name: Run Emoji precommit task
