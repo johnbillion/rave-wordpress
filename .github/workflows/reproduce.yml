@@ -58,7 +58,7 @@ jobs:
             --user-agent="WordPress/${BRANCH}"
           unzip package.zip
           shopt -s dotglob
-          mv "${TAG}/*" .
+          mv "${TAG}"/* .
           shopt -u dotglob
           rm -rf "${TAG}"
           rm package.zip
