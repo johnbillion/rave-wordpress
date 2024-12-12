@@ -22,6 +22,7 @@ runs:
   steps:
     - name: Prepare tag name
       shell: bash
+      id: tag
       run: | #shell
         export LONG_TAG="${{ inputs.tag }}"
         export SHORT_TAG="${LONG_TAG%.0}"
