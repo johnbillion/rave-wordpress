@@ -213,6 +213,7 @@ jobs:
         run: | #shell
           composer require "johnpbloch/wordpress:${TAG}" --prefer-dist --no-progress --no-plugins
           mv vendor/johnpbloch/wordpress-core package
+          rm package/composer.json
 
       - name: Handle anomalies with build files in TT and TT1
         if: inputs.package == 'github-zip' || inputs.package == 'github-tar' || inputs.package == 'build.trac.wordpress.org'
