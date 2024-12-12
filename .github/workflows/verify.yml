@@ -182,6 +182,13 @@ jobs:
         env:
           WP_VERSION: ${{ steps.tag.outputs.long }}
         run: | #shell
+          # This does not use a single string with EOL because it breaks syntax highlighting.
+          echo "services:" > docker-compose.yml
+          echo "  wordpress:" >> docker-compose.yml
+          echo "    image: wordpress:\${WP_VERSION-latest}" >> docker-compose.yml
+          echo "    container_name: wordpress" >> docker-compose.yml
+          echo "    volumes:" >> docker-compose.yml
+          echo "      - ./package:/var/www/html" >> docker-compose.yml
           docker compose up -d wordpress
           docker compose run --rm wordpress -- rm /var/www/html/.htaccess
           docker compose run --rm wordpress -- rm /var/www/html/wp-config-docker.php
