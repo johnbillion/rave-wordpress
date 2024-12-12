@@ -24,7 +24,8 @@ runs:
       shell: bash
       id: tag
       run: | #shell
-        LONG_TAG="${{ inputs.tag }}"
         echo short="${LONG_TAG%.0}" >> "$GITHUB_OUTPUT"
-        echo long="$LONG_TAG" >> "$GITHUB_OUTPUT"
+        echo long="${LONG_TAG}" >> "$GITHUB_OUTPUT"
         echo branch="${LONG_TAG%.*}" >> "$GITHUB_OUTPUT"
+      env:
+        LONG_TAG: ${{ inputs.tag }}
