@@ -203,7 +203,7 @@ jobs:
         env:
           TAG: ${{ steps.tag.outputs.long }}
         run: | #shell
-          composer require "roots/wordpress-full:${TAG}" --prefer-dist --no-progress --no-suggest
+          composer require "roots/wordpress-full:${TAG}" --prefer-dist --no-progress
           mv vendor/roots/wordpress-full package
 
       - name: Download johnpbloch/wordpress
@@ -211,9 +211,8 @@ jobs:
         env:
           TAG: ${{ steps.tag.outputs.long }}
         run: | #shell
-          composer require "johnpbloch/wordpress:${TAG}" --prefer-dist --no-progress --no-suggest
-          mv wordpress package
-          rm package/composer.json
+          composer require "johnpbloch/wordpress:${TAG}" --prefer-dist --no-progress --no-plugins
+          mv vendor/johnpbloch/wordpress-core package
 
       - name: Handle anomalies with build files in TT and TT1
         if: inputs.package == 'github-zip' || inputs.package == 'github-tar' || inputs.package == 'build.trac.wordpress.org'
