@@ -9,13 +9,10 @@ inputs:
 outputs:
   short:
     description: Short tag name, eg 6.7 or 6.7.1
-    type: string
   long:
     description: Long tag name, eg. 6.7.0 or 6.7.1
-    type: string
   branch:
     description: Branch number, eg. 6.7
-    type: string
 
 runs:
   using: composite
