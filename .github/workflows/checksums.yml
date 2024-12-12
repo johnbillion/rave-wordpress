@@ -19,7 +19,9 @@ jobs:
     steps:
       - name: Prepare tag name
         id: tag
-        uses: ./.github/actions/prepare-tag-name
+        uses: johnbillion/rave-wordpress/.github/actions/prepare-tag-name@prepare-tag
+        with:
+          tag: ${{ inputs.tag }}
 
       - name: Download checksums from wordpress.org
         run: |

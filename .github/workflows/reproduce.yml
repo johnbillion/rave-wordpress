@@ -23,7 +23,9 @@ jobs:
     steps:
       - name: Prepare tag name
         id: tag
-        uses: ./.github/actions/prepare-tag-name
+        uses: johnbillion/rave-wordpress/.github/actions/prepare-tag-name@prepare-tag
+        with:
+          tag: ${{ inputs.tag }}
 
       - name: Git checkout github.com/wordpress/wordpress-develop
         if: inputs.source == 'github-wordpress-develop'
