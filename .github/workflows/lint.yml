@@ -57,7 +57,7 @@ jobs:
         with:
           filter_triggers: ''
 
-      - name: Upload SARIF file
+      - name: Upload Octoscan SARIF file
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: "${{steps.octoscan.outputs.sarif_output}}"
@@ -85,7 +85,7 @@ jobs:
         run: | #shell
           uvx zizmor --format sarif . > results.sarif
 
-      - name: Upload SARIF file
+      - name: Upload Zizmor SARIF file
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: results.sarif
@@ -106,7 +106,7 @@ jobs:
     - name: Run Poutine
       uses: boostsecurityio/poutine-action@v0.15.2
 
-    - name: Upload SARIF file
+    - name: Upload Poutine SARIF file
       uses: github/codeql-action/upload-sarif@v3
       with:
         sarif_file: results.sarif
