@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: Prepare tag name
         id: tag
-        uses: johnbillion/rave-wordpress/.github/actions/prepare-tag-name@prepare-tag
+        uses: johnbillion/rave-wordpress/.github/actions/prepare-tag-name@trunk
         with:
           tag: ${{ inputs.tag }}
 
