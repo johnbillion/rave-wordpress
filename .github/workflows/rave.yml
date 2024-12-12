@@ -61,7 +61,7 @@ jobs:
       - name: Output versions from versions.json
         id: fetch
         run: | #shell
-          echo "versions=$(cat versions.json)" >> "$GITHUB_OUTPUT"
+          echo versions="$(cat versions.json)" >> "$GITHUB_OUTPUT"
 
       - name: Save versions.json
         uses: actions/upload-artifact@v4

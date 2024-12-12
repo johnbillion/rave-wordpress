@@ -48,7 +48,7 @@ jobs:
         if: inputs.tag == 'latest'
         id: extract
         run: | #shell
-          echo "latest=$(jq -r '.[0]' versions.json)" >> "$GITHUB_OUTPUT"
+          echo latest="$(jq -r '.[0]' versions.json)" >> "$GITHUB_OUTPUT"
 
       - name: Download latest artifact
         if: inputs.tag == 'latest'
