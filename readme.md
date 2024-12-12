@@ -41,9 +41,9 @@ RAVE stands for Reproduce And Verify.
 
 ### Other verifications
 
-* The md5 and sha1 hashes published on wordpress.org are verified against the wordpress.org packages
-* Checksums returned by `api.wordpress.org/core/checksums` are verified against file contents
-* Update offer URLs returned by `api.wordpress.org/core/version-check` are verified against expected URLs
+* ✅ md5 and sha1 hashes published on wordpress.org are verified against the wordpress.org packages
+* ✅ Checksums returned by `api.wordpress.org/core/checksums` are verified against file contents
+* ✅ Update offer URLs returned by `api.wordpress.org/core/version-check` are verified against expected URLs
 
 ## When do the tests run?
 
@@ -53,7 +53,7 @@ The GitHub Actions workflow runs once an hour. It verifies the latest version in
 * WordPress 6.6
 * WordPress 6.5
 
-_Note:_ Due to request rate limiting on wordpress.org, the `core.trac.wordpress.org` source and the `build.trac.wordpress.org` package are only verified in the most recent branch. All other sources and packages are verified in the three most recent branches.
+_Note:_ Due to request rate limiting on wordpress.org, the `core.trac.wordpress.org` source and the `build.trac.wordpress.org` package are only verified for the most recent branch. All other sources and packages are verified for the three most recent branches.
 
 ## Why test the official package?
 
