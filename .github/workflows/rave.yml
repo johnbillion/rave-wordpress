@@ -53,10 +53,10 @@ jobs:
 
       - name: Fetch version matrix from workflow input
         if: ${{ github.event_name == 'workflow_dispatch' }}
-        run: | #shell
-          echo "[\"${VERSION}\"]" > versions.json
         env:
           VERSION: ${{ github.event.inputs.version }}
+        run: | #shell
+          echo "[\"${VERSION}\"]" > versions.json
 
       - name: Output versions from versions.json
         id: fetch

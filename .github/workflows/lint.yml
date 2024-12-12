@@ -80,9 +80,10 @@ jobs:
         uses: astral-sh/setup-uv@v4
 
       - name: Run Zizmor
-        run: uvx zizmor --format sarif . > results.sarif
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: | #shell
+          uvx zizmor --format sarif . > results.sarif
 
       - name: Upload SARIF file
         uses: github/codeql-action/upload-sarif@v3

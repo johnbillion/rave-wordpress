@@ -24,6 +24,9 @@ jobs:
           tag: ${{ inputs.tag }}
 
       - name: Download zip and hashes from wordpress.org
+        env:
+          TAG: ${{ steps.tag.outputs.short }}
+          BRANCH: ${{ steps.tag.outputs.branch }}
         run: | #shell
           wget -O package.zip "https://wordpress.org/wordpress-${TAG}.zip" \
             --user-agent="WordPress/${BRANCH}"
@@ -31,9 +34,6 @@ jobs:
             --user-agent="WordPress/${BRANCH}"
           wget -O package.zip.sha1 "https://wordpress.org/wordpress-${TAG}.zip.sha1" \
             --user-agent="WordPress/${BRANCH}"
-        env:
-          TAG: ${{ steps.tag.outputs.short }}
-          BRANCH: ${{ steps.tag.outputs.branch }}
 
       - name: Check the md5 hash
         run: | #shell
@@ -56,6 +56,9 @@ jobs:
           tag: ${{ inputs.tag }}
 
       - name: Download tar.gz and hashes from wordpress.org
+        env:
+          TAG: ${{ steps.tag.outputs.short }}
+          BRANCH: ${{ steps.tag.outputs.branch }}
         run: | #shell
           wget -O package.tar.gz "https://wordpress.org/wordpress-${TAG}.tar.gz" \
             --user-agent="WordPress/${BRANCH}"
@@ -63,9 +66,6 @@ jobs:
             --user-agent="WordPress/${BRANCH}"
           wget -O package.tar.gz.sha1 "https://wordpress.org/wordpress-${TAG}.tar.gz.sha1" \
             --user-agent="WordPress/${BRANCH}"
-        env:
-          TAG: ${{ steps.tag.outputs.short }}
-          BRANCH: ${{ steps.tag.outputs.branch }}
 
       - name: Check the md5 hash
         run: | #shell

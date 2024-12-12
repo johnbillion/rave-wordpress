@@ -29,30 +29,33 @@ jobs:
 
       - name: Git checkout github.com/wordpress/wordpress-develop
         if: inputs.source == 'github-wordpress-develop'
+        env:
+            TAG: ${{ steps.tag.outputs.long }}
         run: | #shell
           git clone --no-checkout https://github.com/wordpress/wordpress-develop/ .
           git checkout "tags/${TAG}" -b "${TAG}"
-        env:
-            TAG: ${{ steps.tag.outputs.long }}
 
       - name: Git checkout develop.git.wordpress.org
         if: inputs.source == 'develop.git.wordpress.org'
+        env:
+          TAG: ${{ steps.tag.outputs.long }}
         run: | #shell
           git clone --no-checkout git://develop.git.wordpress.org/ .
           git checkout "tags/${TAG}" -b "${TAG}"
-        env:
-          TAG: ${{ steps.tag.outputs.long }}
 
       - name: SVN checkout develop.svn.wordpress.org
         if: inputs.source == 'develop.svn.wordpress.org'
+        env:
+          TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
           svn checkout "https://develop.svn.wordpress.org/tags/${TAG}" .
           rm -rf .svn
-        env:
-          TAG: ${{ steps.tag.outputs.short }}
 
       - name: Download zip from core.trac.wordpress.org
         if: inputs.source == 'core.trac.wordpress.org'
+        env:
+          TAG: ${{ steps.tag.outputs.long }}
+          BRANCH: ${{ steps.tag.outputs.branch }}
         run: | #shell
           wget -O package.zip "https://core.trac.wordpress.org/browser/tags/${TAG}?format=zip" \
             --user-agent="WordPress/${BRANCH}"
@@ -62,9 +65,6 @@ jobs:
           shopt -u dotglob
           rm -rf "${TAG}"
           rm package.zip
-        env:
-          TAG: ${{ steps.tag.outputs.long }}
-          BRANCH: ${{ steps.tag.outputs.branch }}
 
       - name: Log file list
         run: | #shell
@@ -84,19 +84,22 @@ jobs:
           git --version
 
       - name: Install npm Dependencies
-        run: npm ci
+        run: | #shell
+          npm ci
 
       - name: Update Twemoji processing for debugging
         run: | #shell
           sed -i "s/'Unable to fetch Twemoji file list'/files.stderr.toString()/" Gruntfile.js
 
       - name: Run Emoji precommit task
-        run: npm run grunt precommit:emoji
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: | #shell
+          npm run grunt precommit:emoji
 
       - name: Build WordPress
-        run: npm run build
+        run: | #shell
+          npm run build
 
       - name: Upload artifact
         uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
