@@ -182,15 +182,7 @@ jobs:
         env:
           WP_VERSION: ${{ steps.tag.outputs.long }}
         run: | #shell
-          {
-            echo 'services:'
-            echo '  wordpress:'
-            # shellcheck disable=SC2016
-            echo '    image: wordpress:${WP_VERSION-latest}'
-            echo '    container_name: wordpress'
-            echo '    volumes:'
-            echo '      - ./package:/var/www/html'
-          } > docker-compose.yml
+          yq --null-input '{"services":{"wordpress":{"image":strenv(WP_VERSION),"container_name":"wordpress","volumes":["./package:/var/www/html"]}}}' > docker-compose.yml
           docker compose up -d wordpress
           docker compose run --rm wordpress -- rm /var/www/html/.htaccess
           docker compose run --rm wordpress -- rm /var/www/html/wp-config-docker.php
