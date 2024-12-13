@@ -248,12 +248,12 @@ jobs:
           rm -rf source/wp-content/themes/twentyfifteen
           rm -rf source/wp-content/themes/twentysixteen
           rm -rf source/wp-content/themes/twentyseventeen
-          if [[ "${TAG}" == "latest" ]] || (( $(echo "${BRANCH} >= 6.4" | bc -l) )); then
+          if [[ "${TAG}" == "latest" ]] || dpkg --compare-versions "${BRANCH}" ge "6.4"; then
             rm -rf source/wp-content/themes/twentynineteen
             rm -rf source/wp-content/themes/twentytwenty
             rm -rf source/wp-content/themes/twentytwentyone
           fi
-          if [[ "${TAG}" == "latest" ]] || (( $(echo "${BRANCH} >= 6.7" | bc -l) )); then
+          if [[ "${TAG}" == "latest" ]] || dpkg --compare-versions "${BRANCH}" ge "6.7"; then
             rm -rf source/wp-content/themes/twentytwentytwo
           fi
 
