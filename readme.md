@@ -59,6 +59,11 @@ _Note:_ Due to request rate limiting on wordpress.org, the `core.trac.wordpress.
 
 There are several opportunities for the official WordPress package to be tampered with so that it differs from the actual source code in the source control repos. This could come via an attack on the build server, on wordpress.org or downloads.wordpress.org, from external hackers, from those in control of the wordpress.org CDN, from disgruntled members of the meta or systems teams, from anyone who gains access to accounts or credentials of such team members, or from the project lead.
 
+### Real world examples
+
+* [In 2007 a cracker gained access to the wordpress.org servers and added a backdoor to the WordPress 2.1.1 package](https://wordpress.org/news/2007/03/upgrade-212/). RAVE would have successfully detected that the 2.1.1 package served by wordpress.org didn't match the package that it reproduced from the source code, and the backdoor code would have been immediately visible in the failing workflow on the RAVE repo.
+* [In 2016 Wordfence identified a vulnerability in a webhook mechanism on api.wordpress.org](https://www.wordfence.com/blog/2016/11/hacking-27-web-via-wordpress-auto-update/) and demonstrated that a cracker could theoretically execute a shell command on the api.wordpress.org server. If a cracker exploited this vulnerability to modify an existing release or create a new one then RAVE would have successfully detected it.
+
 ## Why test unofficial packages?
 
 There are several opportunities for unofficial WordPress packages to be tampered with so they differ from the official package. This could come via an attack on the servers distributing the packages, from external hackers, from those in control of the packaging, or from anyone who gains access to accounts or credentials of people or processes involved in the packaging or distribution.
