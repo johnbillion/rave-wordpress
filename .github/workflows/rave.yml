@@ -37,7 +37,7 @@ permissions: {}
 jobs:
   versions:
     name: Determine branch numbers
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions: {}
     outputs:
       versions: ${{ steps.fetch.outputs.versions }}

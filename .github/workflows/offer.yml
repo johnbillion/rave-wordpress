@@ -13,7 +13,7 @@ permissions: {}
 jobs:
   verify:
     name: ${{ inputs.tag }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions: {}
     timeout-minutes: 10
     steps:

@@ -13,7 +13,7 @@ permissions: {}
 jobs:
   zip:
     name: "${{ inputs.tag }} zip"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions: {}
     timeout-minutes: 10
     steps:
@@ -45,7 +45,7 @@ jobs:
 
   tar:
     name: "${{ inputs.tag }} tar"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions: {}
     timeout-minutes: 10
     steps:
