@@ -192,6 +192,7 @@ jobs:
             echo '      - ./package:/var/www/html'
           } > docker-compose.yml
           docker compose up -d wordpress
+          docker compose run --rm wordpress -- ls -al /var/www/html
           docker compose run --rm wordpress -- rm /var/www/html/.htaccess
           docker compose run --rm wordpress -- rm /var/www/html/wp-config-docker.php
           docker compose run --rm wordpress -- rm -r /var/www/html/wp-content/plugins/akismet
