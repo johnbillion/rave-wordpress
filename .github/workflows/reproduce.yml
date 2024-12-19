@@ -30,7 +30,7 @@ jobs:
       - name: Git checkout github.com/wordpress/wordpress-develop
         if: inputs.source == 'github-wordpress-develop'
         env:
-            TAG: ${{ steps.tag.outputs.long }}
+          TAG: ${{ steps.tag.outputs.long }}
         run: | #shell
           git clone --no-checkout https://github.com/wordpress/wordpress-develop/ .
           git checkout "tags/${TAG}" -b "${TAG}"
