@@ -64,13 +64,13 @@ jobs:
           echo versions="$(cat versions.json)" >> "$GITHUB_OUTPUT"
 
       - name: Save versions.json
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # 4.5.0
         with:
           name: versions
           path: versions.json
 
       - name: Save offers.json
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # 4.5.0
         with:
           name: offers
           path: offers.json
