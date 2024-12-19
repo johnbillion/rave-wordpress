@@ -29,14 +29,14 @@ jobs:
 
       - name: Download artifact
         if: inputs.tag != 'latest'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # 4.1.8
         with:
           name: wordpress-${{ steps.tag.outputs.long }}-develop.svn.wordpress.org
           path: source
 
       - name: Download versions artifact
         if: inputs.tag == 'latest'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # 4.1.8
         with:
           name: versions
 
@@ -48,7 +48,7 @@ jobs:
 
       - name: Download latest artifact
         if: inputs.tag == 'latest'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # 4.1.8
         with:
           name: "wordpress-${{ steps.extract.outputs.latest }}-develop.svn.wordpress.org"
           path: source
@@ -192,6 +192,7 @@ jobs:
             echo '      - ./package:/var/www/html'
           } > docker-compose.yml
           docker compose up -d wordpress
+          docker compose run --rm wordpress -- ls -al /var/www/html
           docker compose run --rm wordpress -- rm /var/www/html/.htaccess
           docker compose run --rm wordpress -- rm /var/www/html/wp-config-docker.php
           docker compose run --rm wordpress -- rm -r /var/www/html/wp-content/plugins/akismet
