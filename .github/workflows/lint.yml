@@ -120,7 +120,7 @@ jobs:
       contents: read
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # 4.2.2
         with:
           persist-credentials: false
 
@@ -132,7 +132,7 @@ jobs:
           publish_results: false
 
       - name: Upload scorecard SARIF file
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@df409f7d9260372bd5f19e5b04e83cb3c43714ae # 3.27.9
         with:
           sarif_file: results.sarif
           category: ossf-scorecard
