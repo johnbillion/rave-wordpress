@@ -22,13 +22,13 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Download canonical source artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # 4.1.8
         with:
           name: wordpress-${{ inputs.tag }}-develop.svn.wordpress.org
           path: develop.svn.wordpress.org
 
       - name: Download comparison source artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # 4.1.8
         with:
           name: wordpress-${{ inputs.tag }}-${{ inputs.source }}
           path: ${{ inputs.source }}
