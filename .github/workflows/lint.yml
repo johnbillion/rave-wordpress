@@ -20,97 +20,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  actionlint:
-    name: Actionlint
-    runs-on: ubuntu-24.04
-    permissions:
-      contents: read
-    timeout-minutes: 1
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # 4.2.2
-        with:
-          persist-credentials: false
-
-      - name: Run actionlint
-        uses: docker://rhysd/actionlint:latest
-        with:
-          args: "-color -verbose"
-
-  octoscan:
-    name: Octoscan
-    runs-on: ubuntu-24.04
+  lint:
+    name: Lint
     permissions:
       security-events: write
       actions: read
       contents: read
-    timeout-minutes: 10
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # 4.2.2
-        with:
-          persist-credentials: false
-
-      - name: Run Octoscan
-        id: octoscan
-        uses: synacktiv/action-octoscan@6b1cf2343893dfb9e5f75652388bd2dc83f456b0 # 1.0.0
-        with:
-          filter_triggers: ''
-
-      - name: Upload Octoscan SARIF file
-        uses: github/codeql-action/upload-sarif@df409f7d9260372bd5f19e5b04e83cb3c43714ae # 3.27.9
-        with:
-          sarif_file: "${{steps.octoscan.outputs.sarif_output}}"
-          category: octoscan
-
-  zizmor:
-    name: Zizmor
-    runs-on: ubuntu-24.04
-    permissions:
-      security-events: write
-      actions: read
-      contents: read
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # 4.2.2
-        with:
-          persist-credentials: false
-
-      - name: Install the latest version of uv
-        uses: astral-sh/setup-uv@38f3f104447c67c051c4a08e39b64a148898af3a # 4.2.0
-
-      - name: Run Zizmor
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: | #shell
-          uvx zizmor --format sarif . > results.sarif
-
-      - name: Upload Zizmor SARIF file
-        uses: github/codeql-action/upload-sarif@df409f7d9260372bd5f19e5b04e83cb3c43714ae # 3.27.9
-        with:
-          sarif_file: results.sarif
-          category: zizmor
-
-  poutine:
-    name: Poutine
-    runs-on: ubuntu-24.04
-    permissions:
-      security-events: write
-      contents: read
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # 4.2.2
-      with:
-        persist-credentials: false
-
-    - name: Run Poutine
-      uses: boostsecurityio/poutine-action@84c0a0d32e8d57ae12651222be1eb15351429228 # 0.15.2
-
-    - name: Upload Poutine SARIF file
-      uses: github/codeql-action/upload-sarif@df409f7d9260372bd5f19e5b04e83cb3c43714ae # 3.27.9
-      with:
-        sarif_file: results.sarif
-        category: poutine
+    uses: johnbillion/plugin-infrastructure/.github/workflows/reusable-workflow-lint.yml@1264303fa2e8b81ac9b49265cd96c96947eaacd0
 
   ossf:
     name: OpenSSF Scorecard
