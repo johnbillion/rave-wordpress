@@ -43,18 +43,14 @@ jobs:
           git clone --no-checkout git://develop.git.wordpress.org/ .
           git checkout "tags/${TAG}" -b "${TAG}"
 
-      - name: Install SVN
-        if: inputs.source == 'develop.svn.wordpress.org'
-        run: | #shell
-          sudo apt-get update
-          sudo apt-get install -y subversion
-          svn --version
-
       - name: SVN checkout develop.svn.wordpress.org
         if: inputs.source == 'develop.svn.wordpress.org'
         env:
           TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
+          sudo apt-get update
+          sudo apt-get install -y subversion
+          svn --version
           svn checkout "https://develop.svn.wordpress.org/tags/${TAG}" .
           rm -rf .svn
 
