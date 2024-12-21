@@ -75,11 +75,12 @@ If one of the GitHub Actions workflows in this repo fails, it should be investig
 
 ## What's not tested?
 
-This approach does *not*:
+This approach:
 
-* Detect malicious or unwanted code that gets inserted into the Subversion or Git source code repos and subsequently makes it into the published package.
-* Detect a targeted attack that can vary the contents of the package based on a parameter such as the IP address making the request.
-* Deal with build provenance, attestation, software signing, SBOMs, or make tea.
+* Does **not** detect malicious or unwanted code that gets committed to the Subversion source code repo and subsequently makes it into the published package.
+* Does **not** detect a targeted attack that causes the contents of the package to vary based on a parameter such as the IP address or user agent of the client making the request.
+* Does **not** verify the contents of the bundled Akismet plugin.
+* Does **not** deal with build provenance verification or software signing.
 
 ## Reproducible WordPress
 
@@ -95,7 +96,7 @@ The WordPress.org website [provides the md5 and sha1 hash of its WordPress packa
 
 The WordPress open source project does not make use of package signing which could be used to verify a package. [See ticket #39309 for discussion on this topic](https://core.trac.wordpress.org/ticket/39309).
 
-Therefore, this library has been created to provide a means of verifying that the contents of published packages matches the code in the official source code repos.
+Therefore, this library has been created to provide a means of verifying that the contents of published packages matches the code built from the official source code repos.
 
 ## License
 
