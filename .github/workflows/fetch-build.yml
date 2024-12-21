@@ -45,6 +45,7 @@ jobs:
           svn --version
           svn checkout "https://core.svn.wordpress.org/tags/${TAG}" .
           rm -rf .svn
+          rm -rf wp-content/plugins/akismet
 
       - name: Upload artifact
         uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # 4.5.0
