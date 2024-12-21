@@ -251,6 +251,7 @@ jobs:
           fi
 
       - name: Handle known differences in bundled plugins
+        if: inputs.package != 'core.svn.wordpress.org'
         run: | #shell
           rm -rf package/wp-content/plugins/akismet
 
