@@ -1,0 +1,54 @@
+name: Fetch build
+
+on:
+  workflow_call:
+    inputs:
+      tag:
+        description: Tag name for WordPress release
+        required: true
+        type: string
+      build:
+        description: Build name for WordPress release
+        required: true
+        type: string
+
+permissions: {}
+
+jobs:
+  reproduce:
+    name: "${{ inputs.build }}"
+    runs-on: ubuntu-latest
+    permissions: {}
+    timeout-minutes: 10
+    steps:
+      - name: Prepare tag name
+        id: tag
+        uses: johnbillion/rave-wordpress/.github/actions/prepare-tag-name@trunk
+        with:
+          tag: ${{ inputs.tag }}
+
+      - name: Git checkout core.git.wordpress.org
+        if: inputs.build == 'core.git.wordpress.org'
+        env:
+          TAG: ${{ steps.tag.outputs.long }}
+        run: | #shell
+          git clone --no-checkout git://core.git.wordpress.org/ .
+          git checkout "tags/${TAG}" -b "${TAG}"
+
+      - name: SVN checkout core.svn.wordpress.org
+        if: inputs.build == 'core.svn.wordpress.org'
+        env:
+          TAG: ${{ steps.tag.outputs.short }}
+        run: | #shell
+          sudo apt-get update
+          sudo apt-get install -y subversion
+          svn --version
+          svn checkout "https://core.svn.wordpress.org/tags/${TAG}" .
+          rm -rf .svn
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # 4.5.0
+        with:
+          name: wordpress-${{ steps.tag.outputs.long }}-${{ inputs.build }}
+          path: .
+          if-no-files-found: error

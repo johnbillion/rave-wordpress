@@ -28,9 +28,8 @@ RAVE stands for Reproduce And Verify.
 
 ### Official builds
 
-* ⏳ Todo: `core.git.wordpress.org`
-* ⏳ Todo: `core.svn.wordpress.org`
-* ⏳ ???: `build.svn.wordpress.org`
+* ✅ `core.git.wordpress.org`
+* ✅ `core.svn.wordpress.org`
 
 ### Unofficial packages
 

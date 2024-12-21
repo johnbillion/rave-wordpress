@@ -97,11 +97,29 @@ jobs:
       tag: ${{ matrix.tag }}
       source: ${{ matrix.source }}
 
+  fetch-build:
+    name: "Fetch builds ${{ matrix.tag }}"
+    permissions: {}
+    needs:
+      - versions
+    strategy:
+      matrix:
+        tag: ${{ fromJson(needs.versions.outputs.versions) }}
+        build:
+          - core.svn.wordpress.org
+          - core.git.wordpress.org
+      fail-fast: false
+    uses: ./.github/workflows/fetch-build.yml
+    with:
+      tag: ${{ matrix.tag }}
+      build: ${{ matrix.build }}
+
   compare:
     name: "Compare ${{ matrix.tag }}"
     permissions: {}
     needs:
       - reproduce
+      - fetch-build
       - versions
     strategy:
       matrix:
@@ -109,6 +127,8 @@ jobs:
         source:
           - develop.git.wordpress.org
           - github-wordpress-develop
+          - core.git.wordpress.org
+          - core.svn.wordpress.org
         include:
           # Only compare the latest tag from core.trac.wordpress.org due to rate limiting
           - tag: ${{ fromJson(needs.versions.outputs.versions)[0] }}
