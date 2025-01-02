@@ -27,28 +27,3 @@ jobs:
       actions: read
       contents: read
     uses: johnbillion/plugin-infrastructure/.github/workflows/reusable-workflow-lint.yml@1264303fa2e8b81ac9b49265cd96c96947eaacd0
-
-  ossf:
-    name: OpenSSF Scorecard
-    runs-on: ubuntu-24.04
-    permissions:
-      security-events: write
-      contents: read
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # 4.2.2
-        with:
-          persist-credentials: false
-
-      - name: Run OSSF Scorecard
-        uses: ossf/scorecard-action@0864cf19026789058feabb7e87baa5f140aac736 # v2.3.1
-        with:
-          results_format: sarif
-          results_file: results.sarif
-          publish_results: false
-
-      - name: Upload scorecard SARIF file
-        uses: github/codeql-action/upload-sarif@df409f7d9260372bd5f19e5b04e83cb3c43714ae # 3.27.9
-        with:
-          sarif_file: results.sarif
-          category: ossf-scorecard
