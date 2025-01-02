@@ -46,7 +46,7 @@ jobs:
         if: ${{ github.event_name != 'workflow_dispatch' }}
         run: | #shell
           # Fetches the version number from the first three objects which have a `response` of `autoupdate`
-          wget -O - https://api.wordpress.org/core/version-check/1.7/ \
+          wget -q -O - https://api.wordpress.org/core/version-check/1.7/ \
             --user-agent='WordPress/6.0' \
             | jq -c '.offers | map(select(.response == "autoupdate")) | .[0:3]' > offers.json
           # Map each version and if the number is in major.minor syntax, append a .0
