@@ -83,7 +83,6 @@ jobs:
         run: | #shell
           npm --version
           node --version
-          curl --version
           git --version
 
       - name: Install npm Dependencies

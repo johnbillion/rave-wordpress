@@ -68,12 +68,14 @@ jobs:
         with:
           name: versions
           path: versions.json
+          if-no-files-found: error
 
       - name: Save offers.json
         uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # 4.5.0
         with:
           name: offers
           path: offers.json
+          if-no-files-found: error
 
   reproduce:
     name: "Reproduce ${{ matrix.tag }}"
