@@ -37,4 +37,4 @@ jobs:
         env:
           SOURCE: ${{ inputs.source }}
         run: | #shell
-          diff --strip-trailing-cr --recursive develop.svn.wordpress.org "${SOURCE}"
+          diff --strip-trailing-cr --recursive --color=always develop.svn.wordpress.org "${SOURCE}"

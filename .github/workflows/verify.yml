@@ -264,4 +264,4 @@ jobs:
 
       - name: Compare files
         run: | #shell
-          diff --strip-trailing-cr --recursive source package
+          diff --strip-trailing-cr --recursive --color=always source package
