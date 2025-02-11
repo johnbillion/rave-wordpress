@@ -216,15 +216,13 @@ jobs:
       package: ${{ matrix.package }}
 
   verify-hashes:
-    name: ${{ matrix.label }}
+    name: Verify hashes ${{ matrix.tag }}
     permissions: {}
     needs:
       - versions
     strategy:
       matrix:
         tag: ${{ fromJson(needs.versions.outputs.versions) }}
-        label:
-          - Verify hashes
       fail-fast: false
     uses: ./.github/workflows/hashes.yml
     with:

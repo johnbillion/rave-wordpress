@@ -11,13 +11,13 @@ on:
 permissions: {}
 
 jobs:
-  zip:
-    name: "${{ inputs.tag }} zip"
+  zip-md5:
+    name: Zip md5
     runs-on: ubuntu-latest
     permissions: {}
     timeout-minutes: 10
     environment:
-      name: zip hashes
+      name: zip md5 hash
       url: "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip.md5"
     steps:
       - name: Prepare tag name
@@ -26,33 +26,54 @@ jobs:
         with:
           tag: ${{ inputs.tag }}
 
-      - name: Download zip and hashes from wordpress.org
+      - name: Download zip and md5 hash from wordpress.org
         env:
           TAG: ${{ steps.tag.outputs.short }}
-          BRANCH: ${{ steps.tag.outputs.branch }}
         run: | #shell
           wget -O package.zip "https://wordpress.org/wordpress-${TAG}.zip" \
-            --user-agent="WordPress/${BRANCH}"
+            --user-agent="WordPress/${TAG}"
           wget -O package.zip.md5 "https://wordpress.org/wordpress-${TAG}.zip.md5" \
-            --user-agent="WordPress/${BRANCH}"
-          wget -O package.zip.sha1 "https://wordpress.org/wordpress-${TAG}.zip.sha1" \
-            --user-agent="WordPress/${BRANCH}"
+            --user-agent="WordPress/${TAG}"
 
       - name: Check the md5 hash
         run: | #shell
           echo "$(cat package.zip.md5) package.zip" | md5sum -c -
 
-      - name: Check the sha1 hash
-        run: | #shell
-          echo "$(cat package.zip.sha1) package.zip" | sha1sum -c -
-
-  tar:
-    name: "${{ inputs.tag }} tar"
+  zip-sha1:
+    name: Zip sha1
     runs-on: ubuntu-latest
     permissions: {}
     timeout-minutes: 10
     environment:
-      name: tar hashes
+      name: zip sha1 hash
+      url: "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip.sha1"
+    steps:
+      - name: Prepare tag name
+        id: tag
+        uses: johnbillion/rave-wordpress/.github/actions/prepare-tag-name@trunk
+        with:
+          tag: ${{ inputs.tag }}
+
+      - name: Download zip and sha1 hash from wordpress.org
+        env:
+          TAG: ${{ steps.tag.outputs.short }}
+        run: | #shell
+          wget -O package.zip "https://wordpress.org/wordpress-${TAG}.zip" \
+            --user-agent="WordPress/${TAG}"
+          wget -O package.zip.sha1 "https://wordpress.org/wordpress-${TAG}.zip.sha1" \
+            --user-agent="WordPress/${TAG}"
+
+      - name: Check the sha1 hash
+        run: | #shell
+          echo "$(cat package.zip.sha1) package.zip" | sha1sum -c -
+
+  tar-md5:
+    name: Tar md5
+    runs-on: ubuntu-latest
+    permissions: {}
+    timeout-minutes: 10
+    environment:
+      name: tar md5 hash
       url: "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz.md5"
     steps:
       - name: Prepare tag name
@@ -61,21 +82,42 @@ jobs:
         with:
           tag: ${{ inputs.tag }}
 
-      - name: Download tar.gz and hashes from wordpress.org
+      - name: Download tar.gz and md5 hash from wordpress.org
         env:
           TAG: ${{ steps.tag.outputs.short }}
-          BRANCH: ${{ steps.tag.outputs.branch }}
         run: | #shell
           wget -O package.tar.gz "https://wordpress.org/wordpress-${TAG}.tar.gz" \
-            --user-agent="WordPress/${BRANCH}"
+            --user-agent="WordPress/${TAG}"
           wget -O package.tar.gz.md5 "https://wordpress.org/wordpress-${TAG}.tar.gz.md5" \
-            --user-agent="WordPress/${BRANCH}"
-          wget -O package.tar.gz.sha1 "https://wordpress.org/wordpress-${TAG}.tar.gz.sha1" \
-            --user-agent="WordPress/${BRANCH}"
+            --user-agent="WordPress/${TAG}"
 
       - name: Check the md5 hash
         run: | #shell
           echo "$(cat package.tar.gz.md5) package.tar.gz" | md5sum -c -
+
+  tar-sha1:
+    name: Tar sha1
+    runs-on: ubuntu-latest
+    permissions: {}
+    timeout-minutes: 10
+    environment:
+      name: tar sha1 hash
+      url: "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz.sha1"
+    steps:
+      - name: Prepare tag name
+        id: tag
+        uses: johnbillion/rave-wordpress/.github/actions/prepare-tag-name@trunk
+        with:
+          tag: ${{ inputs.tag }}
+
+      - name: Download tar.gz and sha1 hash from wordpress.org
+        env:
+          TAG: ${{ steps.tag.outputs.short }}
+        run: | #shell
+          wget -O package.tar.gz "https://wordpress.org/wordpress-${TAG}.tar.gz" \
+            --user-agent="WordPress/${TAG}"
+          wget -O package.tar.gz.sha1 "https://wordpress.org/wordpress-${TAG}.tar.gz.sha1" \
+            --user-agent="WordPress/${TAG}"
 
       - name: Check the sha1 hash
         run: | #shell
