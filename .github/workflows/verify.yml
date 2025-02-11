@@ -20,6 +20,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions: {}
     timeout-minutes: 10
+    environment:
+      name: "${{ inputs.package }} ${{ inputs.tag }}"
     steps:
       - name: Prepare tag name
         id: tag
