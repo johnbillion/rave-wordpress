@@ -113,7 +113,7 @@ jobs:
           TAG: ${{ steps.tag.outputs.short }}
           BRANCH: ${{ steps.tag.outputs.branch }}
         run: | #shell
-          wget -O package.zip "$PACKAGE" \
+          wget -O package.zip "$PACKAGE_URL" \
             --user-agent="WordPress/${BRANCH}"
           unzip package.zip -d wordpress
           mv "wordpress/WordPress-${TAG}" package
@@ -124,7 +124,7 @@ jobs:
           TAG: ${{ steps.tag.outputs.short }}
           BRANCH: ${{ steps.tag.outputs.branch }}
         run: | #shell
-          wget -O package.tar.gz "$PACKAGE" \
+          wget -O package.tar.gz "$PACKAGE_URL" \
             --user-agent="WordPress/${BRANCH}"
           mkdir wordpress
           tar -xzf package.tar.gz -C wordpress
@@ -136,7 +136,7 @@ jobs:
           TAG: ${{ steps.tag.outputs.short }}
           BRANCH: ${{ steps.tag.outputs.branch }}
         run: | #shell
-          wget -O package.zip "$PACKAGE" \
+          wget -O package.zip "$PACKAGE_URL" \
             --user-agent="WordPress/${BRANCH}"
           unzip package.zip -d wordpress
           mv wordpress/wordpress package
@@ -147,7 +147,7 @@ jobs:
           TAG: ${{ steps.tag.outputs.short }}
           BRANCH: ${{ steps.tag.outputs.branch }}
         run: | #shell
-          wget -O package.tar.gz "$PACKAGE" \
+          wget -O package.tar.gz "$PACKAGE_URL" \
             --user-agent="WordPress/${BRANCH}"
           mkdir wordpress
           tar -xzf package.tar.gz -C wordpress
@@ -180,7 +180,7 @@ jobs:
           TAG: ${{ steps.tag.outputs.short }}
           BRANCH: ${{ steps.tag.outputs.branch }}
         run: | #shell
-          wget -O package.zip "$PACKAGE" \
+          wget -O package.zip "$PACKAGE_URL" \
             --user-agent="WordPress/${BRANCH}"
           unzip package.zip -d wordpress
           mv wordpress/wordpress package
@@ -191,7 +191,7 @@ jobs:
           TAG: ${{ steps.tag.outputs.short }}
           BRANCH: ${{ steps.tag.outputs.branch }}
         run: | #shell
-          wget -O package.tar.gz "$PACKAGE" \
+          wget -O package.tar.gz "$PACKAGE_URL" \
             --user-agent="WordPress/${BRANCH}"
           mkdir wordpress
           tar -xzf package.tar.gz -C wordpress
@@ -203,7 +203,7 @@ jobs:
           TAG: ${{ steps.tag.outputs.short }}
           BRANCH: ${{ steps.tag.outputs.branch }}
         run: | #shell
-          wget -O package.zip "$PACKAGE" \
+          wget -O package.zip "$PACKAGE_URL" \
             --user-agent="WordPress/${BRANCH}"
           unzip package.zip -d wordpress
           mv wordpress/wordpress package
@@ -214,7 +214,7 @@ jobs:
           TAG: ${{ steps.tag.outputs.short }}
           BRANCH: ${{ steps.tag.outputs.branch }}
         run: | #shell
-          wget -O package.tar.gz "$PACKAGE" \
+          wget -O package.tar.gz "$PACKAGE_URL" \
             --user-agent="WordPress/${BRANCH}"
           mkdir wordpress
           tar -xzf package.tar.gz -C wordpress
@@ -226,7 +226,7 @@ jobs:
           TAG: ${{ steps.tag.outputs.short }}
           BRANCH: ${{ steps.tag.outputs.branch }}
         run: | #shell
-          wget -O package.zip "$PACKAGE" \
+          wget -O package.zip "$PACKAGE_URL" \
             --user-agent="WordPress/${BRANCH}"
           unzip package.zip -d wordpress
           mv "wordpress/${TAG}" package
@@ -249,7 +249,7 @@ jobs:
           TAG: ${{ steps.tag.outputs.short }}
           BRANCH: ${{ steps.tag.outputs.branch }}
         run: | #shell
-          wget -O package.zip "$PACKAGE" \
+          wget -O package.zip "$PACKAGE_URL" \
             --user-agent="WordPress/${BRANCH}"
           unzip package.zip -d wordpress
           mv wordpress/wordpress package
