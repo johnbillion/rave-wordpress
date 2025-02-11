@@ -148,6 +148,7 @@ jobs:
 
   offers:
     name: ${{ matrix.label }}
+    if: ${{ github.event_name != 'workflow_dispatch' }}
     permissions: {}
     needs:
       - versions
