@@ -16,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions: {}
     timeout-minutes: 10
+    environment:
+      name: checksums
     steps:
       - name: Prepare tag name
         id: tag

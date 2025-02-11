@@ -16,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions: {}
     timeout-minutes: 10
+    environment:
+      name: zip hashes
     steps:
       - name: Prepare tag name
         id: tag
@@ -48,6 +50,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions: {}
     timeout-minutes: 10
+    environment:
+      name: tar hashes
     steps:
       - name: Prepare tag name
         id: tag
