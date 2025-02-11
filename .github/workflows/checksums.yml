@@ -18,6 +18,7 @@ jobs:
     timeout-minutes: 10
     environment:
       name: checksums
+      url: "https://api.wordpress.org/core/checksums/1.0/?version=${{ steps.tag.outputs.short }}"
     steps:
       - name: Prepare tag name
         id: tag

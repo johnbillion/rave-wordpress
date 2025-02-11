@@ -18,6 +18,7 @@ jobs:
     timeout-minutes: 10
     environment:
       name: zip hashes
+      url: "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip.md5"
     steps:
       - name: Prepare tag name
         id: tag
@@ -52,6 +53,7 @@ jobs:
     timeout-minutes: 10
     environment:
       name: tar hashes
+      url: "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz.md5"
     steps:
       - name: Prepare tag name
         id: tag
