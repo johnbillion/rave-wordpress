@@ -42,13 +42,16 @@ jobs:
     outputs:
       versions: ${{ steps.fetch.outputs.versions }}
     steps:
-      - name: Fetch versions matrix from API data
-        if: ${{ github.event_name != 'workflow_dispatch' }}
+      - name: Fetch offers from version check API
         run: | #shell
           # Fetches the version number from the first three objects which have a `response` of `autoupdate`
           wget -q -O - https://api.wordpress.org/core/version-check/1.7/ \
             --user-agent='WordPress/6.0' \
             | jq -c '.offers | map(select(.response == "autoupdate")) | .[0:3]' > offers.json
+
+      - name: Populate versions matrix from API data
+        if: ${{ github.event_name != 'workflow_dispatch' }}
+        run: | #shell
           # Map each version and if the number is in major.minor syntax, append a .0
           versions=$(jq -c '. | map(.version | capture("(?<major>\\d+)\\.(?<minor>\\d+)(\\.(?<patch>\\d+))?") | .major + "." + .minor + "." + (.patch // "0") )' offers.json)
           echo "$versions" > versions.json
