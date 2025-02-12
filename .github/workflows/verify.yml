@@ -18,9 +18,36 @@ env:
   PACKAGE_URL: ""
 
 jobs:
+  pre-flight:
+    name: Pre-flight checks
+    runs-on: ubuntu-latest
+    permissions: {}
+    timeout-minutes: 10
+    env:
+      RESULT: clear
+    outputs:
+      result: ${{ env.RESULT }}
+    steps:
+      # Is the Docker image 404ing? The PR might not be merged yet:
+      # https://github.com/docker-library/official-images/pulls?q=is%3Apr+label%3Alibrary%2Fwordpress
+      - name: Check Docker image availability
+        if: inputs.package == 'docker-wordpress'
+        env:
+          TAG: ${{ inputs.tag }}
+        run: | #shell
+          api_url="https://hub.docker.com/v2/repositories/library/wordpress/tags/${TAG}/"
+          status_code=$(curl --silent --output /dev/null --write-out "%{http_code}" --head "$api_url/")
+
+          if [ "$status_code" -eq 404 ]; then
+            echo "404: $api_url"
+            echo "RESULT=hold" >> "$GITHUB_ENV"
+          fi
+
   verify:
     name: "${{ inputs.package }}"
     runs-on: ubuntu-latest
+    needs: pre-flight
+    if: ${{ needs.pre-flight.outputs.result == 'clear' }}
     permissions: {}
     timeout-minutes: 10
     environment:
@@ -227,8 +254,6 @@ jobs:
           unzip package.zip -d wordpress
           mv "wordpress/${TAG}" package
 
-      # Is the image 404ing? The PR might not be merged yet:
-      # https://github.com/docker-library/official-images/pulls?q=is%3Apr+label%3Alibrary%2Fwordpress
       - name: Download Docker image
         if: inputs.package == 'docker-wordpress'
         env:
