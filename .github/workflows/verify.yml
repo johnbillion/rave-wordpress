@@ -227,6 +227,8 @@ jobs:
           unzip package.zip -d wordpress
           mv "wordpress/${TAG}" package
 
+      # Is the image 404ing? The PR might not be merged yet:
+      # https://github.com/docker-library/official-images/pulls?q=is%3Apr+label%3Alibrary%2Fwordpress
       - name: Download Docker image
         if: inputs.package == 'docker-wordpress'
         env:
