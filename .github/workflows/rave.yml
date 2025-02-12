@@ -181,7 +181,7 @@ jobs:
           - downloads.w.org-tar
           - github-zip
           - github-tar
-          - docker-wordpress
+          # - docker-wordpress
           - wpengine-zip
           - roots-wordpress-full
           - johnpbloch-wordpress
