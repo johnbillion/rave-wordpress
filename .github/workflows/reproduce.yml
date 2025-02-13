@@ -103,6 +103,10 @@ jobs:
         run: | #shell
           npm run build
 
+      - name: Verify update check URL is as expected
+        run: | #shell
+          grep --fixed-strings "://api.wordpress.org/core/version-check/1.7/" build/wp-includes/update.php
+
       - name: Upload artifact
         uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # 4.5.0
         with:
