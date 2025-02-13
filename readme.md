@@ -2,7 +2,7 @@
 
 # RAVE for WordPress
 
-RAVE for WordPress is a supply chain security tool which compares the contents of published packages of WordPress with the canonical source code to verify they have not been tampered with. The packages from WordPress.org are tested along with those from GitHub and some unofficial channels.
+RAVE for WordPress is a supply chain security tool which compares the contents of published packages of WordPress with the canonical source code to verify they have not been tampered with. The packages from WordPress.org are tested along with those from GitHub and various third parties.
 
 A CI system runs on GitHub Actions which reproduces the build from the canonical sources, fetches published packages from various locations, and compares them all against one another to verify their integrity and identify any anomalies.
 
@@ -60,8 +60,14 @@ There are several opportunities for the official WordPress package to be tampere
 
 ### Real world examples
 
-* [In 2007 a cracker gained access to the wordpress.org servers and added a backdoor to the WordPress 2.1.1 package](https://wordpress.org/news/2007/03/upgrade-212/). RAVE would have successfully detected that the 2.1.1 package served by wordpress.org didn't match the package that it reproduced from the source code, and the backdoor code would have been immediately visible in the failing workflow on the RAVE repo.
-* [In 2016 Wordfence identified a vulnerability in a webhook mechanism on api.wordpress.org](https://www.wordfence.com/blog/2016/11/hacking-27-web-via-wordpress-auto-update/) and demonstrated that a cracker could theoretically execute a shell command on the api.wordpress.org server. If a cracker exploited this vulnerability to modify an existing release or create a new one then RAVE would have successfully detected it.
+* [In 2007 a cracker gained access to the wordpress.org servers and added a backdoor to the WordPress 2.1.1 package](https://wordpress.org/news/2007/03/upgrade-212/). RAVE would have successfully detected this by:
+  * Detecting that the 2.1.1 package served by wordpress.org didn't match the package that it reproduced from the source code
+  * Making the backdoor code immediately visible in the diff in the failing workflow
+* [In 2016 Wordfence identified a vulnerability in a webhook mechanism on api.wordpress.org](https://www.wordfence.com/blog/2016/11/hacking-27-web-via-wordpress-auto-update/) and demonstrated that a cracker could theoretically execute a shell command on the api.wordpress.org server. If a cracker exploited this vulnerability to modify an existing release or create a new one then RAVE would have successfully detected this by:
+  * Identifying a new version that didn't exist in the source repos
+  * Identifying a modified package that didn't match the code built from the source repos and didn't match the versions published to Packagist and Docker Hub
+  * Identifying any attempt to serve an update from an unexpected host name or URL in the update API response
+  * Identifying any discrepancies between the published sha1 and md5 hashes, the published checksums, and the offers returned by the update API
 
 ## Why test unofficial packages?
 
