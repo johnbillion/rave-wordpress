@@ -58,7 +58,7 @@ jobs:
             exit 1
           fi
 
-          if [ "$NO_CONTENT_URL" != "$EXPECTED_URL_FULL" ]; then
-            echo "No-content URL $NO_CONTENT_URL does not match the expected $EXPECTED_URL_FULL"
+          if [ "$NO_CONTENT_URL" != "$EXPECTED_URL_NO_CONTENT" ]; then
+            echo "No-content URL $NO_CONTENT_URL does not match the expected $EXPECTED_URL_NO_CONTENT"
             exit 1
           fi
