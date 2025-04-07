@@ -216,7 +216,7 @@ jobs:
       package: ${{ matrix.package }}
 
   verify-hashes:
-    name: Verify hashes: ${{ matrix.tag }}
+    name: "Verify hashes: ${{ matrix.tag }}"
     permissions: {}
     needs:
       - versions
