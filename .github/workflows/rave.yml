@@ -83,7 +83,7 @@ jobs:
           if-no-files-found: error
 
   reproduce:
-    name: "Reproduce ${{ matrix.tag }}"
+    name: "Reproduce: ${{ matrix.tag }}"
     permissions: {}
     needs:
       - versions
@@ -105,7 +105,7 @@ jobs:
       source: ${{ matrix.source }}
 
   fetch-build:
-    name: "Fetch builds ${{ matrix.tag }}"
+    name: "Fetch builds: ${{ matrix.tag }}"
     permissions: {}
     needs:
       - versions
@@ -122,7 +122,7 @@ jobs:
       build: ${{ matrix.build }}
 
   compare:
-    name: "Compare ${{ matrix.tag }}"
+    name: "Compare: ${{ matrix.tag }}"
     permissions: {}
     needs:
       - reproduce
@@ -163,7 +163,7 @@ jobs:
       tag: ${{ matrix.tag }}
 
   verify-packages:
-    name: "Verify ${{ matrix.tag }} packages"
+    name: "Verify packages: ${{ matrix.tag }}"
     permissions:
       contents: read
     needs:
@@ -196,7 +196,7 @@ jobs:
       package: ${{ matrix.package }}
 
   verify-latest-package:
-    name: "Verify ${{ matrix.tag }} packages"
+    name: "Verify packages: ${{ matrix.tag }}"
     if: ${{ github.event_name != 'workflow_dispatch' }}
     permissions:
       contents: read
@@ -216,7 +216,7 @@ jobs:
       package: ${{ matrix.package }}
 
   verify-hashes:
-    name: Verify hashes ${{ matrix.tag }}
+    name: Verify hashes: ${{ matrix.tag }}
     permissions: {}
     needs:
       - versions
