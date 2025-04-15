@@ -177,6 +177,7 @@ jobs:
           - github-tar
           - docker-wordpress
           - wpengine-zip
+          - aspirecloud-zip
           - roots-wordpress-full
           - johnpbloch-wordpress
         include:

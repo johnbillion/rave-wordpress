@@ -74,6 +74,9 @@ jobs:
             wpengine-zip)
               PACKAGE_URL="https://core-updates.wpengine.com/wordpress-${TAG_SHORT}.zip"
               ;;
+            aspirecloud-zip)
+              PACKAGE_URL="https://api.aspirecloud.net/download/wordpress-${TAG_SHORT}.zip"
+              ;;
             roots-wordpress-full)
               PACKAGE_URL="https://packagist.org/packages/roots/wordpress-full#${TAG_SHORT}"
               ;;
@@ -241,6 +244,16 @@ jobs:
 
       - name: Download zip from core-updates.wpengine.com
         if: inputs.package == 'wpengine-zip'
+        env:
+          BRANCH: ${{ steps.tag.outputs.branch }}
+        run: | #shell
+          wget -O package.zip "$PACKAGE_URL" \
+            --user-agent="WordPress/${BRANCH}"
+          unzip package.zip -d wordpress
+          mv wordpress/wordpress package
+
+      - name: Download zip from api.aspirecloud.net
+        if: inputs.package == 'aspirecloud-zip'
         env:
           BRANCH: ${{ steps.tag.outputs.branch }}
         run: | #shell
