@@ -38,10 +38,18 @@ jobs:
     steps:
       - name: Fetch offers from version check API
         run: | #shell
-          # Fetches the version number from the first three objects which have a `response` of `autoupdate`
+          # Fetches the latest release from each of the three latest minor branches
           wget -q -O - https://api.wordpress.org/core/version-check/1.7/ \
             --user-agent='WordPress/6.0' \
-            | jq -c '.offers | map(select(.response == "autoupdate")) | .[0:3]' > offers.json
+            | jq -c '
+              .offers
+              | map(select(.response == "autoupdate"))
+              | group_by(.version | capture("(?<major>\\d+)\\.(?<minor>\\d+)").minor)
+              | map(max_by(.version | split(".") | map(tonumber)))
+              | sort_by(.version | split(".") | map(tonumber) | .[:2])
+              | reverse
+              | .[0:3]
+            ' > offers.json
 
       - name: Populate versions matrix from API data
         if: ${{ github.event_name != 'workflow_dispatch' }}
