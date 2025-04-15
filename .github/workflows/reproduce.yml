@@ -57,7 +57,7 @@ jobs:
       - name: Download zip from core.trac.wordpress.org
         if: inputs.source == 'core.trac.wordpress.org'
         env:
-          TAG: ${{ steps.tag.outputs.long }}
+          TAG: ${{ steps.tag.outputs.short }}
           BRANCH: ${{ steps.tag.outputs.branch }}
         run: | #shell
           wget -O package.zip "https://core.trac.wordpress.org/browser/tags/${TAG}?format=zip" \
