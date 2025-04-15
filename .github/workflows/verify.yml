@@ -120,7 +120,7 @@ jobs:
         run: | #shell
           wget -O package.zip "$PACKAGE_URL" \
             --user-agent="WordPress/${BRANCH}"
-          unzip package.zip -d wordpress
+          unzip -q package.zip -d wordpress
           mv "wordpress/WordPress-${TAG}" package
 
       - name: Get tar file from GitHub
@@ -142,7 +142,7 @@ jobs:
         run: | #shell
           wget -O package.zip "$PACKAGE_URL" \
             --user-agent="WordPress/${BRANCH}"
-          unzip package.zip -d wordpress
+          unzip -q package.zip -d wordpress
           mv wordpress/wordpress package
 
       - name: Get tar file from wordpress.org
@@ -163,7 +163,7 @@ jobs:
         run: | #shell
           wget -O package.zip "https://wordpress.org/latest.zip" \
             --user-agent="WordPress/${BRANCH}"
-          unzip package.zip -d wordpress
+          unzip -q package.zip -d wordpress
           mv wordpress/wordpress package
 
       - name: Get latest tar file from wordpress.org
@@ -184,7 +184,7 @@ jobs:
         run: | #shell
           wget -O package.zip "$PACKAGE_URL" \
             --user-agent="WordPress/${BRANCH}"
-          unzip package.zip -d wordpress
+          unzip -q package.zip -d wordpress
           mv wordpress/wordpress package
 
       - name: Get tar file from downloads.wordpress.org
@@ -205,7 +205,7 @@ jobs:
         run: | #shell
           wget -O package.zip "$PACKAGE_URL" \
             --user-agent="WordPress/${BRANCH}"
-          unzip package.zip -d wordpress
+          unzip -q package.zip -d wordpress
           mv wordpress/wordpress package
 
       - name: Get tar file from downloads.w.org
@@ -227,7 +227,7 @@ jobs:
         run: | #shell
           wget -O package.zip "$PACKAGE_URL" \
             --user-agent="WordPress/${BRANCH}"
-          unzip package.zip -d wordpress
+          unzip -q package.zip -d wordpress
           mv "wordpress/${TAG}" package
 
       - name: Download Docker image
@@ -249,7 +249,7 @@ jobs:
         run: | #shell
           wget -O package.zip "$PACKAGE_URL" \
             --user-agent="WordPress/${BRANCH}"
-          unzip package.zip -d wordpress
+          unzip -q package.zip -d wordpress
           mv wordpress/wordpress package
 
       - name: Download zip from api.aspirecloud.net
@@ -259,7 +259,7 @@ jobs:
         run: | #shell
           wget -O package.zip "$PACKAGE_URL" \
             --user-agent="WordPress/${BRANCH}"
-          unzip package.zip -d wordpress
+          unzip -q package.zip -d wordpress
           mv wordpress/wordpress package
 
       - name: Download roots/wordpress-full

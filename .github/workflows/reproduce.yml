@@ -62,7 +62,7 @@ jobs:
         run: | #shell
           wget -O package.zip "https://core.trac.wordpress.org/browser/tags/${TAG}?format=zip" \
             --user-agent="WordPress/${BRANCH}"
-          unzip package.zip
+          unzip -q package.zip
           shopt -s dotglob
           mv "${TAG}"/* .
           shopt -u dotglob
