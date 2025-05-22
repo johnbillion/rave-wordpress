@@ -43,7 +43,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y subversion
           svn --version
-          svn checkout "https://core.svn.wordpress.org/tags/${TAG}" .
+          svn checkout "https://core.svn.wordpress.org/tags/${TAG}" --ignore-externals .
           rm -rf .svn
           rm -rf wp-content/plugins/akismet
 
