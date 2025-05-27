@@ -54,14 +54,14 @@ jobs:
           TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
           mkdir -p "checksums/${MAJOR}"
-          jq -r --arg tag "$TAG" '.checksums[$tag] | to_entries[] | "\(.value)  wordpress/\(.key)"' checksums.json > "checksums/${MAJOR}/${TAG}.md5"
+          jq -r --arg tag "$TAG" '.checksums[$tag] | to_entries[] | "\(.value)  \(.key)"' checksums.json > "checksums/${MAJOR}/${TAG}.md5"
 
       - name: Verify checksums
         env:
           MAJOR: ${{ steps.tag.outputs.major }}
           TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
-          md5sum -c "checksums/${MAJOR}/${TAG}.md5"
+          (cd wordpress && md5sum -c "checksums/${MAJOR}/${TAG}.md5")
 
       - name: Create pull request if there are additions or changes
         # if: github.ref == 'refs/heads/trunk'
