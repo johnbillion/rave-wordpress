@@ -64,7 +64,7 @@ jobs:
           (cd wordpress && md5sum -c "../checksums/${MAJOR}/${TAG}.md5")
 
       - name: Create pull request if there are additions or changes
-        # if: github.ref == 'refs/heads/trunk'
+        if: github.ref == 'refs/heads/trunk'
         uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e
         with:
           add-paths: checksums
