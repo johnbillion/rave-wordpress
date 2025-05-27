@@ -16,6 +16,9 @@ outputs:
   branch:
     description: Branch number, eg. 6.7
     value: ${{ steps.tag.outputs.branch }}
+  major:
+    description: Major number, eg. 6
+    value: ${{ steps.tag.outputs.major }}
 
 runs:
   using: composite
@@ -29,3 +32,4 @@ runs:
         echo short="${LONG_TAG%.0}" >> "$GITHUB_OUTPUT"
         echo long="${LONG_TAG}" >> "$GITHUB_OUTPUT"
         echo branch="${LONG_TAG%.*}" >> "$GITHUB_OUTPUT"
+        echo major="${LONG_TAG%%.*}" >> "$GITHUB_OUTPUT"
