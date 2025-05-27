@@ -14,7 +14,9 @@ jobs:
   verify:
     name: ${{ inputs.tag }}
     runs-on: ubuntu-latest
-    permissions: {}
+    permissions:
+      contents: write
+      pull-requests: write
     timeout-minutes: 10
     environment:
       name: offers

@@ -151,7 +151,9 @@ jobs:
   offers:
     name: ${{ matrix.label }}
     if: ${{ github.event_name != 'workflow_dispatch' }}
-    permissions: {}
+    permissions:
+      contents: write
+      pull-requests: write
     needs:
       - versions
     strategy:
