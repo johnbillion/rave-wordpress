@@ -233,7 +233,9 @@ jobs:
 
   verify-checksums:
     name: ${{ matrix.label }}
-    permissions: {}
+    permissions:
+      contents: write
+      pull-requests: write
     needs:
       - versions
     strategy:
