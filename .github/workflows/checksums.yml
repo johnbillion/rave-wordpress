@@ -14,7 +14,9 @@ jobs:
   checksums:
     name: ${{ inputs.tag }}
     runs-on: ubuntu-latest
-    permissions: {}
+    permissions:
+      contents: write
+      pull-requests: write
     timeout-minutes: 10
     environment:
       name: checksums
@@ -25,6 +27,11 @@ jobs:
         uses: johnbillion/rave-wordpress/.github/actions/prepare-tag-name@trunk
         with:
           tag: ${{ inputs.tag }}
+
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: true
 
       - name: Download checksums from wordpress.org
         env:
@@ -43,10 +50,27 @@ jobs:
 
       - name: Convert checksums.json into format that can be used by md5sum
         env:
+          MAJOR: ${{ steps.tag.outputs.major }}
           TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
-          jq -r --arg tag "$TAG" '.checksums[$tag] | to_entries[] | "\(.value)  wordpress/\(.key)"' checksums.json > checksums.md5
+          mkdir -p "checksums/${MAJOR}"
+          jq -r --arg tag "$TAG" '.checksums[$tag] | to_entries[] | "\(.value)  wordpress/\(.key)"' checksums.json > "checksums/${MAJOR}/${TAG}.md5"
 
       - name: Verify checksums
+        env:
+          MAJOR: ${{ steps.tag.outputs.major }}
+          TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
-          md5sum -c checksums.md5
+          md5sum -c "checksums/${MAJOR}/${TAG}.md5"
+
+      - name: Create pull request if there are additions or changes
+        # if: github.ref == 'refs/heads/trunk'
+        uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e
+        with:
+          add-paths: checksums
+          title: "Update checksums for WordPress ${{ steps.tag.outputs.short }}"
+          body: "This pull request updates the checksums for WordPress ${{ steps.tag.outputs.short }}."
+          branch: "checksums/${{ steps.tag.outputs.short }}"
+          commit-message: "Update checksums for WordPress ${{ steps.tag.outputs.short }}"
+          base: trunk
+          delete-branch: true
