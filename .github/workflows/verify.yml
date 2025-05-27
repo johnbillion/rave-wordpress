@@ -116,10 +116,9 @@ jobs:
         if: inputs.package == 'github-zip'
         env:
           TAG: ${{ steps.tag.outputs.short }}
-          BRANCH: ${{ steps.tag.outputs.branch }}
         run: | #shell
           wget -O package.zip "$PACKAGE_URL" \
-            --user-agent="WordPress/${BRANCH}"
+            --user-agent="WordPress/${TAG}"
           unzip -q package.zip -d wordpress
           mv "wordpress/WordPress-${TAG}" package
 
@@ -127,10 +126,9 @@ jobs:
         if: inputs.package == 'github-tar'
         env:
           TAG: ${{ steps.tag.outputs.short }}
-          BRANCH: ${{ steps.tag.outputs.branch }}
         run: | #shell
           wget -O package.tar.gz "$PACKAGE_URL" \
-            --user-agent="WordPress/${BRANCH}"
+            --user-agent="WordPress/${TAG}"
           mkdir wordpress
           tar -xzf package.tar.gz -C wordpress
           mv "wordpress/WordPress-${TAG}" package
@@ -138,20 +136,20 @@ jobs:
       - name: Get zip file from wordpress.org
         if: inputs.package == 'wordpress.org-zip' && inputs.tag != 'latest'
         env:
-          BRANCH: ${{ steps.tag.outputs.branch }}
+          TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
           wget -O package.zip "$PACKAGE_URL" \
-            --user-agent="WordPress/${BRANCH}"
+            --user-agent="WordPress/${TAG}"
           unzip -q package.zip -d wordpress
           mv wordpress/wordpress package
 
       - name: Get tar file from wordpress.org
         if: inputs.package == 'wordpress.org-tar' && inputs.tag != 'latest'
         env:
-          BRANCH: ${{ steps.tag.outputs.branch }}
+          TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
           wget -O package.tar.gz "$PACKAGE_URL" \
-            --user-agent="WordPress/${BRANCH}"
+            --user-agent="WordPress/${TAG}"
           mkdir wordpress
           tar -xzf package.tar.gz -C wordpress
           mv wordpress/wordpress package
@@ -159,20 +157,20 @@ jobs:
       - name: Get latest zip file from wordpress.org
         if: inputs.package == 'wordpress.org-zip' && inputs.tag == 'latest'
         env:
-          BRANCH: ${{ steps.tag.outputs.branch }}
+          TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
           wget -O package.zip "https://wordpress.org/latest.zip" \
-            --user-agent="WordPress/${BRANCH}"
+            --user-agent="WordPress/${TAG}"
           unzip -q package.zip -d wordpress
           mv wordpress/wordpress package
 
       - name: Get latest tar file from wordpress.org
         if: inputs.package == 'wordpress.org-tar' && inputs.tag == 'latest'
         env:
-          BRANCH: ${{ steps.tag.outputs.branch }}
+          TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
           wget -O package.tar.gz "https://wordpress.org/latest.tar.gz" \
-            --user-agent="WordPress/${BRANCH}"
+            --user-agent="WordPress/${TAG}"
           mkdir wordpress
           tar -xzf package.tar.gz -C wordpress
           mv wordpress/wordpress package
@@ -180,20 +178,20 @@ jobs:
       - name: Get zip file from downloads.wordpress.org
         if: inputs.package == 'downloads.wordpress.org-zip'
         env:
-          BRANCH: ${{ steps.tag.outputs.branch }}
+          TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
           wget -O package.zip "$PACKAGE_URL" \
-            --user-agent="WordPress/${BRANCH}"
+            --user-agent="WordPress/${TAG}"
           unzip -q package.zip -d wordpress
           mv wordpress/wordpress package
 
       - name: Get tar file from downloads.wordpress.org
         if: inputs.package == 'downloads.wordpress.org-tar'
         env:
-          BRANCH: ${{ steps.tag.outputs.branch }}
+          TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
           wget -O package.tar.gz "$PACKAGE_URL" \
-            --user-agent="WordPress/${BRANCH}"
+            --user-agent="WordPress/${TAG}"
           mkdir wordpress
           tar -xzf package.tar.gz -C wordpress
           mv wordpress/wordpress package
@@ -201,20 +199,20 @@ jobs:
       - name: Get zip file from downloads.w.org
         if: inputs.package == 'downloads.w.org-zip'
         env:
-          BRANCH: ${{ steps.tag.outputs.branch }}
+          TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
           wget -O package.zip "$PACKAGE_URL" \
-            --user-agent="WordPress/${BRANCH}"
+            --user-agent="WordPress/${TAG}"
           unzip -q package.zip -d wordpress
           mv wordpress/wordpress package
 
       - name: Get tar file from downloads.w.org
         if: inputs.package == 'downloads.w.org-tar'
         env:
-          BRANCH: ${{ steps.tag.outputs.branch }}
+          TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
           wget -O package.tar.gz "$PACKAGE_URL" \
-            --user-agent="WordPress/${BRANCH}"
+            --user-agent="WordPress/${TAG}"
           mkdir wordpress
           tar -xzf package.tar.gz -C wordpress
           mv wordpress/wordpress package
@@ -223,10 +221,9 @@ jobs:
         if: inputs.package == 'build.trac.wordpress.org'
         env:
           TAG: ${{ steps.tag.outputs.short }}
-          BRANCH: ${{ steps.tag.outputs.branch }}
         run: | #shell
           wget -O package.zip "$PACKAGE_URL" \
-            --user-agent="WordPress/${BRANCH}"
+            --user-agent="WordPress/${TAG}"
           unzip -q package.zip -d wordpress
           mv "wordpress/${TAG}" package
 
@@ -245,20 +242,20 @@ jobs:
       - name: Download zip from core-updates.wpengine.com
         if: inputs.package == 'wpengine-zip'
         env:
-          BRANCH: ${{ steps.tag.outputs.branch }}
+          TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
           wget -O package.zip "$PACKAGE_URL" \
-            --user-agent="WordPress/${BRANCH}"
+            --user-agent="WordPress/${TAG}"
           unzip -q package.zip -d wordpress
           mv wordpress/wordpress package
 
       - name: Download zip from api.aspirecloud.net
         if: inputs.package == 'aspirecloud-zip'
         env:
-          BRANCH: ${{ steps.tag.outputs.branch }}
+          TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
           wget -O package.zip "$PACKAGE_URL" \
-            --user-agent="WordPress/${BRANCH}"
+            --user-agent="WordPress/${TAG}"
           unzip -q package.zip -d wordpress
           mv wordpress/wordpress package
 

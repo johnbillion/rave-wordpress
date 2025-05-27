@@ -40,7 +40,7 @@ jobs:
         run: | #shell
           # Fetches the latest release from each of the three latest minor branches
           wget -q -O - https://api.wordpress.org/core/version-check/1.7/ \
-            --user-agent='WordPress/6.0' \
+            --user-agent='WordPress/6.8' \
             | jq -c '
               .offers
               | map(select(.response == "autoupdate"))

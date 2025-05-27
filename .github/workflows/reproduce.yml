@@ -58,10 +58,9 @@ jobs:
         if: inputs.source == 'core.trac.wordpress.org'
         env:
           TAG: ${{ steps.tag.outputs.short }}
-          BRANCH: ${{ steps.tag.outputs.branch }}
         run: | #shell
           wget -O package.zip "https://core.trac.wordpress.org/browser/tags/${TAG}?format=zip" \
-            --user-agent="WordPress/${BRANCH}"
+            --user-agent="WordPress/${TAG}"
           unzip -q package.zip
           shopt -s dotglob
           mv "${TAG}"/* .
