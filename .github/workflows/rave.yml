@@ -32,10 +32,17 @@ jobs:
   versions:
     name: Determine branch numbers
     runs-on: ubuntu-latest
-    permissions: {}
+    permissions:
+      contents: write
+      pull-requests: write
     outputs:
       versions: ${{ steps.fetch.outputs.versions }}
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: true
+
       - name: Fetch offers from version check API
         run: | #shell
           # Fetches the latest release from each of the three latest minor branches
@@ -83,6 +90,18 @@ jobs:
           name: offers
           path: offers.json
           if-no-files-found: error
+
+      - name: Create pull request if there are changes to offers.json
+        # if: github.ref == 'refs/heads/trunk'
+        uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7.0.8
+        with:
+          add-paths: offers.json
+          title: "Update offers.json"
+          body: "This pull request updates the offers.json file."
+          branch: offers
+          commit-message: "Update offers.json"
+          base: trunk
+          delete-branch: true
 
   reproduce:
     name: "Reproduce: ${{ matrix.tag }}"
@@ -151,9 +170,7 @@ jobs:
   offers:
     name: ${{ matrix.label }}
     if: ${{ github.event_name != 'workflow_dispatch' }}
-    permissions:
-      contents: write
-      pull-requests: write
+    permissions: {}
     needs:
       - versions
     strategy:
