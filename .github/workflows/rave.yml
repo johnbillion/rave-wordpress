@@ -238,6 +238,7 @@ jobs:
       pull-requests: write
     needs:
       - versions
+      - verify-packages
     strategy:
       matrix:
         tag: ${{ fromJson(needs.versions.outputs.versions) }}
