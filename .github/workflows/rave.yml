@@ -92,7 +92,7 @@ jobs:
           if-no-files-found: error
 
       - name: Create pull request if there are changes to offers.json
-        # if: github.ref == 'refs/heads/trunk'
+        if: github.ref == 'refs/heads/trunk'
         uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7.0.8
         with:
           add-paths: offers.json
