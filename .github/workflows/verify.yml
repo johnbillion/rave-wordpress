@@ -77,6 +77,9 @@ jobs:
             aspirecloud-zip)
               PACKAGE_URL="https://api.aspirecloud.net/download/wordpress-${TAG_SHORT}.zip"
               ;;
+            fair-zip)
+              PACKAGE_URL="https://github.com/fairpm/fair-plugin/releases/latest/download/wordpress-${TAG_SHORT}-fair.zip"
+              ;;
             roots-wordpress-full)
               PACKAGE_URL="https://packagist.org/packages/roots/wordpress-full#${TAG_SHORT}"
               ;;
@@ -259,6 +262,16 @@ jobs:
           unzip -q package.zip -d wordpress
           mv wordpress/wordpress package
 
+      - name: Download zip from FAIR
+        if: inputs.package == 'fair-zip'
+        env:
+          TAG: ${{ steps.tag.outputs.short }}
+        run: | #shell
+          wget -O package.zip "$PACKAGE_URL" \
+            --user-agent="WordPress/${TAG}"
+          unzip -q package.zip -d wordpress
+          mv wordpress/wordpress package
+
       - name: Download roots/wordpress-full
         if: inputs.package == 'roots-wordpress-full'
         env:
@@ -312,6 +325,7 @@ jobs:
       - name: Handle known differences in bundled plugins
         run: | #shell
           rm -rf package/wp-content/plugins/akismet
+          rm -rf package/wp-content/plugins/fair
 
       - name: Tree source
         run: | #shell

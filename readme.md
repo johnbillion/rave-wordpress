@@ -36,6 +36,7 @@ RAVE stands for Reproduce And Verify.
 * ✅ `wordpress` image from Docker Hub
 * ✅ `core-updates.wpengine.com` from WPEngine
 * ✅ `api.aspirecloud.net` from AspireCloud
+* ✅ Bundle packages provided by FAIR
 * ✅ `roots/wordpress-full` on Packagist
 * ✅ `johnpbloch/wordpress` on Packagist
 
