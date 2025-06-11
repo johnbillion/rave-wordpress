@@ -77,9 +77,9 @@ There are several opportunities for unofficial WordPress packages to be tampered
 
 ## How?
 
-By using the `diff` utility to compare the contents of the distributed package at its various locations with the output of building the source code from its various locations, we can identify anomalies between them. This reduces the opportunity for malicious or unwanted code to be introduced into WordPress packages without it also being present in the source repos or pipeline repos.
+By comparing the contents of the distributed package at its various locations with the output of building the source code, anomalies can be identified. This reduces the opportunity for malicious or unwanted code to be introduced into a WordPress package without it also being present in the source code repos, pipeline repos, and other distribution packages.
 
-If one of the GitHub Actions workflows in this repo fails, it should be investigated to see if the failure was caused by divergent code.
+If one of the GitHub Actions workflows in this repo fails, it should be investigated to see if the failure was caused by divergent code. Any differences between packages are immediately visible in the workflow run output.
 
 ## What's not tested?
 
