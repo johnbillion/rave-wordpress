@@ -260,7 +260,10 @@ jobs:
     strategy:
       matrix:
         label:
-          - Verify versions
+          - Verify distributed versions
+        tag:
+          - ${{ fromJson(needs.versions.outputs.versions)[0] }}
+          - '6.8.0'
         package:
           - github-zip
           # - docker-wordpress
@@ -272,7 +275,7 @@ jobs:
       fail-fast: false
     uses: ./.github/workflows/versions.yml
     with:
-      tag: ${{ fromJson(needs.versions.outputs.versions)[0] }}
+      tag: ${{ matrix.tag }}
       package: ${{ matrix.package }}
 
   verify-checksums:
