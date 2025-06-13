@@ -45,7 +45,7 @@ jobs:
           TAG: ${{ steps.tag.outputs.short }}
         run: |
           set -e
-          latest_version=$(curl -s https://repo.packagist.org/p2/roots/wordpress-full.json | jq -r '.packages["roots/wordpress-full"] | map(.version) | sort_by(.) | last')
+          latest_version=$(curl -s https://repo.packagist.org/p2/roots/wordpress-full.json | jq -r '.packages["roots/wordpress-full"] | map(.version) | .[]' | grep -Ev -- '-(RC|rc|beta|alpha|dev)' | sort -V | tail -n1)
           if [ "$latest_version" != "$TAG" ]; then
             echo "Error: Found a newer version ($latest_version) than $TAG"
             exit 1
