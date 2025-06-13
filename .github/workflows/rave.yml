@@ -267,7 +267,7 @@ jobs:
         package:
           - github-zip
           - docker-wordpress
-          # - wpengine-zip
+          - wpengine-zip
           - aspirecloud-zip
           # - fair-zip
           - roots-wordpress-full

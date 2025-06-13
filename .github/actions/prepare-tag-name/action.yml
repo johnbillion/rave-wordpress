@@ -19,6 +19,9 @@ outputs:
   major:
     description: Major number, eg. 6
     value: ${{ steps.tag.outputs.major }}
+  next:
+    description: Next patch version, eg. 6.7.2
+    value: ${{ steps.tag.outputs.next }}
 
 runs:
   using: composite
@@ -33,3 +36,5 @@ runs:
         echo long="${LONG_TAG}" >> "$GITHUB_OUTPUT"
         echo branch="${LONG_TAG%.*}" >> "$GITHUB_OUTPUT"
         echo major="${LONG_TAG%%.*}" >> "$GITHUB_OUTPUT"
+        PATCH_VERSION=$(echo "${LONG_TAG}" | awk -F. '{print $3 + 1}')
+        echo next="${LONG_TAG%.*}.${PATCH_VERSION}" >> "$GITHUB_OUTPUT"
