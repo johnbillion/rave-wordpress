@@ -1,0 +1,40 @@
+name: Verify versions
+
+on:
+  workflow_call:
+    inputs:
+      tag:
+        description: Tag name for WordPress release
+        required: true
+        type: string
+      package:
+        description: Package for WordPress release
+        required: true
+        type: string
+
+permissions: {}
+
+jobs:
+  verify:
+    name: "${{ inputs.package }}"
+    runs-on: ubuntu-latest
+    permissions: {}
+    timeout-minutes: 10
+    steps:
+      - name: Prepare tag name
+        id: tag
+        uses: johnbillion/rave-wordpress/.github/actions/prepare-tag-name@verify-version-offers
+        with:
+          tag: ${{ inputs.tag }}
+
+      - name: Verify versions provided by GitHub
+        if: inputs.package == 'github-zip'
+        env:
+          TAG: ${{ steps.tag.outputs.short }}
+        run: |
+          set -e
+          latest_tag=$(curl -s https://api.github.com/repos/WordPress/WordPress/tags | jq -r '.[0].name')
+          if [ "$latest_tag" != "$TAG" ]; then
+            echo "Error: Found a newer tag ($latest_tag) than $TAG"
+            exit 1
+          fi

@@ -250,6 +250,31 @@ jobs:
     with:
       tag: ${{ matrix.tag }}
 
+  verify-versions:
+    name: ${{ matrix.label }}
+    if: ${{ github.event_name != 'workflow_dispatch' }}
+    permissions:
+      contents: read
+    needs:
+      - versions
+    strategy:
+      matrix:
+        label:
+          - Verify versions
+        package:
+          - github-zip
+          # - docker-wordpress
+          # - wpengine-zip
+          # - aspirecloud-zip
+          # - fair-zip
+          # - roots-wordpress-full
+          # - johnpbloch-wordpress
+      fail-fast: false
+    uses: ./.github/workflows/versions.yml
+    with:
+      tag: ${{ fromJson(needs.versions.outputs.versions)[0] }}
+      package: ${{ matrix.package }}
+
   verify-checksums:
     name: ${{ matrix.label }}
     permissions:
