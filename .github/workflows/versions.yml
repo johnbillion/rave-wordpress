@@ -16,7 +16,7 @@ permissions: {}
 
 jobs:
   verify:
-    name: "${{ inputs.package }}"
+    name: "${{ inputs.package }} ${{ inputs.tag }}"
     runs-on: ubuntu-latest
     permissions: {}
     timeout-minutes: 10
@@ -36,5 +36,29 @@ jobs:
           latest_tag=$(curl -s https://api.github.com/repos/WordPress/WordPress/tags | jq -r '.[0].name')
           if [ "$latest_tag" != "$TAG" ]; then
             echo "Error: Found a newer tag ($latest_tag) than $TAG"
+            exit 1
+          fi
+
+      - name: Verify versions distributed by roots/wordpress-full
+        if: inputs.package == 'roots-wordpress-full'
+        env:
+          TAG: ${{ steps.tag.outputs.short }}
+        run: |
+          set -e
+          latest_version=$(curl -s https://repo.packagist.org/p2/roots/wordpress-full.json | jq -r '.packages["roots/wordpress-full"] | map(.version) | sort_by(.) | last')
+          if [ "$latest_version" != "$TAG" ]; then
+            echo "Error: Found a newer version ($latest_version) than $TAG"
+            exit 1
+          fi
+
+      - name: Verify versions distributed by johnpbloch/wordpress
+        if: inputs.package == 'johnpbloch-wordpress'
+        env:
+          TAG: ${{ steps.tag.outputs.short }}
+        run: |
+          set -e
+          latest_version=$(curl -s https://repo.packagist.org/p2/johnpbloch/wordpress.json | jq -r '.packages["johnpbloch/wordpress"] | map(.version) | sort_by(.) | last')
+          if [ "$latest_version" != "$TAG" ]; then
+            echo "Error: Found a newer version ($latest_version) than $TAG"
             exit 1
           fi
