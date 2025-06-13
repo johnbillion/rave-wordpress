@@ -177,7 +177,7 @@ jobs:
       matrix:
         tag: ${{ fromJson(needs.versions.outputs.versions) }}
         label:
-          - Verify offers
+          - Verify update offers
       fail-fast: false
     uses: ./.github/workflows/offer.yml
     with:

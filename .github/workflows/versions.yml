@@ -1,4 +1,4 @@
-name: Verify versions
+name: Verify distributed versions
 
 on:
   workflow_call:
@@ -27,7 +27,7 @@ jobs:
         with:
           tag: ${{ inputs.tag }}
 
-      - name: Verify versions provided by GitHub
+      - name: Verify versions distributed by GitHub
         if: inputs.package == 'github-zip'
         env:
           TAG: ${{ steps.tag.outputs.short }}
