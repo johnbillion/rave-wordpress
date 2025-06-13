@@ -87,6 +87,19 @@ jobs:
             exit 1
           fi
 
+      - name: Verify versions distributed by FAIR
+        if: inputs.package == 'fair-zip'
+        env:
+          TAG: ${{ steps.tag.outputs.next }}
+        run: |
+          set -e
+          url="https://github.com/fairpm/fair-plugin/releases/latest/download/wordpress-${TAG}-fair.zip"
+          status=$(curl -o /dev/null -s -w "%{http_code}" "$url")
+          if [ "$status" != "404" ]; then
+            echo "Error: Found a release for next version ($TAG) at $url"
+            exit 1
+          fi
+
       - name: Verify versions distributed by WPEngine
         if: inputs.package == 'wpengine-zip'
         env:
