@@ -74,3 +74,15 @@ jobs:
             echo "Error: Found a newer tag ($latest_tag) than $TAG"
             exit 1
           fi
+
+      - name: Verify versions distributed by AspireCloud
+        if: inputs.package == 'aspirecloud-zip'
+        env:
+          TAG: ${{ steps.tag.outputs.short }}
+        run: |
+          set -e
+          latest_version=$(curl -s 'https://api.aspirecloud.net/core/version-check/1.7/' | jq -r '.offers[].version' | sort -V | tail -n1)
+          if [ "$latest_version" != "$TAG" ]; then
+            echo "Error: Found a newer version ($latest_version) than $TAG"
+            exit 1
+          fi
