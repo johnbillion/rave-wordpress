@@ -201,7 +201,6 @@ jobs:
           - downloads.w.org-zip
           - downloads.w.org-tar
           - github-zip
-          - github-tar
           - docker-wordpress
           - wpengine-zip
           - aspirecloud-zip

@@ -44,9 +44,6 @@ jobs:
             github-zip)
               PACKAGE_URL="https://github.com/WordPress/WordPress/archive/refs/tags/${TAG_SHORT}.zip"
               ;;
-            github-tar)
-              PACKAGE_URL="https://github.com/WordPress/WordPress/archive/refs/tags/${TAG_SHORT}.tar.gz"
-              ;;
             wordpress.org-zip)
               PACKAGE_URL="https://wordpress.org/wordpress-${TAG_SHORT}.zip"
               ;;
@@ -123,17 +120,6 @@ jobs:
           wget -O package.zip "$PACKAGE_URL" \
             --user-agent="WordPress/${TAG}"
           unzip -q package.zip -d wordpress
-          mv "wordpress/WordPress-${TAG}" package
-
-      - name: Get tar file from GitHub
-        if: inputs.package == 'github-tar'
-        env:
-          TAG: ${{ steps.tag.outputs.short }}
-        run: | #shell
-          wget -O package.tar.gz "$PACKAGE_URL" \
-            --user-agent="WordPress/${TAG}"
-          mkdir wordpress
-          tar -xzf package.tar.gz -C wordpress
           mv "wordpress/WordPress-${TAG}" package
 
       - name: Get zip file from wordpress.org
@@ -290,7 +276,7 @@ jobs:
           rm package/composer.json
 
       - name: Handle anomalies with build files in TT and TT1
-        if: inputs.package == 'github-zip' || inputs.package == 'github-tar' || inputs.package == 'build.trac.wordpress.org'
+        if: inputs.package == 'github-zip' || inputs.package == 'build.trac.wordpress.org'
         run: | #shell
           rm package/wp-content/themes/twentytwenty/.npmrc
           rm package/wp-content/themes/twentytwenty/.stylelintrc.json
@@ -300,7 +286,7 @@ jobs:
           rm package/wp-content/themes/twentytwentyone/.stylelintrc.json
 
       - name: Handle known differences in bundled themes
-        if: inputs.package != 'github-zip' && inputs.package != 'github-tar' && inputs.package != 'build.trac.wordpress.org'
+        if: inputs.package != 'github-zip' && inputs.package != 'build.trac.wordpress.org'
         env:
           TAG: ${{ inputs.tag }}
           BRANCH: ${{ steps.tag.outputs.branch }}
