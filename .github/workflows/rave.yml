@@ -263,7 +263,6 @@ jobs:
           - Verify distributed versions
         tag:
           - ${{ fromJson(needs.versions.outputs.versions)[0] }}
-          - '6.8.0'
         package:
           - github-zip
           - docker-wordpress

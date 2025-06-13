@@ -16,7 +16,7 @@ permissions: {}
 
 jobs:
   verify:
-    name: "${{ inputs.package }} ${{ inputs.tag }}"
+    name: "${{ inputs.package }}"
     runs-on: ubuntu-latest
     permissions: {}
     timeout-minutes: 10
