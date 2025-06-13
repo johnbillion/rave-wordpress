@@ -266,7 +266,7 @@ jobs:
           - '6.8.0'
         package:
           - github-zip
-          # - docker-wordpress
+          - docker-wordpress
           # - wpengine-zip
           # - aspirecloud-zip
           # - fair-zip
