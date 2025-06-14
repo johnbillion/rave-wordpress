@@ -69,7 +69,7 @@ jobs:
           TAG: ${{ steps.tag.outputs.long }}
         run: |
           set -e
-          latest_tag=$(curl -s 'https://hub.docker.com/v2/repositories/library/wordpress/tags?page_size=100' | jq -r '.results[].name' | grep -E '^[0-9]\.[0-9]\.[0-9]$' | sort -V | tail -n1)
+          latest_tag=$(curl -s 'https://hub.docker.com/v2/repositories/library/wordpress/tags?page_size=100' | jq -r '.results[].name' | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -n1)
           if [ "$latest_tag" != "$TAG" ]; then
             echo "Error: Found a newer tag ($latest_tag) than $TAG"
             exit 1
