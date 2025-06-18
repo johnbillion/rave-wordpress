@@ -311,7 +311,7 @@ jobs:
       - name: Handle known differences in bundled plugins
         run: | #shell
           rm -rf package/wp-content/plugins/akismet
-          rm -rf package/wp-content/plugins/fair
+          rm -rf package/wp-content/plugins/fair-plugin
 
       - name: Tree source
         run: | #shell
