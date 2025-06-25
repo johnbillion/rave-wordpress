@@ -272,6 +272,7 @@ jobs:
           - fair-zip
           - roots-wordpress-full
           - johnpbloch-wordpress
+          - stable-check
       fail-fast: false
     uses: ./.github/workflows/versions.yml
     with:
