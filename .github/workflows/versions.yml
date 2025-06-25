@@ -119,7 +119,7 @@ jobs:
           TAG: ${{ steps.tag.outputs.short }}
         run: |
           set -e
-          versions=$(curl -s 'https://api.wordpress.org/core/stable-check/1.0/' | jq -r 'to_entries[].key' | sort -V | tail -n1)
+          latest_version=$(curl -s 'https://api.wordpress.org/core/stable-check/1.0/' | jq -r 'to_entries[].key' | sort -V | tail -n1)
           if [ "$latest_version" != "$TAG" ]; then
             echo "Error: Found a newer version ($latest_version) than $TAG"
             exit 1
