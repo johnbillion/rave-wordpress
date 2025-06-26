@@ -43,7 +43,7 @@ jobs:
       - name: Fetch package
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # 4.1.8
         with:
-          name: wordpress-${{ steps.tag.outputs.short }}-wordpress.org-zip
+          name: wordpress-${{ steps.tag.outputs.short }}-core.svn.wordpress.org
           path: wordpress
 
       - name: Convert checksums.json into format that can be used by md5sum
