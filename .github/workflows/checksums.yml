@@ -37,7 +37,7 @@ jobs:
         env:
           TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
-          wget -O checksums.json "https://api.wordpress.org/core/checksums/1.0/?version=${TAG}" \
+          wget --output-document=checksums.json "https://api.wordpress.org/core/checksums/1.0/?version=${TAG}" \
             --user-agent="WordPress/${TAG}"
 
       - name: Download and extract zip from wordpress.org
@@ -54,14 +54,14 @@ jobs:
           TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
           mkdir -p "checksums/${MAJOR}"
-          jq -r --arg tag "$TAG" '.checksums[$tag] | to_entries[] | "\(.value)  \(.key)"' checksums.json > "checksums/${MAJOR}/${TAG}.md5"
+          jq --raw-output --arg tag "$TAG" '.checksums[$tag] | to_entries[] | "\(.value)  \(.key)"' checksums.json > "checksums/${MAJOR}/${TAG}.md5"
 
       - name: Verify checksums
         env:
           MAJOR: ${{ steps.tag.outputs.major }}
           TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
-          (cd wordpress && md5sum -c "../checksums/${MAJOR}/${TAG}.md5")
+          (cd wordpress && md5sum --check="../checksums/${MAJOR}/${TAG}.md5")
 
       - name: Create pull request if there are additions or changes
         if: github.ref == 'refs/heads/trunk'

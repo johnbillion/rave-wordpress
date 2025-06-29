@@ -47,7 +47,7 @@ jobs:
       - name: Fetch offers from version check API
         run: | #shell
           # Fetches the latest release from the two latest minor branches
-          wget -q -O - https://api.wordpress.org/core/version-check/1.7/ \
+          wget --quiet --output-document=- https://api.wordpress.org/core/version-check/1.7/ \
             --user-agent='WordPress/6.8' \
             | jq '
               .offers
@@ -63,7 +63,7 @@ jobs:
         if: ${{ github.event_name != 'workflow_dispatch' }}
         run: | #shell
           # Map each version and if the number is in major.minor syntax, append a .0
-          versions=$(jq -c '. | map(.version | capture("(?<major>\\d+)\\.(?<minor>\\d+)(\\.(?<patch>\\d+))?") | .major + "." + .minor + "." + (.patch // "0") )' offers.json)
+          versions=$(jq --compact-output '. | map(.version | capture("(?<major>\\d+)\\.(?<minor>\\d+)(\\.(?<patch>\\d+))?") | .major + "." + .minor + "." + (.patch // "0") )' offers.json)
           echo "$versions" > versions.json
 
       - name: Fetch version matrix from workflow input

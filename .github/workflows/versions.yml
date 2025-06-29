@@ -33,7 +33,7 @@ jobs:
           TAG: ${{ steps.tag.outputs.short }}
         run: |
           set -e
-          latest_tag=$(curl -s https://api.github.com/repos/WordPress/WordPress/tags | jq -r '.[0].name')
+          latest_tag=$(curl -s https://api.github.com/repos/WordPress/WordPress/tags | jq --raw-output '.[0].name')
           if [ "$latest_tag" != "$TAG" ]; then
             echo "Error: Found a newer tag ($latest_tag) than $TAG"
             exit 1
@@ -45,7 +45,7 @@ jobs:
           TAG: ${{ steps.tag.outputs.short }}
         run: |
           set -e
-          latest_version=$(curl -s https://repo.packagist.org/p2/roots/wordpress-full.json | jq -r '.packages["roots/wordpress-full"] | map(.version) | .[]' | grep -Ev -- '-(RC|rc|beta|alpha|dev)' | sort -V | tail -n1)
+          latest_version=$(curl -s https://repo.packagist.org/p2/roots/wordpress-full.json | jq --raw-output '.packages["roots/wordpress-full"] | map(.version) | .[]' | grep -Ev -- '-(RC|rc|beta|alpha|dev)' | sort -V | tail -n1)
           if [ "$latest_version" != "$TAG" ]; then
             echo "Error: Found a newer version ($latest_version) than $TAG"
             exit 1
@@ -57,7 +57,7 @@ jobs:
           TAG: ${{ steps.tag.outputs.short }}
         run: |
           set -e
-          latest_version=$(curl -s https://repo.packagist.org/p2/johnpbloch/wordpress.json | jq -r '.packages["johnpbloch/wordpress"] | map(.version) | sort_by(.) | last')
+          latest_version=$(curl -s https://repo.packagist.org/p2/johnpbloch/wordpress.json | jq --raw-output '.packages["johnpbloch/wordpress"] | map(.version) | sort_by(.) | last')
           if [ "$latest_version" != "$TAG" ]; then
             echo "Error: Found a newer version ($latest_version) than $TAG"
             exit 1
@@ -69,7 +69,7 @@ jobs:
           TAG: ${{ steps.tag.outputs.long }}
         run: |
           set -e
-          latest_tag=$(curl -s 'https://hub.docker.com/v2/repositories/library/wordpress/tags?page_size=100' | jq -r '.results[].name' | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -n1)
+          latest_tag=$(curl -s 'https://hub.docker.com/v2/repositories/library/wordpress/tags?page_size=100' | jq --raw-output '.results[].name' | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -n1)
           if [ "$latest_tag" != "$TAG" ]; then
             echo "Error: Found a newer tag ($latest_tag) than $TAG"
             exit 1
@@ -81,7 +81,7 @@ jobs:
           TAG: ${{ steps.tag.outputs.short }}
         run: |
           set -e
-          latest_version=$(curl -s 'https://api.aspirecloud.net/core/version-check/1.7/' | jq -r '.offers[].version' | sort -V | tail -n1)
+          latest_version=$(curl -s 'https://api.aspirecloud.net/core/version-check/1.7/' | jq --raw-output '.offers[].version' | sort -V | tail -n1)
           if [ "$latest_version" != "$TAG" ]; then
             echo "Error: Found a newer version ($latest_version) than $TAG"
             exit 1
@@ -119,7 +119,7 @@ jobs:
           TAG: ${{ steps.tag.outputs.short }}
         run: |
           set -e
-          latest_version=$(curl -s 'https://api.wordpress.org/core/stable-check/1.0/' | jq -r 'to_entries[].key' | sort -V | tail -n1)
+          latest_version=$(curl -s 'https://api.wordpress.org/core/stable-check/1.0/' | jq --raw-output 'to_entries[].key' | sort -V | tail -n1)
           if [ "$latest_version" != "$TAG" ]; then
             echo "Error: Found a newer version ($latest_version) than $TAG"
             exit 1
