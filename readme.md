@@ -45,7 +45,8 @@ RAVE stands for Reproduce And Verify.
 * ✅ md5 and sha1 hashes published on wordpress.org are verified against the wordpress.org packages
 * ✅ Checksums returned by `api.wordpress.org/core/checksums` are verified against file contents
 * ✅ Update URLs returned by `api.wordpress.org/core/version-check` are verified against expected URLs
-* ✅ Verifies that nobody is distributing a version newer than the current latest official version
+* ✅ Versions returned by `api.wordpress.org/core/stable-check` are as expected
+* ✅ Verifies that no distributors are offering a version newer than the latest official version
 
 ## When do the tests run?
 
