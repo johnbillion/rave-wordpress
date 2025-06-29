@@ -44,9 +44,9 @@ jobs:
             exit 1
           fi
 
-          DOWNLOAD_URL=$(echo "$MATCHING_OBJECT" | jq -r '.download')
-          PACKAGE_URL=$(echo "$MATCHING_OBJECT" | jq -r '.packages.full')
-          NO_CONTENT_URL=$(echo "$MATCHING_OBJECT" | jq -r '.packages.no_content')
+          DOWNLOAD_URL=$(echo "$MATCHING_OBJECT" | jq --raw-output '.download')
+          PACKAGE_URL=$(echo "$MATCHING_OBJECT" | jq --raw-output '.packages.full')
+          NO_CONTENT_URL=$(echo "$MATCHING_OBJECT" | jq --raw-output '.packages.no_content')
 
           if [ "$DOWNLOAD_URL" != "$EXPECTED_URL_FULL" ]; then
             echo "Download URL $DOWNLOAD_URL does not match the expected $EXPECTED_URL_FULL"

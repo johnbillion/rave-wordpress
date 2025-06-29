@@ -59,7 +59,7 @@ jobs:
         env:
           TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
-          wget -O package.zip "https://core.trac.wordpress.org/browser/tags/${TAG}?format=zip" \
+          wget --output-document=package.zip "https://core.trac.wordpress.org/browser/tags/${TAG}?format=zip" \
             --user-agent="WordPress/${TAG}"
           unzip -q package.zip
           shopt -s dotglob
