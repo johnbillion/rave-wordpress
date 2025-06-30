@@ -33,7 +33,9 @@ jobs:
           TAG: ${{ steps.tag.outputs.short }}
         run: |
           set -e
-          latest_tag=$(curl -s https://api.github.com/repos/WordPress/WordPress/tags | jq --raw-output '.[0].name')
+          response=$(curl -s https://api.github.com/repos/WordPress/WordPress/tags)
+          echo "GitHub API response: $response"
+          latest_tag=$(echo "$response" | jq --raw-output '.[0].name')
           if [ "$latest_tag" != "$TAG" ]; then
             echo "Error: Found a newer tag ($latest_tag) than $TAG"
             exit 1
