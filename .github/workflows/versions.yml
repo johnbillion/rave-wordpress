@@ -31,12 +31,10 @@ jobs:
         if: inputs.package == 'github-zip'
         env:
           TAG: ${{ steps.tag.outputs.short }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -e
-          response=$(curl -s -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/WordPress/WordPress/tags)
-          echo "GitHub API response: $response"
-          latest_tag=$(echo "$response" | jq --raw-output '.[0].name')
+          latest_tag=$(gh api repos/WordPress/WordPress/tags --jq '.[0].name')
           if [ "$latest_tag" != "$TAG" ]; then
             echo "Error: Found a newer tag ($latest_tag) than $TAG"
             exit 1
