@@ -114,105 +114,149 @@ jobs:
 
       - name: Get zip file from GitHub
         if: inputs.package == 'github-zip'
+        uses: ./.github/actions/download-with-retry
+        with:
+          url: ${{ env.PACKAGE_URL }}
+          output: package.zip
+          user-agent: WordPress/${{ steps.tag.outputs.short }}
+
+      - name: Extract GitHub zip
+        if: inputs.package == 'github-zip'
         env:
           TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
-          wget --output-document=package.zip "$PACKAGE_URL" \
-            --user-agent="WordPress/${TAG}"
           unzip -q package.zip -d wordpress
           mv "wordpress/WordPress-${TAG}" package
 
       - name: Get zip file from wordpress.org
         if: inputs.package == 'wordpress.org-zip' && inputs.tag != 'latest'
-        env:
-          TAG: ${{ steps.tag.outputs.short }}
+        uses: ./.github/actions/download-with-retry
+        with:
+          url: ${{ env.PACKAGE_URL }}
+          output: package.zip
+          user-agent: WordPress/${{ steps.tag.outputs.short }}
+
+      - name: Extract wordpress.org zip
+        if: inputs.package == 'wordpress.org-zip' && inputs.tag != 'latest'
         run: | #shell
-          wget --output-document=package.zip "$PACKAGE_URL" \
-            --user-agent="WordPress/${TAG}"
           unzip -q package.zip -d wordpress
           mv wordpress/wordpress package
 
       - name: Get tar file from wordpress.org
         if: inputs.package == 'wordpress.org-tar' && inputs.tag != 'latest'
-        env:
-          TAG: ${{ steps.tag.outputs.short }}
+        uses: ./.github/actions/download-with-retry
+        with:
+          url: ${{ env.PACKAGE_URL }}
+          output: package.tar.gz
+          user-agent: WordPress/${{ steps.tag.outputs.short }}
+
+      - name: Extract wordpress.org tar
+        if: inputs.package == 'wordpress.org-tar' && inputs.tag != 'latest'
         run: | #shell
-          wget --output-document=package.tar.gz "$PACKAGE_URL" \
-            --user-agent="WordPress/${TAG}"
           mkdir wordpress
           tar -xzf package.tar.gz -C wordpress
           mv wordpress/wordpress package
 
       - name: Get latest zip file from wordpress.org
         if: inputs.package == 'wordpress.org-zip' && inputs.tag == 'latest'
-        env:
-          TAG: ${{ steps.tag.outputs.short }}
+        uses: ./.github/actions/download-with-retry
+        with:
+          url: https://wordpress.org/latest.zip
+          output: package.zip
+          user-agent: WordPress/${{ steps.tag.outputs.short }}
+
+      - name: Extract latest wordpress.org zip
+        if: inputs.package == 'wordpress.org-zip' && inputs.tag == 'latest'
         run: | #shell
-          wget --output-document=package.zip "https://wordpress.org/latest.zip" \
-            --user-agent="WordPress/${TAG}"
           unzip -q package.zip -d wordpress
           mv wordpress/wordpress package
 
       - name: Get latest tar file from wordpress.org
         if: inputs.package == 'wordpress.org-tar' && inputs.tag == 'latest'
-        env:
-          TAG: ${{ steps.tag.outputs.short }}
+        uses: ./.github/actions/download-with-retry
+        with:
+          url: https://wordpress.org/latest.tar.gz
+          output: package.tar.gz
+          user-agent: WordPress/${{ steps.tag.outputs.short }}
+
+      - name: Extract latest wordpress.org tar
+        if: inputs.package == 'wordpress.org-tar' && inputs.tag == 'latest'
         run: | #shell
-          wget --output-document=package.tar.gz "https://wordpress.org/latest.tar.gz" \
-            --user-agent="WordPress/${TAG}"
           mkdir wordpress
           tar -xzf package.tar.gz -C wordpress
           mv wordpress/wordpress package
 
       - name: Get zip file from downloads.wordpress.org
         if: inputs.package == 'downloads.wordpress.org-zip'
-        env:
-          TAG: ${{ steps.tag.outputs.short }}
+        uses: ./.github/actions/download-with-retry
+        with:
+          url: ${{ env.PACKAGE_URL }}
+          output: package.zip
+          user-agent: WordPress/${{ steps.tag.outputs.short }}
+
+      - name: Extract downloads.wordpress.org zip
+        if: inputs.package == 'downloads.wordpress.org-zip'
         run: | #shell
-          wget --output-document=package.zip "$PACKAGE_URL" \
-            --user-agent="WordPress/${TAG}"
           unzip -q package.zip -d wordpress
           mv wordpress/wordpress package
 
       - name: Get tar file from downloads.wordpress.org
         if: inputs.package == 'downloads.wordpress.org-tar'
-        env:
-          TAG: ${{ steps.tag.outputs.short }}
+        uses: ./.github/actions/download-with-retry
+        with:
+          url: ${{ env.PACKAGE_URL }}
+          output: package.tar.gz
+          user-agent: WordPress/${{ steps.tag.outputs.short }}
+
+      - name: Extract downloads.wordpress.org tar
+        if: inputs.package == 'downloads.wordpress.org-tar'
         run: | #shell
-          wget --output-document=package.tar.gz "$PACKAGE_URL" \
-            --user-agent="WordPress/${TAG}"
           mkdir wordpress
           tar -xzf package.tar.gz -C wordpress
           mv wordpress/wordpress package
 
       - name: Get zip file from downloads.w.org
         if: inputs.package == 'downloads.w.org-zip'
-        env:
-          TAG: ${{ steps.tag.outputs.short }}
+        uses: ./.github/actions/download-with-retry
+        with:
+          url: ${{ env.PACKAGE_URL }}
+          output: package.zip
+          user-agent: WordPress/${{ steps.tag.outputs.short }}
+
+      - name: Extract downloads.w.org zip
+        if: inputs.package == 'downloads.w.org-zip'
         run: | #shell
-          wget --output-document=package.zip "$PACKAGE_URL" \
-            --user-agent="WordPress/${TAG}"
           unzip -q package.zip -d wordpress
           mv wordpress/wordpress package
 
       - name: Get tar file from downloads.w.org
         if: inputs.package == 'downloads.w.org-tar'
-        env:
-          TAG: ${{ steps.tag.outputs.short }}
+        uses: ./.github/actions/download-with-retry
+        with:
+          url: ${{ env.PACKAGE_URL }}
+          output: package.tar.gz
+          user-agent: WordPress/${{ steps.tag.outputs.short }}
+
+      - name: Extract downloads.w.org tar
+        if: inputs.package == 'downloads.w.org-tar'
         run: | #shell
-          wget --output-document=package.tar.gz "$PACKAGE_URL" \
-            --user-agent="WordPress/${TAG}"
           mkdir wordpress
           tar -xzf package.tar.gz -C wordpress
           mv wordpress/wordpress package
 
       - name: Download zip from build.trac.wordpress.org
         if: inputs.package == 'build.trac.wordpress.org'
+        uses: ./.github/actions/download-with-retry
+        with:
+          url: ${{ env.PACKAGE_URL }}
+          output: package.zip
+          user-agent: WordPress/${{ steps.tag.outputs.short }}
+
+      - name: Extract build.trac.wordpress.org zip
+        if: inputs.package == 'build.trac.wordpress.org'
         env:
           TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
-          wget --output-document=package.zip "$PACKAGE_URL" \
-            --user-agent="WordPress/${TAG}"
           unzip -q package.zip -d wordpress
           mv "wordpress/${TAG}" package
 
@@ -230,31 +274,43 @@ jobs:
 
       - name: Download zip from core-updates.wpengine.com
         if: inputs.package == 'wpengine-zip'
-        env:
-          TAG: ${{ steps.tag.outputs.short }}
+        uses: ./.github/actions/download-with-retry
+        with:
+          url: ${{ env.PACKAGE_URL }}
+          output: package.zip
+          user-agent: WordPress/${{ steps.tag.outputs.short }}
+
+      - name: Extract wpengine zip
+        if: inputs.package == 'wpengine-zip'
         run: | #shell
-          wget --output-document=package.zip "$PACKAGE_URL" \
-            --user-agent="WordPress/${TAG}"
           unzip -q package.zip -d wordpress
           mv wordpress/wordpress package
 
       - name: Download zip from api.aspirecloud.net
         if: inputs.package == 'aspirecloud-zip'
-        env:
-          TAG: ${{ steps.tag.outputs.short }}
+        uses: ./.github/actions/download-with-retry
+        with:
+          url: ${{ env.PACKAGE_URL }}
+          output: package.zip
+          user-agent: WordPress/${{ steps.tag.outputs.short }}
+
+      - name: Extract aspirecloud zip
+        if: inputs.package == 'aspirecloud-zip'
         run: | #shell
-          wget --output-document=package.zip "$PACKAGE_URL" \
-            --user-agent="WordPress/${TAG}"
           unzip -q package.zip -d wordpress
           mv wordpress/wordpress package
 
       - name: Download zip from FAIR
         if: inputs.package == 'fair-zip'
-        env:
-          TAG: ${{ steps.tag.outputs.short }}
+        uses: ./.github/actions/download-with-retry
+        with:
+          url: ${{ env.PACKAGE_URL }}
+          output: package.zip
+          user-agent: WordPress/${{ steps.tag.outputs.short }}
+
+      - name: Extract FAIR zip
+        if: inputs.package == 'fair-zip'
         run: | #shell
-          wget --output-document=package.zip "$PACKAGE_URL" \
-            --user-agent="WordPress/${TAG}"
           unzip -q package.zip -d wordpress
           mv wordpress/wordpress package
 
