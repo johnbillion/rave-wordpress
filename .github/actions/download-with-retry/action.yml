@@ -1,0 +1,37 @@
+name: Download with retry
+description: Downloads a file with retry logic (3 attempts, 20s delay)
+
+inputs:
+  url:
+    description: URL to download from
+    required: true
+  output:
+    description: Output filename
+    required: true
+  user-agent:
+    description: User agent string
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Download with retry
+      shell: bash
+      run: |
+        for attempt in 1 2 3; do
+          echo "Attempt $attempt to download from ${{ inputs.url }}"
+          if wget --output-document="${{ inputs.output }}" "${{ inputs.url }}" \
+            --user-agent="${{ inputs.user-agent }}"; then
+            echo "Download successful on attempt $attempt"
+            exit 0
+          else
+            echo "Download failed on attempt $attempt"
+            if [ $attempt -lt 3 ]; then
+              echo "Waiting 20 seconds before retry..."
+              sleep 20
+            else
+              echo "All download attempts failed"
+              exit 1
+            fi
+          fi
+        done
