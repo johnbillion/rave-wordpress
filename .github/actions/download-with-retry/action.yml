@@ -17,11 +17,15 @@ runs:
   steps:
     - name: Download with retry
       shell: bash
+      env:
+        DOWNLOAD_URL: ${{ inputs.url }}
+        OUTPUT_FILE: ${{ inputs.output }}
+        USER_AGENT: ${{ inputs.user-agent }}
       run: |
         for attempt in 1 2 3; do
           echo "Attempt $attempt"
-          if wget --output-document="${{ inputs.output }}" "${{ inputs.url }}" \
-            --user-agent="${{ inputs.user-agent }}" --no-verbose; then
+          if wget --output-document="${OUTPUT_FILE}" "${DOWNLOAD_URL}" \
+            --user-agent="${USER_AGENT}" --no-verbose; then
             echo "Download successful on attempt $attempt"
             exit 0
           else
