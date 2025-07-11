@@ -114,7 +114,7 @@ jobs:
 
       - name: Get zip file from GitHub
         if: inputs.package == 'github-zip'
-        uses: ./.github/actions/download-with-retry
+        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@add-retry-mechanism
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
@@ -130,7 +130,7 @@ jobs:
 
       - name: Get zip file from wordpress.org
         if: inputs.package == 'wordpress.org-zip' && inputs.tag != 'latest'
-        uses: ./.github/actions/download-with-retry
+        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@add-retry-mechanism
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
@@ -144,7 +144,7 @@ jobs:
 
       - name: Get tar file from wordpress.org
         if: inputs.package == 'wordpress.org-tar' && inputs.tag != 'latest'
-        uses: ./.github/actions/download-with-retry
+        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@add-retry-mechanism
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.tar.gz
@@ -159,7 +159,7 @@ jobs:
 
       - name: Get latest zip file from wordpress.org
         if: inputs.package == 'wordpress.org-zip' && inputs.tag == 'latest'
-        uses: ./.github/actions/download-with-retry
+        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@add-retry-mechanism
         with:
           url: https://wordpress.org/latest.zip
           output: package.zip
@@ -173,7 +173,7 @@ jobs:
 
       - name: Get latest tar file from wordpress.org
         if: inputs.package == 'wordpress.org-tar' && inputs.tag == 'latest'
-        uses: ./.github/actions/download-with-retry
+        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@add-retry-mechanism
         with:
           url: https://wordpress.org/latest.tar.gz
           output: package.tar.gz
@@ -188,7 +188,7 @@ jobs:
 
       - name: Get zip file from downloads.wordpress.org
         if: inputs.package == 'downloads.wordpress.org-zip'
-        uses: ./.github/actions/download-with-retry
+        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@add-retry-mechanism
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
@@ -202,7 +202,7 @@ jobs:
 
       - name: Get tar file from downloads.wordpress.org
         if: inputs.package == 'downloads.wordpress.org-tar'
-        uses: ./.github/actions/download-with-retry
+        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@add-retry-mechanism
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.tar.gz
@@ -217,7 +217,7 @@ jobs:
 
       - name: Get zip file from downloads.w.org
         if: inputs.package == 'downloads.w.org-zip'
-        uses: ./.github/actions/download-with-retry
+        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@add-retry-mechanism
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
@@ -231,7 +231,7 @@ jobs:
 
       - name: Get tar file from downloads.w.org
         if: inputs.package == 'downloads.w.org-tar'
-        uses: ./.github/actions/download-with-retry
+        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@add-retry-mechanism
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.tar.gz
@@ -246,7 +246,7 @@ jobs:
 
       - name: Download zip from build.trac.wordpress.org
         if: inputs.package == 'build.trac.wordpress.org'
-        uses: ./.github/actions/download-with-retry
+        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@add-retry-mechanism
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
@@ -274,7 +274,7 @@ jobs:
 
       - name: Download zip from core-updates.wpengine.com
         if: inputs.package == 'wpengine-zip'
-        uses: ./.github/actions/download-with-retry
+        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@add-retry-mechanism
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
@@ -288,7 +288,7 @@ jobs:
 
       - name: Download zip from api.aspirecloud.net
         if: inputs.package == 'aspirecloud-zip'
-        uses: ./.github/actions/download-with-retry
+        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@add-retry-mechanism
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
@@ -302,7 +302,7 @@ jobs:
 
       - name: Download zip from FAIR
         if: inputs.package == 'fair-zip'
-        uses: ./.github/actions/download-with-retry
+        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@add-retry-mechanism
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
