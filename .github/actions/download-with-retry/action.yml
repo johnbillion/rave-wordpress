@@ -19,9 +19,9 @@ runs:
       shell: bash
       run: |
         for attempt in 1 2 3; do
-          echo "Attempt $attempt to download from ${{ inputs.url }}"
+          echo "Attempt $attempt"
           if wget --output-document="${{ inputs.output }}" "${{ inputs.url }}" \
-            --user-agent="${{ inputs.user-agent }}"; then
+            --user-agent="${{ inputs.user-agent }}" --no-verbose; then
             echo "Download successful on attempt $attempt"
             exit 0
           else
