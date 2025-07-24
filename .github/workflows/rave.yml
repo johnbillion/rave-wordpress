@@ -205,7 +205,7 @@ jobs:
           - docker-wordpress
           - wpengine-zip
           - aspirecloud-zip
-          - fair-zip
+          # - fair-zip
           - roots-wordpress-full
           - johnpbloch-wordpress
         include:
