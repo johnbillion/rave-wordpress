@@ -34,7 +34,7 @@ jobs:
         run: | #shell
           EXPECTED_URL_FULL="https://downloads.w.org/release/wordpress-${TAG}.zip"
           EXPECTED_URL_NO_CONTENT="https://downloads.w.org/release/wordpress-${TAG}-no-content.zip"
-          MATCHING_OBJECT=$(jq --arg tag "$TAG" '.[] | select(.version == $tag)' offers.json)
+          MATCHING_OBJECT=$(jq --arg tag "$TAG" 'select(.version == $tag)' offers.json)
 
           if [ -z "$MATCHING_OBJECT" ]; then
             echo "No matching version found for tag $TAG"
