@@ -39,7 +39,7 @@ jobs:
         env:
           TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
-          sudo apt-get install -y subversion
+          sudo apt-get install -y --no-install-recommends subversion
           svn --version
           svn export "https://core.svn.wordpress.org/tags/${TAG}" . --ignore-externals
 
