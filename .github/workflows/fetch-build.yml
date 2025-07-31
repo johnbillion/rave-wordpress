@@ -32,19 +32,16 @@ jobs:
         env:
           TAG: ${{ steps.tag.outputs.long }}
         run: | #shell
-          git clone --no-checkout git://core.git.wordpress.org/ .
-          git checkout "tags/${TAG}" -b "${TAG}"
+          git clone --depth 1 --branch "${TAG}" git://core.git.wordpress.org/ .
 
       - name: SVN checkout core.svn.wordpress.org
         if: inputs.build == 'core.svn.wordpress.org'
         env:
           TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
-          sudo apt-get update
           sudo apt-get install -y subversion
           svn --version
-          svn checkout "https://core.svn.wordpress.org/tags/${TAG}" --ignore-externals .
-          rm -rf .svn
+          svn export "https://core.svn.wordpress.org/tags/${TAG}" . --ignore-externals
 
       - name: Upload artifact
         uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # 4.5.0
