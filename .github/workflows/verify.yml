@@ -95,17 +95,17 @@ jobs:
           name: wordpress-${{ steps.tag.outputs.long }}-develop.svn.wordpress.org
           path: source
 
-      - name: Download versions artifact
+      - name: Download version artifact
         if: inputs.tag == 'latest'
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # 4.1.8
         with:
-          name: versions
+          name: version
 
-      - name: Extract the latest version number from versions.json
+      - name: Extract the latest version number from version.txt
         if: inputs.tag == 'latest'
         id: extract
         run: | #shell
-          echo latest="$(jq --raw-output '.[0]' versions.json)" >> "$GITHUB_OUTPUT"
+          echo latest="$(cat version.txt)" >> "$GITHUB_OUTPUT"
 
       - name: Download latest artifact
         if: inputs.tag == 'latest'
