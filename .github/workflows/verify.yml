@@ -271,7 +271,7 @@ jobs:
           TAG: ${{ steps.tag.outputs.long }}
         run: | #shell
           yq --null-input '{"services":{"wordpress":{"image":"wordpress:"+strenv(TAG),"container_name":"wordpress","volumes":["./package:/var/www/html:rw"]}}}' > docker-compose.yml
-          compose up --quiet-pull -d wordpress
+          docker compose up --quiet-pull -d wordpress
           docker compose run --rm wordpress -- ls -al /var/www/html
           docker compose run --rm wordpress -- rm /var/www/html/.htaccess
           docker compose run --rm wordpress -- rm /var/www/html/wp-config-docker.php
