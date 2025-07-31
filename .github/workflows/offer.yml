@@ -16,9 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions: {}
     timeout-minutes: 10
-    environment:
-      name: offers
-      url: https://api.wordpress.org/core/version-check/1.7/
     steps:
       - name: Prepare tag name
         id: tag

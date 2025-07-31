@@ -16,9 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions: {}
     timeout-minutes: 10
-    environment:
-      name: zip md5 hash
-      url: "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip.md5"
     steps:
       - name: Prepare tag name
         id: tag
@@ -44,9 +41,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions: {}
     timeout-minutes: 10
-    environment:
-      name: zip sha1 hash
-      url: "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip.sha1"
     steps:
       - name: Prepare tag name
         id: tag
@@ -72,9 +66,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions: {}
     timeout-minutes: 10
-    environment:
-      name: tar md5 hash
-      url: "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz.md5"
     steps:
       - name: Prepare tag name
         id: tag
@@ -100,9 +91,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions: {}
     timeout-minutes: 10
-    environment:
-      name: tar sha1 hash
-      url: "https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz.sha1"
     steps:
       - name: Prepare tag name
         id: tag
