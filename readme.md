@@ -88,7 +88,6 @@ This approach:
 
 * Does **not** detect malicious or unwanted code that gets committed to the Subversion source code repo and subsequently makes it into the published package.
 * Does **not** detect a targeted attack that causes the contents of the package to vary based on a parameter such as the IP address or user agent of the client making the request.
-* Does **not** verify the contents of the bundled Akismet plugin.
 * Does **not** deal with build provenance verification or software signing.
 
 ## Reproducible WordPress
