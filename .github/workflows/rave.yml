@@ -37,7 +37,7 @@ jobs:
       pull-requests: write
     timeout-minutes: 10
     outputs:
-      versions: ${{ steps.fetch.outputs.versions }}
+      version: ${{ steps.fetch.outputs.version }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -46,43 +46,39 @@ jobs:
 
       - name: Fetch offers from version check API
         run: | #shell
-          # Fetches the latest release from the two latest minor branches
+          # Fetches the latest release
           wget --quiet --output-document=- https://api.wordpress.org/core/version-check/1.7/ \
             --user-agent='WordPress/6.8' \
             | jq '
               .offers
               | map(select(.response == "autoupdate"))
-              | group_by(.version | capture("(?<major>\\d+)\\.(?<minor>\\d+)").minor)
-              | map(max_by(.version | split(".") | map(tonumber)))
-              | sort_by(.version | split(".") | map(tonumber) | .[:2])
-              | reverse
-              | .[0:2]
+              | max_by(.version | split(".") | map(tonumber))
             ' > offers.json
 
       - name: Populate versions matrix from API data
         if: ${{ github.event_name != 'workflow_dispatch' }}
         run: | #shell
-          # Map each version and if the number is in major.minor syntax, append a .0
-          versions=$(jq --compact-output '. | map(.version | capture("(?<major>\\d+)\\.(?<minor>\\d+)(\\.(?<patch>\\d+))?") | .major + "." + .minor + "." + (.patch // "0") )' offers.json)
-          echo "$versions" > versions.json
+          # Extract version and if the number is in major.minor syntax, append a .0
+          version=$(jq --raw-output '.version | capture("(?<major>\\d+)\\.(?<minor>\\d+)(\\.(?<patch>\\d+))?") | .major + "." + .minor + "." + (.patch // "0")' offers.json)
+          echo "$version" > version.txt
 
       - name: Fetch version matrix from workflow input
         if: ${{ github.event_name == 'workflow_dispatch' }}
         env:
           VERSION: ${{ github.event.inputs.version }}
         run: | #shell
-          jq --null-input --compact-output --arg version "${VERSION}" '[$version]' > versions.json
+          echo "${VERSION}" > version.txt
 
-      - name: Output versions from versions.json
+      - name: Output version from version.txt
         id: fetch
         run: | #shell
-          echo versions="$(cat versions.json)" >> "$GITHUB_OUTPUT"
+          echo version="$(cat version.txt)" >> "$GITHUB_OUTPUT"
 
-      - name: Save versions.json
+      - name: Save version.txt
         uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # 4.5.0
         with:
-          name: versions
-          path: versions.json
+          name: version
+          path: version.txt
           if-no-files-found: error
 
       - name: Save offers.json
@@ -105,46 +101,41 @@ jobs:
           delete-branch: true
 
   reproduce:
-    name: "Reproduce: ${{ matrix.tag }}"
+    name: "Reproduce: ${{ needs.versions.outputs.version }}"
     permissions: {}
     needs:
       - versions
     strategy:
       matrix:
-        tag: ${{ fromJson(needs.versions.outputs.versions) }}
         source:
           - develop.svn.wordpress.org
           - develop.git.wordpress.org
           - github-wordpress-develop
-        include:
-          # Only reproduce the latest tag from core.trac.wordpress.org due to rate limiting
-          - tag: ${{ fromJson(needs.versions.outputs.versions)[0] }}
-            source: core.trac.wordpress.org
+          - core.trac.wordpress.org
       fail-fast: false
     uses: ./.github/workflows/reproduce.yml
     with:
-      tag: ${{ matrix.tag }}
+      tag: ${{ needs.versions.outputs.version }}
       source: ${{ matrix.source }}
 
   fetch-build:
-    name: "Fetch builds: ${{ matrix.tag }}"
+    name: "Fetch builds: ${{ needs.versions.outputs.version }}"
     permissions: {}
     needs:
       - versions
     strategy:
       matrix:
-        tag: ${{ fromJson(needs.versions.outputs.versions) }}
         build:
           - core.svn.wordpress.org
           - core.git.wordpress.org
       fail-fast: false
     uses: ./.github/workflows/fetch-build.yml
     with:
-      tag: ${{ matrix.tag }}
+      tag: ${{ needs.versions.outputs.version }}
       build: ${{ matrix.build }}
 
   compare:
-    name: "Compare: ${{ matrix.tag }}"
+    name: "Compare: ${{ needs.versions.outputs.version }}"
     permissions: {}
     needs:
       - reproduce
@@ -152,40 +143,30 @@ jobs:
       - versions
     strategy:
       matrix:
-        tag: ${{ fromJson(needs.versions.outputs.versions) }}
         source:
           - develop.git.wordpress.org
           - github-wordpress-develop
           - core.git.wordpress.org
           - core.svn.wordpress.org
-        include:
-          # Only compare the latest tag from core.trac.wordpress.org due to rate limiting
-          - tag: ${{ fromJson(needs.versions.outputs.versions)[0] }}
-            source: core.trac.wordpress.org
+          - core.trac.wordpress.org
       fail-fast: false
     uses: ./.github/workflows/compare.yml
     with:
-      tag: ${{ matrix.tag }}
+      tag: ${{ needs.versions.outputs.version }}
       source: ${{ matrix.source }}
 
   offers:
-    name: ${{ matrix.label }}
+    name: Verify update offers
     if: ${{ github.event_name != 'workflow_dispatch' }}
     permissions: {}
     needs:
       - versions
-    strategy:
-      matrix:
-        tag: ${{ fromJson(needs.versions.outputs.versions) }}
-        label:
-          - Verify update offers
-      fail-fast: false
     uses: ./.github/workflows/offer.yml
     with:
-      tag: ${{ matrix.tag }}
+      tag: ${{ needs.versions.outputs.version }}
 
   verify-packages:
-    name: "Verify packages: ${{ matrix.tag }}"
+    name: "Verify packages: ${{ needs.versions.outputs.version }}"
     permissions:
       contents: read
     needs:
@@ -193,7 +174,6 @@ jobs:
       - versions
     strategy:
       matrix:
-        tag: ${{ fromJson(needs.versions.outputs.versions) }}
         package:
           - wordpress.org-zip
           - wordpress.org-tar
@@ -208,14 +188,11 @@ jobs:
           - fair-zip
           - roots-wordpress-full
           - johnpbloch-wordpress
-        include:
-          # Only verify the latest tag from build.trac.wordpress.org due to rate limiting
-          - tag: ${{ fromJson(needs.versions.outputs.versions)[0] }}
-            package: build.trac.wordpress.org
+          - build.trac.wordpress.org
       fail-fast: false
     uses: ./.github/workflows/verify.yml
     with:
-      tag: ${{ matrix.tag }}
+      tag: ${{ needs.versions.outputs.version }}
       package: ${{ matrix.package }}
 
   verify-latest-package:
@@ -239,20 +216,16 @@ jobs:
       package: ${{ matrix.package }}
 
   verify-hashes:
-    name: "Verify hashes: ${{ matrix.tag }}"
+    name: "Verify hashes: ${{ needs.versions.outputs.version }}"
     permissions: {}
     needs:
       - versions
-    strategy:
-      matrix:
-        tag: ${{ fromJson(needs.versions.outputs.versions) }}
-      fail-fast: false
     uses: ./.github/workflows/hashes.yml
     with:
-      tag: ${{ matrix.tag }}
+      tag: ${{ needs.versions.outputs.version }}
 
   verify-versions:
-    name: ${{ matrix.label }}
+    name: Verify distributed versions
     if: ${{ github.event_name != 'workflow_dispatch' }}
     permissions:
       contents: read
@@ -260,10 +233,6 @@ jobs:
       - versions
     strategy:
       matrix:
-        label:
-          - Verify distributed versions
-        tag:
-          - ${{ fromJson(needs.versions.outputs.versions)[0] }}
         package:
           - github-zip
           - docker-wordpress
@@ -276,23 +245,17 @@ jobs:
       fail-fast: false
     uses: ./.github/workflows/versions.yml
     with:
-      tag: ${{ matrix.tag }}
+      tag: ${{ needs.versions.outputs.version }}
       package: ${{ matrix.package }}
 
   verify-checksums:
-    name: ${{ matrix.label }}
+    name: Verify checksums
     permissions:
       contents: write
       pull-requests: write
     needs:
       - versions
       - verify-packages
-    strategy:
-      matrix:
-        tag: ${{ fromJson(needs.versions.outputs.versions) }}
-        label:
-          - Verify checksums
-      fail-fast: false
     uses: ./.github/workflows/checksums.yml
     with:
-      tag: ${{ matrix.tag }}
+      tag: ${{ needs.versions.outputs.version }}
