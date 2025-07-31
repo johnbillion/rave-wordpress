@@ -101,7 +101,7 @@ jobs:
           delete-branch: true
 
   reproduce:
-    name: "Reproduce: ${{ needs.versions.outputs.version }}"
+    name: "Reproduce ${{ needs.versions.outputs.version }}"
     permissions: {}
     needs:
       - versions
@@ -119,7 +119,7 @@ jobs:
       source: ${{ matrix.source }}
 
   fetch-build:
-    name: "Fetch builds: ${{ needs.versions.outputs.version }}"
+    name: Fetch builds
     permissions: {}
     needs:
       - versions
@@ -135,7 +135,7 @@ jobs:
       build: ${{ matrix.build }}
 
   compare:
-    name: "Compare: ${{ needs.versions.outputs.version }}"
+    name: Compare
     permissions: {}
     needs:
       - reproduce
@@ -166,7 +166,7 @@ jobs:
       tag: ${{ needs.versions.outputs.version }}
 
   verify-packages:
-    name: "Verify packages: ${{ needs.versions.outputs.version }}"
+    name: Verify packages
     permissions:
       contents: read
     needs:
@@ -196,7 +196,7 @@ jobs:
       package: ${{ matrix.package }}
 
   verify-latest-package:
-    name: "Verify packages: ${{ matrix.tag }}"
+    name: Verify latest packages
     if: ${{ github.event_name != 'workflow_dispatch' }}
     permissions:
       contents: read
@@ -204,19 +204,17 @@ jobs:
       - reproduce
     strategy:
       matrix:
-        tag:
-          - 'latest'
         package:
           - wordpress.org-zip
           - wordpress.org-tar
       fail-fast: false
     uses: ./.github/workflows/verify.yml
     with:
-      tag: ${{ matrix.tag }}
+      tag: 'latest'
       package: ${{ matrix.package }}
 
   verify-hashes:
-    name: "Verify hashes: ${{ needs.versions.outputs.version }}"
+    name: Verify hashes
     permissions: {}
     needs:
       - versions
