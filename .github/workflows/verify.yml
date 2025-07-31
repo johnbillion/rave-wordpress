@@ -276,6 +276,7 @@ jobs:
           docker compose run --rm wordpress -- rm /var/www/html/.htaccess
           docker compose run --rm wordpress -- rm /var/www/html/wp-config-docker.php
           docker compose cp wordpress:/var/www/html/wp-content/plugins/akismet akismet-package
+          docker compose run --rm wordpress -- rm -rf /var/www/html/wp-content/plugins/akismet
 
       - name: Download zip from core-updates.wpengine.com
         if: inputs.package == 'wpengine-zip'
