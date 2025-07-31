@@ -398,7 +398,7 @@ jobs:
           echo "Akismet version: $AKISMET_VERSION"
           echo "AKISMET_VERSION=$AKISMET_VERSION" >> "$GITHUB_ENV"
 
-      - name: Fetch Akismet {{ env.AKISMET_VERSION }} from source
+      - name: Fetch Akismet ${{ env.AKISMET_VERSION }} from source
         if: env.PACKAGE_INCLUDES_AKISMET == 'true'
         run: | #shell
           sudo apt-get update
