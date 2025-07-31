@@ -404,7 +404,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y subversion
           svn --version
-          svn checkout --quiet --ignore-externals https://plugins.svn.wordpress.org/akismet/tags/$AKISMET_VERSION/ akismet-source
+          svn checkout --quiet --ignore-externals "https://plugins.svn.wordpress.org/akismet/tags/$AKISMET_VERSION/" akismet-source
           rm -rf akismet-source/.svn
 
       - name: Verify Akismet
