@@ -270,7 +270,6 @@ jobs:
           docker compose run --rm wordpress -- ls -al /var/www/html
           docker compose run --rm wordpress -- rm /var/www/html/.htaccess
           docker compose run --rm wordpress -- rm /var/www/html/wp-config-docker.php
-          docker compose run --rm wordpress -- rm -r /var/www/html/wp-content/plugins/akismet
 
       - name: Download zip from core-updates.wpengine.com
         if: inputs.package == 'wpengine-zip'
@@ -366,7 +365,6 @@ jobs:
 
       - name: Handle known differences in bundled plugins
         run: | #shell
-          rm -rf package/wp-content/plugins/akismet
           rm -rf package/wp-content/plugins/fair-plugin
 
       - name: Tree source
