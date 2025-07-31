@@ -17,6 +17,7 @@ permissions: {}
 env:
   PACKAGE_URL: ""
   PACKAGE_INCLUDES_AKISMET: "true"
+  AKISMET_VERSION: ""
 
 jobs:
   verify:
@@ -389,17 +390,23 @@ jobs:
         run: | #shell
           diff --strip-trailing-cr --recursive --color=always source package
 
-      - name: Verify Akismet
+      - name: Detect Akismet version
         if: env.PACKAGE_INCLUDES_AKISMET == 'true'
         run: | #shell
-          # Extract Akismet version from plugin header
-          AKISMET_VERSION=$(grep -E '^\s*\*?\s*Version:' akismet-package/akismet.php | head -n1 | sed -E 's/^.*Version:[[:space:]]*([0-9.]+).*$/\1/')
+          AKISMET_VERSION="$(grep -E '^\s*\*?\s*Version:' akismet-package/akismet.php | head -n1 | sed -E 's/^.*Version:[[:space:]]*([0-9.]+).*$/\1/')"
           echo "Akismet version: $AKISMET_VERSION"
-          # Checkout Akismet source from SVN
+          echo "AKISMET_VERSION=$AKISMET_VERSION" >> "$GITHUB_ENV"
+
+      - name: Fetch Akismet {{ env.AKISMET_VERSION }} from source
+        if: env.PACKAGE_INCLUDES_AKISMET == 'true'
+        run: | #shell
           sudo apt-get update
           sudo apt-get install -y subversion
           svn --version
           svn checkout --quiet --ignore-externals https://plugins.svn.wordpress.org/akismet/tags/$AKISMET_VERSION/ akismet-source
           rm -rf akismet-source/.svn
-          # Compare the two directories
+
+      - name: Verify Akismet
+        if: env.PACKAGE_INCLUDES_AKISMET == 'true'
+        run: | #shell
           diff --strip-trailing-cr --recursive --color=always akismet-source akismet-package
