@@ -404,7 +404,7 @@ jobs:
         run: | #shell
           sudo apt-get install -y --no-install-recommends subversion
           svn --version
-          svn export --quiet "https://plugins.svn.wordpress.org/akismet/tags/$AKISMET_VERSION/" akismet-source --ignore-externals
+          svn export --quiet --force --ignore-externals "https://plugins.svn.wordpress.org/akismet/tags/$AKISMET_VERSION/" akismet-source
 
       - name: Verify Akismet
         if: env.PACKAGE_INCLUDES_AKISMET == 'true'

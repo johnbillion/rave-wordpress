@@ -48,7 +48,7 @@ jobs:
         run: | #shell
           sudo apt-get install -y --no-install-recommends subversion
           svn --version
-          svn export "https://develop.svn.wordpress.org/tags/${TAG}" . --ignore-externals
+          svn export --quiet --force --ignore-externals "https://develop.svn.wordpress.org/tags/${TAG}" .
 
       - name: Download zip from core.trac.wordpress.org
         if: inputs.source == 'core.trac.wordpress.org'

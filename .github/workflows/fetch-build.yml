@@ -41,7 +41,7 @@ jobs:
         run: | #shell
           sudo apt-get install -y --no-install-recommends subversion
           svn --version
-          svn export "https://core.svn.wordpress.org/tags/${TAG}" . --ignore-externals
+          svn export --quiet --force --ignore-externals "https://core.svn.wordpress.org/tags/${TAG}" .
 
       - name: Upload artifact
         uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # 4.5.0
