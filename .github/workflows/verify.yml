@@ -415,7 +415,7 @@ jobs:
 
       - name: Check for package files
         id: package-check
-        run: |
+        run: | #shell
           if [ -f "package.zip" ]; then
             echo "package_file=package.zip" >> "$GITHUB_OUTPUT"
           elif [ -f "package.tar.gz" ]; then
@@ -430,7 +430,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           PACKAGE_FILE: ${{ steps.package-check.outputs.package_file }}
-        run: |
+        run: | #shell
           if gh attestation verify "${PACKAGE_FILE}" --repo johnbillion/rave-wordpress; then
             echo "Attestation already exists for ${PACKAGE_FILE}"
             echo "attestation_exists=true" >> "$GITHUB_OUTPUT"
@@ -445,7 +445,7 @@ jobs:
           TAG: ${{ steps.tag.outputs.short }}
           PACKAGE: ${{ inputs.package }}
           PACKAGE_FILE: ${{ steps.package-check.outputs.package_file }}
-        run: |
+        run: | #shell
           # Generate SHA256 of package file
           PACKAGE_SHA256=$(sha256sum "${PACKAGE_FILE}" | cut -d' ' -f1)
 
@@ -480,8 +480,6 @@ jobs:
           }
           EOF
 
-          echo "Generated release predicate for ${PACKAGE_FILE}"
-
       - name: Generate attestation
         if: steps.package-check.outputs.package_file != 'false' && steps.attestation-check.outputs.attestation_exists == 'false'
         uses: actions/attest@ce27ba3b4a9a139d9a20a4a07d69fabb52f1e5bc # v2.4.0
@@ -495,7 +493,5 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           PACKAGE_FILE: ${{ steps.package-check.outputs.package_file }}
-        run: |
-          echo "Verifying attestation for ${PACKAGE_FILE}..."
+        run: | #shell
           gh attestation verify "${PACKAGE_FILE}" --repo johnbillion/rave-wordpress
-          echo "✅ Attestation verified successfully for ${PACKAGE_FILE}"
