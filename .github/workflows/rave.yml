@@ -119,12 +119,14 @@ jobs:
       source: ${{ matrix.source }}
 
   fetch-build:
-    name: Fetch builds
+    name: ${{ matrix.label }}
     permissions: {}
     needs:
       - versions
     strategy:
       matrix:
+        label:
+          - Fetch builds
         build:
           - core.svn.wordpress.org
           - core.git.wordpress.org
@@ -135,7 +137,7 @@ jobs:
       build: ${{ matrix.build }}
 
   compare:
-    name: Compare
+    name: ${{ matrix.label }}
     permissions: {}
     needs:
       - reproduce
@@ -143,6 +145,8 @@ jobs:
       - versions
     strategy:
       matrix:
+        label:
+          - Compare
         source:
           - develop.git.wordpress.org
           - github-wordpress-develop
@@ -166,7 +170,7 @@ jobs:
       tag: ${{ needs.versions.outputs.version }}
 
   verify-packages:
-    name: Verify packages
+    name: ${{ matrix.label }}
     permissions:
       contents: read
     needs:
@@ -174,6 +178,8 @@ jobs:
       - versions
     strategy:
       matrix:
+        label:
+          - Verify packages
         package:
           - wordpress.org-zip
           - wordpress.org-tar
@@ -196,7 +202,7 @@ jobs:
       package: ${{ matrix.package }}
 
   verify-latest-package:
-    name: Verify latest packages
+    name: ${{ matrix.label }}
     if: ${{ github.event_name != 'workflow_dispatch' }}
     permissions:
       contents: read
@@ -204,6 +210,8 @@ jobs:
       - reproduce
     strategy:
       matrix:
+        label:
+          - Verify latest packages
         package:
           - wordpress.org-zip
           - wordpress.org-tar
