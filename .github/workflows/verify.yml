@@ -434,7 +434,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           PACKAGE_FILE: ${{ steps.package-check.outputs.package_file }}
         run: | #shell
-          if gh attestation verify "${PACKAGE_FILE}" --repo johnbillion/rave-wordpress; then
+          if gh attestation verify "${PACKAGE_FILE}" --repo johnbillion/rave-wordpress --predicate-type "https://in-toto.io/attestation/release/v0.1"; then
             echo "Attestation already exists for ${PACKAGE_FILE}"
             echo "attestation_exists=true" >> "$GITHUB_OUTPUT"
           else
@@ -497,4 +497,4 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           PACKAGE_FILE: ${{ steps.package-check.outputs.package_file }}
         run: | #shell
-          gh attestation verify "${PACKAGE_FILE}" --repo johnbillion/rave-wordpress
+          gh attestation verify "${PACKAGE_FILE}" --repo johnbillion/rave-wordpress --predicate-type "https://in-toto.io/attestation/release/v0.1"

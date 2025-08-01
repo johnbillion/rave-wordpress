@@ -107,12 +107,12 @@ RAVE generates an [in-toto release attestation](https://github.com/in-toto/attes
 
 ```sh
 wget https://wordpress.org/wordpress-6.8.2.zip
-gh attestation verify wordpress-6.8.2.zip --repo johnbillion/rave-wordpress
+gh attestation verify wordpress-6.8.2.zip --repo johnbillion/rave-wordpress --predicate-type "https://in-toto.io/attestation/release/v0.1"
 ```
 
 ```sh
 wget https://api.aspirecloud.net/download/wordpress-6.8.2.zip
-gh attestation verify wordpress-6.8.2.zip --repo johnbillion/rave-wordpress
+gh attestation verify wordpress-6.8.2.zip --repo johnbillion/rave-wordpress --predicate-type "https://in-toto.io/attestation/release/v0.1"
 ```
 
 ## Does this faciliate WordPress adhering to SLSA?
