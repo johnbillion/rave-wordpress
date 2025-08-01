@@ -26,6 +26,11 @@ jobs:
     permissions: {}
     timeout-minutes: 10
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
       - name: Prepare tag name
         id: tag
         uses: johnbillion/rave-wordpress/.github/actions/prepare-tag-name@trunk
@@ -407,3 +412,65 @@ jobs:
         if: env.PACKAGE_INCLUDES_AKISMET == 'true'
         run: | #shell
           diff --strip-trailing-cr --recursive --color=always akismet-source akismet-package
+
+      - name: Check for package files
+        id: package-check
+        run: |
+          if [ -f "package.zip" ]; then
+            echo "package_file=package.zip" >> "$GITHUB_OUTPUT"
+          elif [ -f "package.tar.gz" ]; then
+            echo "package_file=package.tar.gz" >> "$GITHUB_OUTPUT"
+          else
+            echo "package_file=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Generate release predicate
+        if: steps.package-check.outputs.package_file != 'false'
+        env:
+          TAG: ${{ steps.tag.outputs.short }}
+          PACKAGE: ${{ inputs.package }}
+          PACKAGE_FILE: ${{ steps.package-check.outputs.package_file }}
+        run: |
+          # Generate SHA256 of package file
+          PACKAGE_SHA256=$(sha256sum "${PACKAGE_FILE}" | cut -d' ' -f1)
+
+          # Get current git commit SHA
+          COMMIT_SHA="${{ github.sha }}"
+
+          # Generate the predicate
+          cat > release-predicate.json <<EOF
+          {
+            "_type": "https://in-toto.io/Statement/v1",
+            "subject": [
+              {
+                "name": "${PACKAGE_FILE}",
+                "digest": {
+                  "sha256": "${PACKAGE_SHA256}"
+                }
+              }
+            ],
+            "predicateType": "https://in-toto.io/attestation/release/v0.1",
+            "predicate": {
+              "purl": "pkg:rave/${PACKAGE}/wordpress@${TAG}",
+              "metadata": {
+                "releaseNotes": "WordPress core version ${TAG} distributed by ${PACKAGE}",
+                "releaseUrl": "${PACKAGE_URL}",
+                "vcs": {
+                  "type": "git",
+                  "uri": "https://github.com/johnbillion/rave-wordpress",
+                  "revision": "${COMMIT_SHA}"
+                }
+              }
+            }
+          }
+          EOF
+
+          echo "Generated release predicate for ${PACKAGE_FILE}"
+
+      - name: Generate attestation
+        if: steps.package-check.outputs.package_file != 'false'
+        uses: actions/attest@v2.4.0
+        with:
+          subject-path: ${{ steps.package-check.outputs.package_file }}
+          predicate-type: 'https://in-toto.io/attestation/release/v0.1'
+          predicate-path: 'release-predicate.json'
