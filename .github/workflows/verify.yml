@@ -392,7 +392,7 @@ jobs:
       - name: Detect Akismet version
         if: env.PACKAGE_INCLUDES_AKISMET == 'true'
         run: | #shell
-          AKISMET_VERSION="$(grep -E '^\s*\*?\s*Version:' akismet-package/akismet.php | head -n1 | sed -E 's/^.*Version:[[:space:]]*([0-9.]+).*$/\1/')"
+          AKISMET_VERSION="$(sed -nE 's/^[[:space:]]*\*?[[:space:]]*Version:[[:space:]]*([0-9.]+).*$/\1/p' akismet-package/akismet.php)"
           echo "Akismet version: $AKISMET_VERSION"
           echo "AKISMET_VERSION=$AKISMET_VERSION" >> "$GITHUB_ENV"
 
