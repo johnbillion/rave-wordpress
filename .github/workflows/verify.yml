@@ -488,6 +488,7 @@ jobs:
         uses: actions/attest@ce27ba3b4a9a139d9a20a4a07d69fabb52f1e5bc # v2.4.0
         with:
           subject-path: ${{ steps.package-check.outputs.package_file }}
+          subject-name: '${{ inputs.package }}/wordpress@${{ steps.tag.outputs.short }}'
           predicate-type: 'https://in-toto.io/attestation/release/v0.1'
           predicate-path: 'release-predicate.json'
 
