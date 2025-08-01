@@ -283,7 +283,7 @@ jobs:
           output: package.zip
           user-agent: WordPress/${{ steps.tag.outputs.short }}
 
-      - name: Extract wpengine zip
+      - name: Extract core-updates.wpengine.com zip
         if: inputs.package == 'wpengine-zip'
         run: | #shell
           unzip -q package.zip -d wordpress
@@ -297,7 +297,7 @@ jobs:
           output: package.zip
           user-agent: WordPress/${{ steps.tag.outputs.short }}
 
-      - name: Extract aspirecloud zip
+      - name: Extract api.aspirecloud.net zip
         if: inputs.package == 'aspirecloud-zip'
         run: | #shell
           unzip -q package.zip -d wordpress

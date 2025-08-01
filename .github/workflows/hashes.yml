@@ -12,7 +12,7 @@ permissions: {}
 
 jobs:
   zip-md5:
-    name: Zip md5
+    name: Zip MD5
     runs-on: ubuntu-latest
     permissions: {}
     timeout-minutes: 10
@@ -23,7 +23,7 @@ jobs:
         with:
           tag: ${{ inputs.tag }}
 
-      - name: Download zip and md5 hash from wordpress.org
+      - name: Download zip and MD5 hash from wordpress.org
         env:
           TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
@@ -32,12 +32,12 @@ jobs:
           wget --output-document=package.zip.md5 "https://wordpress.org/wordpress-${TAG}.zip.md5" \
             --user-agent="WordPress/${TAG}"
 
-      - name: Check the md5 hash
+      - name: Check the MD5 hash
         run: | #shell
           echo "$(cat package.zip.md5) package.zip" | md5sum --check -
 
   zip-sha1:
-    name: Zip sha1
+    name: Zip SHA-1
     runs-on: ubuntu-latest
     permissions: {}
     timeout-minutes: 10
@@ -48,7 +48,7 @@ jobs:
         with:
           tag: ${{ inputs.tag }}
 
-      - name: Download zip and sha1 hash from wordpress.org
+      - name: Download zip and SHA-1 hash from wordpress.org
         env:
           TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
@@ -57,12 +57,12 @@ jobs:
           wget --output-document=package.zip.sha1 "https://wordpress.org/wordpress-${TAG}.zip.sha1" \
             --user-agent="WordPress/${TAG}"
 
-      - name: Check the sha1 hash
+      - name: Check the SHA-1 hash
         run: | #shell
           echo "$(cat package.zip.sha1) package.zip" | sha1sum --check -
 
   tar-md5:
-    name: Tar md5
+    name: Tar MD5
     runs-on: ubuntu-latest
     permissions: {}
     timeout-minutes: 10
@@ -73,7 +73,7 @@ jobs:
         with:
           tag: ${{ inputs.tag }}
 
-      - name: Download tar.gz and md5 hash from wordpress.org
+      - name: Download tar.gz and MD5 hash from wordpress.org
         env:
           TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
@@ -82,12 +82,12 @@ jobs:
           wget --output-document=package.tar.gz.md5 "https://wordpress.org/wordpress-${TAG}.tar.gz.md5" \
             --user-agent="WordPress/${TAG}"
 
-      - name: Check the md5 hash
+      - name: Check the MD5 hash
         run: | #shell
           echo "$(cat package.tar.gz.md5) package.tar.gz" | md5sum --check -
 
   tar-sha1:
-    name: Tar sha1
+    name: Tar SHA-1
     runs-on: ubuntu-latest
     permissions: {}
     timeout-minutes: 10
@@ -98,7 +98,7 @@ jobs:
         with:
           tag: ${{ inputs.tag }}
 
-      - name: Download tar.gz and sha1 hash from wordpress.org
+      - name: Download tar.gz and SHA-1 hash from wordpress.org
         env:
           TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
@@ -107,6 +107,6 @@ jobs:
           wget --output-document=package.tar.gz.sha1 "https://wordpress.org/wordpress-${TAG}.tar.gz.sha1" \
             --user-agent="WordPress/${TAG}"
 
-      - name: Check the sha1 hash
+      - name: Check the SHA-1 hash
         run: | #shell
           echo "$(cat package.tar.gz.sha1) package.tar.gz" | sha1sum --check -

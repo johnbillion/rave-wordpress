@@ -2,7 +2,7 @@
 
 # RAVE for WordPress
 
-RAVE for WordPress is a supply chain security tool which compares the contents of published packages of WordPress with the canonical source code to verify they have not been tampered with. The packages from WordPress.org are tested along with those from GitHub and various third parties.
+RAVE for WordPress is a supply chain security tool which compares the contents of published packages of WordPress with the canonical source code to verify they have not been tampered with. The packages from wordpress.org are tested along with those from GitHub and various third parties.
 
 A CI system runs on GitHub Actions which reproduces the build from the canonical sources, fetches published packages from various locations, and compares them all against one another to verify their integrity and identify any anomalies.
 
@@ -42,7 +42,7 @@ RAVE stands for Reproduce And Verify.
 
 ### Other verifications
 
-* ✅ md5 and sha1 hashes published on wordpress.org are verified against the wordpress.org packages
+* ✅ MD5 and SHA-1 hashes published on wordpress.org are verified against the wordpress.org packages
 * ✅ Checksums returned by `api.wordpress.org/core/checksums` are verified against file contents
 * ✅ Update URLs returned by `api.wordpress.org/core/version-check` are verified against expected URLs
 * ✅ Versions returned by `api.wordpress.org/core/stable-check` are as expected
@@ -65,7 +65,7 @@ There are several opportunities for the official WordPress package to be tampere
   * Identifying a new version that didn't exist in the source repos
   * Identifying a modified package that didn't match the code built from the source repos and didn't match the versions published to Packagist and Docker Hub
   * Identifying any attempt to serve an update from an unexpected host name or URL in the update API response
-  * Identifying any discrepancies between the published sha1 and md5 hashes, the published checksums, and the offers returned by the update API
+  * Identifying any discrepancies between the published SHA-1 and MD5 hashes, the published checksums, and the offers returned by the update API
 
 ## Why test unofficial packages?
 
@@ -95,7 +95,7 @@ To quote [reproducible-builds.org](https://reproducible-builds.org/):
 
 ## Verifiable WordPress
 
-The WordPress.org website [provides the md5 and sha1 hash of its WordPress package files](https://wordpress.org/download/releases/). This is not enough to verify a package on its own, because the hash only represents the zip or tar file and if a package on WordPress.org was altered then its published md5 and sha1 hashes could be altered too.
+The wordpress.org website [provides the MD5 and SHA-1 hash of its WordPress package files](https://wordpress.org/download/releases/). This is not enough to verify a package on its own, because the hash only represents the zip or tar file and if a package on wordpress.org was altered then its published MD5 and SHA-1 hashes could be altered too.
 
 The WordPress open source project does not make use of package signing which could be used to verify a package. [See ticket #39309 for discussion on this topic](https://core.trac.wordpress.org/ticket/39309).
 

@@ -79,7 +79,7 @@ jobs:
           node --version
           git --version
 
-      - name: Install npm Dependencies
+      - name: Install npm dependencies
         run: | #shell
           npm ci
 
@@ -87,7 +87,7 @@ jobs:
         run: | #shell
           sed -i "s/'Unable to fetch Twemoji file list'/files.stderr.toString()/" Gruntfile.js
 
-      - name: Run Emoji precommit task
+      - name: Run emoji precommit task
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: | #shell
