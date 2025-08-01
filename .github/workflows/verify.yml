@@ -342,6 +342,25 @@ jobs:
           mv vendor/johnpbloch/wordpress-core package
           rm package/composer.json
 
+      - name: Check for package files
+        id: package-check
+        run: | #shell
+          if [ -f "package.zip" ]; then
+            echo "package_file=package.zip" >> "$GITHUB_OUTPUT"
+          elif [ -f "package.tar.gz" ]; then
+            echo "package_file=package.tar.gz" >> "$GITHUB_OUTPUT"
+          else
+            echo "package_file=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Upload artifact
+        if: steps.package-check.outputs.package_file != 'false'
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # 4.5.0
+        with:
+          name: wordpress-${{ steps.tag.outputs.long }}-${{ inputs.package }}
+          path: ${{ steps.package-check.outputs.package_file }}
+          if-no-files-found: error
+
       - name: Handle anomalies with build files in TT and TT1
         if: inputs.package == 'github-zip' || inputs.package == 'build.trac.wordpress.org'
         run: | #shell
@@ -415,17 +434,6 @@ jobs:
         if: env.PACKAGE_INCLUDES_AKISMET == 'true'
         run: | #shell
           diff --strip-trailing-cr --recursive --color=always akismet-source akismet-package
-
-      - name: Check for package files
-        id: package-check
-        run: | #shell
-          if [ -f "package.zip" ]; then
-            echo "package_file=package.zip" >> "$GITHUB_OUTPUT"
-          elif [ -f "package.tar.gz" ]; then
-            echo "package_file=package.tar.gz" >> "$GITHUB_OUTPUT"
-          else
-            echo "package_file=false" >> "$GITHUB_OUTPUT"
-          fi
 
       - name: Check for existing attestation
         if: steps.package-check.outputs.package_file != 'false'
