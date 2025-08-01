@@ -29,11 +29,6 @@ jobs:
       attestations: write
     timeout-minutes: 10
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        with:
-          persist-credentials: false
-
       - name: Prepare tag name
         id: tag
         uses: johnbillion/rave-wordpress/.github/actions/prepare-tag-name@trunk
@@ -342,25 +337,6 @@ jobs:
           mv vendor/johnpbloch/wordpress-core package
           rm package/composer.json
 
-      - name: Check for package files
-        id: package-check
-        run: | #shell
-          if [ -f "package.zip" ]; then
-            echo "package_file=package.zip" >> "$GITHUB_OUTPUT"
-          elif [ -f "package.tar.gz" ]; then
-            echo "package_file=package.tar.gz" >> "$GITHUB_OUTPUT"
-          else
-            echo "package_file=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Upload artifact
-        if: steps.package-check.outputs.package_file != 'false'
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # 4.5.0
-        with:
-          name: wordpress-${{ steps.tag.outputs.long }}-${{ inputs.package }}
-          path: ${{ steps.package-check.outputs.package_file }}
-          if-no-files-found: error
-
       - name: Handle anomalies with build files in TT and TT1
         if: inputs.package == 'github-zip' || inputs.package == 'build.trac.wordpress.org'
         run: | #shell
@@ -435,6 +411,19 @@ jobs:
         run: | #shell
           diff --strip-trailing-cr --recursive --color=always akismet-source akismet-package
 
+      - name: Check for package files
+        id: package-check
+        run: | #shell
+          if [ -f "package.zip" ]; then
+            echo "package_file=package.zip" >> "$GITHUB_OUTPUT"
+            echo "package_extension=zip" >> "$GITHUB_OUTPUT"
+          elif [ -f "package.tar.gz" ]; then
+            echo "package_file=package.tar.gz" >> "$GITHUB_OUTPUT"
+            echo "package_extension=tar.gz" >> "$GITHUB_OUTPUT"
+          else
+            echo "package_file=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Check for existing attestation
         if: steps.package-check.outputs.package_file != 'false'
         id: attestation-check
@@ -443,10 +432,10 @@ jobs:
           PACKAGE_FILE: ${{ steps.package-check.outputs.package_file }}
         run: | #shell
           if gh attestation verify "${PACKAGE_FILE}" --repo johnbillion/rave-wordpress --predicate-type "https://in-toto.io/attestation/release/v0.1"; then
-            echo "Attestation already exists for ${PACKAGE_FILE}"
+            echo "Attestation already exists"
             echo "attestation_exists=true" >> "$GITHUB_OUTPUT"
           else
-            echo "No attestation found for ${PACKAGE_FILE}, will create one"
+            echo "No attestation found, will create one"
             echo "attestation_exists=false" >> "$GITHUB_OUTPUT"
           fi
 
@@ -456,6 +445,7 @@ jobs:
           TAG: ${{ steps.tag.outputs.short }}
           PACKAGE: ${{ inputs.package }}
           PACKAGE_FILE: ${{ steps.package-check.outputs.package_file }}
+          PACKAGE_EXTENSION: ${{ steps.package-check.outputs.package_extension }}
         run: | #shell
           # Generate SHA256 of package file
           PACKAGE_SHA256=$(sha256sum "${PACKAGE_FILE}" | cut -d' ' -f1)
@@ -469,7 +459,7 @@ jobs:
             "_type": "https://in-toto.io/Statement/v1",
             "subject": [
               {
-                "name": "${PACKAGE_FILE}",
+                "name": "wordpress-${TAG}.${PACKAGE_EXTENSION}",
                 "digest": {
                   "sha256": "${PACKAGE_SHA256}"
                 }
@@ -479,8 +469,7 @@ jobs:
             "predicate": {
               "purl": "pkg:rave/${PACKAGE}/wordpress@${TAG}",
               "metadata": {
-                "releaseNotes": "WordPress core version ${TAG} distributed by ${PACKAGE}",
-                "releaseUrl": "${PACKAGE_URL}",
+                "releaseNotes": "WordPress ${TAG}",
                 "vcs": {
                   "type": "git",
                   "uri": "https://github.com/johnbillion/rave-wordpress",
@@ -496,7 +485,7 @@ jobs:
         uses: actions/attest@ce27ba3b4a9a139d9a20a4a07d69fabb52f1e5bc # v2.4.0
         with:
           subject-path: ${{ steps.package-check.outputs.package_file }}
-          subject-name: '${{ inputs.package }}/wordpress@${{ steps.tag.outputs.short }}'
+          subject-name: 'wordpress-${{ steps.tag.outputs.short }}.${{ steps.package-check.outputs.package_extension }}'
           predicate-type: 'https://in-toto.io/attestation/release/v0.1'
           predicate-path: 'release-predicate.json'
 
