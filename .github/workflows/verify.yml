@@ -424,8 +424,23 @@ jobs:
             echo "package_file=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Generate release predicate
+      - name: Check for existing attestation
         if: steps.package-check.outputs.package_file != 'false'
+        id: attestation-check
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PACKAGE_FILE: ${{ steps.package-check.outputs.package_file }}
+        run: |
+          if gh attestation verify "${PACKAGE_FILE}" --repo johnbillion/rave-wordpress; then
+            echo "Attestation already exists for ${PACKAGE_FILE}"
+            echo "attestation_exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No attestation found for ${PACKAGE_FILE}, will create one"
+            echo "attestation_exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Generate release predicate
+        if: steps.package-check.outputs.package_file != 'false' && steps.attestation-check.outputs.attestation_exists == 'false'
         env:
           TAG: ${{ steps.tag.outputs.short }}
           PACKAGE: ${{ inputs.package }}
@@ -468,8 +483,8 @@ jobs:
           echo "Generated release predicate for ${PACKAGE_FILE}"
 
       - name: Generate attestation
-        if: steps.package-check.outputs.package_file != 'false'
-        uses: actions/attest@v2.4.0
+        if: steps.package-check.outputs.package_file != 'false' && steps.attestation-check.outputs.attestation_exists == 'false'
+        uses: actions/attest@ce27ba3b4a9a139d9a20a4a07d69fabb52f1e5bc # v2.4.0
         with:
           subject-path: ${{ steps.package-check.outputs.package_file }}
           predicate-type: 'https://in-toto.io/attestation/release/v0.1'
