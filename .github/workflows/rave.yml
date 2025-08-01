@@ -223,7 +223,7 @@ jobs:
       tag: ${{ needs.versions.outputs.version }}
 
   verify-versions:
-    name: Verify distributed versions
+    name: ${{ matrix.label }}
     if: ${{ github.event_name != 'workflow_dispatch' }}
     permissions:
       contents: read
@@ -231,6 +231,8 @@ jobs:
       - versions
     strategy:
       matrix:
+        label:
+          - Verify distributed versions
         package:
           - github-zip
           - docker-wordpress
