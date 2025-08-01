@@ -115,6 +115,15 @@ wget https://api.aspirecloud.net/download/wordpress-6.8.2.zip
 gh attestation verify wordpress-6.8.2.zip --repo johnbillion/rave-wordpress --predicate-type "https://in-toto.io/attestation/release/v0.1"
 ```
 
+If you want to download and inspect the metadata of an attestation as JSON:
+
+```sh
+file="wordpress-6.8.2.zip"
+hash=$(shasum -a 256 "$file" | cut -d" " -f1)
+gh attestation download "$file" --repo johnbillion/rave-wordpress
+jq -r '.dsseEnvelope.payload' "sha256:${hash}.jsonl" | base64 -d | jq .
+```
+
 ## Does this faciliate WordPress adhering to SLSA?
 
 No. [SLSA](https://slsa.dev/) is a security framework that improves the supply chain resilience of a software package by generating a verifiable build provenance attestation during its build and release process. RAVE _independently reproduces_ the build for WordPress but is not part of the release process itself, therefore it is not appropriate for RAVE to generate an SLSA build provenance attestation.
