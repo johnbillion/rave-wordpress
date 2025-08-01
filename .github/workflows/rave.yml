@@ -263,7 +263,6 @@ jobs:
       pull-requests: write
     needs:
       - versions
-      - verify-packages
     uses: ./.github/workflows/checksums.yml
     with:
       tag: ${{ needs.versions.outputs.version }}
