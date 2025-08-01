@@ -489,3 +489,13 @@ jobs:
           subject-path: ${{ steps.package-check.outputs.package_file }}
           predicate-type: 'https://in-toto.io/attestation/release/v0.1'
           predicate-path: 'release-predicate.json'
+
+      - name: Verify attestation
+        if: steps.package-check.outputs.package_file != 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PACKAGE_FILE: ${{ steps.package-check.outputs.package_file }}
+        run: |
+          echo "Verifying attestation for ${PACKAGE_FILE}..."
+          gh attestation verify "${PACKAGE_FILE}" --repo johnbillion/rave-wordpress
+          echo "✅ Attestation verified successfully for ${PACKAGE_FILE}"
