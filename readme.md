@@ -101,6 +101,24 @@ The WordPress open source project does not make use of package signing which cou
 
 Therefore, this library has been created to provide a means of verifying that the contents of published packages matches the code built from the official source code repos.
 
+## Attestation
+
+RAVE generates an [in-toto release attestation](https://github.com/in-toto/attestation/blob/main/spec/predicates/release.md) once it's reproduced and verified a given package of WordPress. If you trust RAVE then you can use its attestations to verify a WordPress package that you download, for example using `gh` on the command line:
+
+```sh
+wget https://wordpress.org/wordpress-6.8.2.zip
+gh attestation verify wordpress-6.8.2.zip --repo johnbillion/rave-wordpress
+```
+
+```sh
+wget https://api.aspirecloud.net/download/wordpress-6.8.2.zip
+gh attestation verify wordpress-6.8.2.zip --repo johnbillion/rave-wordpress
+```
+
+## Does this faciliate WordPress adhering to SLSA?
+
+No. [SLSA](https://slsa.dev/) is a security framework that improves the supply chain resilience of a software package by generating a verifiable build provenance attestation during its build and release process. RAVE _independently reproduces_ the build for WordPress but is not part of the release process itself, therefore it is not appropriate for RAVE to generate an SLSA build provenance attestation.
+
 ## License
 
 MIT
