@@ -3,7 +3,7 @@ description: Prepare the tag name given a WordPress version number
 
 inputs:
   tag:
-    description: Tag name for WordPress release
+    description: Full semver tag name for WordPress release in `x.y.z` format
     required: true
     type: string
 outputs:
