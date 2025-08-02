@@ -197,32 +197,13 @@ jobs:
           - roots-wordpress-full
           - johnpbloch-wordpress
           - build.trac.wordpress.org
+        tag:
+          - ${{ needs.versions.outputs.version }}
+        include: ${{ github.event_name != 'workflow_dispatch' && fromJson('[{"label":"Verify latest packages","package":"wordpress.org-zip","tag":"latest"},{"label":"Verify latest packages","package":"wordpress.org-tar","tag":"latest"}]') || fromJson('[]') }}
       fail-fast: false
     uses: ./.github/workflows/verify.yml
     with:
-      tag: ${{ needs.versions.outputs.version }}
-      package: ${{ matrix.package }}
-
-  verify-latest-package:
-    name: ${{ matrix.label }}
-    if: ${{ github.event_name != 'workflow_dispatch' }}
-    permissions:
-      contents: read
-      id-token: write
-      attestations: write
-    needs:
-      - reproduce
-    strategy:
-      matrix:
-        label:
-          - Verify latest packages
-        package:
-          - wordpress.org-zip
-          - wordpress.org-tar
-      fail-fast: false
-    uses: ./.github/workflows/verify.yml
-    with:
-      tag: 'latest'
+      tag: ${{ matrix.tag }}
       package: ${{ matrix.package }}
 
   verify-hashes:
