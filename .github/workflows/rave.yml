@@ -140,9 +140,9 @@ jobs:
     name: ${{ matrix.label }}
     permissions: {}
     needs:
+      - versions
       - reproduce
       - fetch-build
-      - versions
     strategy:
       matrix:
         label:
@@ -176,8 +176,8 @@ jobs:
       id-token: write
       attestations: write
     needs:
-      - reproduce
       - versions
+      - reproduce
     strategy:
       matrix:
         label:
@@ -214,8 +214,9 @@ jobs:
       id-token: write
       attestations: write
     needs:
-      - reproduce
       - versions
+      - reproduce
+      - verify-packages
     strategy:
       matrix:
         include:
