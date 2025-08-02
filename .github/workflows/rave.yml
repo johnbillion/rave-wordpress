@@ -193,7 +193,6 @@ jobs:
           - docker-wordpress
           - wpengine-zip
           - aspirecloud-zip
-          - fair-zip
           - roots-wordpress-full
           - johnpbloch-wordpress
           - build.trac.wordpress.org
