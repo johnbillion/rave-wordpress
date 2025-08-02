@@ -90,14 +90,14 @@ jobs:
           echo PACKAGE_URL="$PACKAGE_URL" >> "$GITHUB_ENV"
           echo PACKAGE_INCLUDES_AKISMET="$PACKAGE_INCLUDES_AKISMET" >> "$GITHUB_ENV"
 
-      - name: Download artifact
+      - name: Download artifact of the reproduced build
         if: inputs.tag != 'latest'
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # 4.1.8
         with:
           name: wordpress-${{ steps.tag.outputs.long }}-develop.svn.wordpress.org
           path: source
 
-      - name: Download version artifact
+      - name: Download version artifact # is this needed?
         if: inputs.tag == 'latest'
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # 4.1.8
         with:
@@ -109,7 +109,7 @@ jobs:
         run: | #shell
           echo latest="$(cat version.txt)" >> "$GITHUB_OUTPUT"
 
-      - name: Download latest artifact
+      - name: Download artifact of the reproduced build
         if: inputs.tag == 'latest'
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # 4.1.8
         with:
