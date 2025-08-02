@@ -205,7 +205,8 @@ jobs:
       tag: ${{ matrix.tag }}
       package: ${{ matrix.package }}
 
-  verify-conditional-packages:
+  # These packages are verified against the latest tag, they cannot be verified against a prior version.
+  verify-latest-packages:
     name: ${{ matrix.label }}
     if: ${{ github.event_name != 'workflow_dispatch' }}
     permissions:
