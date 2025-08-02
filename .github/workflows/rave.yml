@@ -199,7 +199,7 @@ jobs:
           - build.trac.wordpress.org
         tag:
           - ${{ needs.versions.outputs.version }}
-        include: ${{ github.event_name != 'workflow_dispatch' && fromJson('[{"label":"Verify latest packages","package":"wordpress.org-zip","tag":"latest"},{"label":"Verify latest packages","package":"wordpress.org-tar","tag":"latest"}]') || fromJson('[]') }}
+        include: ${{ github.event_name != 'workflow_dispatch' && fromJson(format('[{"label":"Verify packages","package":"fair-zip","tag":"%s"},{"label":"Verify latest packages","package":"wordpress.org-zip","tag":"latest"},{"label":"Verify latest packages","package":"wordpress.org-tar","tag":"latest"}]', needs.versions.outputs.version)) || fromJson('[]') }}
       fail-fast: false
     uses: ./.github/workflows/verify.yml
     with:
