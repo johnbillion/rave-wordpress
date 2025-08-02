@@ -442,7 +442,6 @@ jobs:
         if: steps.package-check.outputs.package_file != 'false' && steps.attestation-check.outputs.attestation_exists == 'false'
         env:
           TAG: ${{ steps.tag.outputs.short }}
-          PACKAGE: ${{ inputs.package }}
           PACKAGE_FILE: ${{ steps.package-check.outputs.package_file }}
           PACKAGE_EXTENSION: ${{ steps.package-check.outputs.package_extension }}
         run: | #shell
@@ -466,7 +465,7 @@ jobs:
             ],
             "predicateType": "https://in-toto.io/attestation/release/v0.1",
             "predicate": {
-              "purl": "pkg:rave/${PACKAGE}/wordpress@${TAG}",
+              "purl": "pkg:rave/wordpress@${TAG}",
               "metadata": {
                 "releaseNotes": "WordPress ${TAG}",
                 "vcs": {
