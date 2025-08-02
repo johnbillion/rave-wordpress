@@ -2,9 +2,9 @@
 
 # RAVE for WordPress
 
-RAVE for WordPress is a supply chain security tool which compares the contents of published packages of WordPress with the canonical source code to verify they have not been tampered with. The packages from wordpress.org are tested along with those from GitHub and various third parties.
+RAVE for WordPress is a supply chain security tool which compares the contents of published packages of WordPress with builds that are reproduced from the source code to verify they have not been tampered with. The packages from wordpress.org are tested along with those from GitHub and various third parties.
 
-A CI system runs on GitHub Actions which reproduces the build from the canonical sources, fetches published packages from various locations, and compares them all against one another to verify their integrity and identify any anomalies.
+A CI system runs on GitHub Actions which reproduces the build from the canonical sources, fetches packages published at several official and unofficial locations, and compares them all against one another to verify their integrity and identify any anomalies. An in-toto release attestation is produced for packages which pass verification.
 
 RAVE stands for Reproduce And Verify.
 
