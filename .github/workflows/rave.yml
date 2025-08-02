@@ -199,7 +199,34 @@ jobs:
           - build.trac.wordpress.org
         tag:
           - ${{ needs.versions.outputs.version }}
-        include: ${{ github.event_name != 'workflow_dispatch' && fromJson(format('[{"label":"Verify packages","package":"fair-zip","tag":"{0}"},{"label":"Verify latest packages","package":"wordpress.org-zip","tag":"latest"},{"label":"Verify latest packages","package":"wordpress.org-tar","tag":"latest"}]', needs.versions.outputs.version)) || fromJson('[]') }}
+      fail-fast: false
+    uses: ./.github/workflows/verify.yml
+    with:
+      tag: ${{ matrix.tag }}
+      package: ${{ matrix.package }}
+
+  verify-conditional-packages:
+    name: ${{ matrix.label }}
+    if: ${{ github.event_name != 'workflow_dispatch' }}
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    needs:
+      - reproduce
+      - versions
+    strategy:
+      matrix:
+        include:
+          - label: Verify packages
+            package: fair-zip
+            tag: ${{ needs.versions.outputs.version }}
+          - label: Verify latest packages
+            package: wordpress.org-zip
+            tag: latest
+          - label: Verify latest packages
+            package: wordpress.org-tar
+            tag: latest
       fail-fast: false
     uses: ./.github/workflows/verify.yml
     with:
