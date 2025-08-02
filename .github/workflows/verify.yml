@@ -424,7 +424,7 @@ jobs:
           fi
 
       - name: Check for existing attestation
-        if: steps.package-check.outputs.package_file != 'false'
+        if: steps.package-check.outputs.package_file != 'false' && inputs.tag != 'latest'
         id: attestation-check
         env:
           GH_TOKEN: ${{ github.token }}
@@ -439,7 +439,7 @@ jobs:
           fi
 
       - name: Generate release predicate
-        if: steps.package-check.outputs.package_file != 'false' && steps.attestation-check.outputs.attestation_exists == 'false'
+        if: steps.package-check.outputs.package_file != 'false' && steps.attestation-check.outputs.attestation_exists == 'false' && inputs.tag != 'latest'
         env:
           TAG: ${{ steps.tag.outputs.short }}
           PACKAGE_FILE: ${{ steps.package-check.outputs.package_file }}
@@ -479,7 +479,7 @@ jobs:
           EOF
 
       - name: Generate attestation
-        if: steps.package-check.outputs.package_file != 'false' && steps.attestation-check.outputs.attestation_exists == 'false'
+        if: steps.package-check.outputs.package_file != 'false' && steps.attestation-check.outputs.attestation_exists == 'false' && inputs.tag != 'latest'
         uses: actions/attest@ce27ba3b4a9a139d9a20a4a07d69fabb52f1e5bc # v2.4.0
         with:
           subject-path: ${{ steps.package-check.outputs.package_file }}
@@ -488,7 +488,7 @@ jobs:
           predicate-path: 'release-predicate.json'
 
       - name: Verify attestation
-        if: steps.package-check.outputs.package_file != 'false' && steps.attestation-check.outputs.attestation_exists == 'false'
+        if: steps.package-check.outputs.package_file != 'false' && steps.attestation-check.outputs.attestation_exists == 'false' && inputs.tag != 'latest'
         env:
           GH_TOKEN: ${{ github.token }}
           PACKAGE_FILE: ${{ steps.package-check.outputs.package_file }}
