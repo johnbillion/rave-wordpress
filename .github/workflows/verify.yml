@@ -488,7 +488,7 @@ jobs:
           predicate-path: 'release-predicate.json'
 
       - name: Verify attestation
-        if: steps.package-check.outputs.package_file != 'false'
+        if: steps.package-check.outputs.package_file != 'false' && steps.attestation-check.outputs.attestation_exists == 'false'
         env:
           GH_TOKEN: ${{ github.token }}
           PACKAGE_FILE: ${{ steps.package-check.outputs.package_file }}
