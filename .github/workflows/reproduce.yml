@@ -32,14 +32,16 @@ jobs:
         env:
           TAG: ${{ steps.tag.outputs.long }}
         run: | #shell
-          git clone --depth 1 --branch "${TAG}" https://github.com/wordpress/wordpress-develop/ .
+          git clone --no-checkout https://github.com/wordpress/wordpress-develop/ .
+          git checkout "tags/${TAG}" -b "${TAG}"
 
       - name: Git checkout develop.git.wordpress.org
         if: inputs.source == 'develop.git.wordpress.org'
         env:
           TAG: ${{ steps.tag.outputs.long }}
         run: | #shell
-          git clone --depth 1 --branch "${TAG}" git://develop.git.wordpress.org/ .
+          git clone --no-checkout git://develop.git.wordpress.org/ .
+          git checkout "tags/${TAG}" -b "${TAG}"
 
       - name: SVN checkout develop.svn.wordpress.org
         if: inputs.source == 'develop.svn.wordpress.org'

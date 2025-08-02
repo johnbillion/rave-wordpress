@@ -32,7 +32,8 @@ jobs:
         env:
           TAG: ${{ steps.tag.outputs.long }}
         run: | #shell
-          git clone --depth 1 --branch "${TAG}" git://core.git.wordpress.org/ .
+          git clone --no-checkout git://core.git.wordpress.org/ .
+          git checkout "tags/${TAG}" -b "${TAG}"
 
       - name: SVN checkout core.svn.wordpress.org
         if: inputs.build == 'core.svn.wordpress.org'
