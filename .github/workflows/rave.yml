@@ -156,7 +156,7 @@ jobs:
     strategy:
       matrix:
         label:
-          - Compare
+          - Compare reproduced builds
         source:
           - develop.git.wordpress.org
           - github-wordpress-develop
