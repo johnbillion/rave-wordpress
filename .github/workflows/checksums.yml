@@ -47,18 +47,15 @@ jobs:
 
       - name: Convert checksums.json into format that can be used by md5sum
         env:
-          MAJOR: ${{ steps.tag.outputs.major }}
           TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
-          mkdir -p "checksums/${MAJOR}"
-          jq --raw-output --arg tag "$TAG" '.checksums[$tag] | to_entries[] | "\(.value)  \(.key)"' checksums.json > "checksums/${MAJOR}/${TAG}.md5"
+          jq --raw-output --arg tag "$TAG" '.checksums[$tag] | to_entries[] | "\(.value)  \(.key)"' checksums.json > "checksums/${TAG}.md5"
 
       - name: Verify checksums
         env:
-          MAJOR: ${{ steps.tag.outputs.major }}
           TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
-          (cd wordpress && md5sum --check "../checksums/${MAJOR}/${TAG}.md5")
+          (cd wordpress && md5sum --check "../checksums/${TAG}.md5")
 
       - name: Create pull request if there are additions or changes
         if: github.ref == 'refs/heads/trunk'

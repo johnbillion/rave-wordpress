@@ -128,6 +128,17 @@ jq -r '.dsseEnvelope.payload' "sha256:${hash}.jsonl" | base64 -d | jq .
 
 No. [SLSA](https://slsa.dev/) is a security framework that improves the supply chain resilience of a software package by generating a verifiable build provenance attestation during its build and release process. RAVE _independently reproduces_ the build for WordPress but is not part of the release process itself, therefore it is not appropriate for RAVE to generate an SLSA build provenance attestation.
 
+## Checksums
+
+Checksums for the files in the full WordPress package can be found [in the checksums directory](https://github.com/johnbillion/rave-wordpress/tree/trunk/checksums). These are provided _as a convenience_ and should only be used for non-adversarial file integrity checks because they use the cryptographically weak MD5 algorithm and are fetched directly from api.wordpress.org.
+
+To verify the integrity of a WordPress installation using the checksums provided in this repository:
+
+```sh
+wget https://raw.githubusercontent.com/johnbillion/rave-wordpress/trunk/checksums/6.8.2.md5
+md5sum --check 6.8.2.md5
+```
+
 ## License
 
 MIT
