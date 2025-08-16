@@ -8,9 +8,6 @@ inputs:
   output:
     description: Output filename
     required: true
-  user-agent:
-    description: User agent string
-    required: true
 
 runs:
   using: composite
@@ -25,7 +22,7 @@ runs:
         for attempt in 1 2 3; do
           echo "Attempt $attempt"
           if wget --output-document="${OUTPUT_FILE}" "${DOWNLOAD_URL}" \
-            --user-agent="${USER_AGENT}" --no-verbose; then
+            --user-agent="WordPress/6.8" --no-verbose; then
             echo "Download successful on attempt $attempt"
             exit 0
           else
