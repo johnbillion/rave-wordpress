@@ -18,20 +18,12 @@ runs:
         DOWNLOAD_URL: ${{ inputs.url }}
         OUTPUT_FILE: ${{ inputs.output }}
       run: | #shell
-        for attempt in 1 2 3; do
-          echo "Attempt $attempt"
-          if wget --output-document="${OUTPUT_FILE}" "${DOWNLOAD_URL}" \
-            --user-agent="WordPress/6.8" --no-verbose; then
-            echo "Download successful on attempt $attempt"
-            exit 0
-          else
-            echo "Download failed on attempt $attempt"
-            if [ $attempt -lt 3 ]; then
-              echo "Waiting 20 seconds before retry..."
-              sleep 20
-            else
-              echo "All download attempts failed"
-              exit 1
-            fi
-          fi
-        done
+        echo "Downloading ${DOWNLOAD_URL} to ${OUTPUT_FILE}"
+        wget --output-document="${OUTPUT_FILE}" \
+          --user-agent="WordPress/6.8" \
+          --tries=3 \
+          --retry-connrefused \
+          --retry-on-http-error=429,500,502,503,504 \
+          --waitretry=20 \
+          --timeout=30 \
+          "${DOWNLOAD_URL}"
