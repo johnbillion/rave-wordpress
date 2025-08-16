@@ -374,9 +374,18 @@ jobs:
         run: | #shell
           tree package || true
 
-      - name: Compare files
+      - name: Verify WordPress core
+        id: verify-wordpress
+        continue-on-error: true
         run: | #shell
           diff --strip-trailing-cr --recursive --color=always source package
+
+      - name: Upload WordPress package on verification failure
+        if: steps.verify-wordpress.outcome == 'failure'
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        with:
+          name: failed-wordpress-${{ inputs.package }}-${{ steps.tag.outputs.long }}
+          path: package
 
       - name: Detect Akismet version
         if: env.PACKAGE_INCLUDES_AKISMET == 'true'
@@ -393,9 +402,24 @@ jobs:
           path: akismet-source
 
       - name: Verify Akismet
+        id: verify-akismet
         if: env.PACKAGE_INCLUDES_AKISMET == 'true'
+        continue-on-error: true
         run: | #shell
           diff --strip-trailing-cr --recursive --color=always akismet-source akismet-package
+
+      - name: Upload Akismet package on verification failure
+        if: steps.verify-akismet.outcome == 'failure'
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        with:
+          name: failed-akismet-${{ inputs.package }}-${{ steps.tag.outputs.long }}
+          path: akismet-package
+
+      - name: Fail if verification failed
+        if: ( steps.verify-wordpress.outcome == 'failure' ) || ( env.PACKAGE_INCLUDES_AKISMET == 'true' && steps.verify-akismet.outcome == 'failure' )
+        run: | #shell
+          echo "Verification failed. Package artifacts have been uploaded."
+          exit 1
 
       - name: Check for package files
         id: package-check
