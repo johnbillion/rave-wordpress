@@ -36,7 +36,7 @@ jobs:
 
       - name: SVN checkout core.svn.wordpress.org
         if: inputs.build == 'core.svn.wordpress.org'
-        uses: johnbillion/rave-wordpress/.github/actions/svn-with-retry@svn-retry
+        uses: johnbillion/rave-wordpress/.github/actions/svn-with-retry@trunk
         with:
           url: https://core.svn.wordpress.org/tags/${{ steps.tag.outputs.short }}/
 
