@@ -17,7 +17,6 @@ runs:
       env:
         DOWNLOAD_URL: ${{ inputs.url }}
         OUTPUT_FILE: ${{ inputs.output }}
-        USER_AGENT: ${{ inputs.user-agent }}
       run: |
         for attempt in 1 2 3; do
           echo "Attempt $attempt"
