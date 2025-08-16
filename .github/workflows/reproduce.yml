@@ -43,12 +43,9 @@ jobs:
 
       - name: SVN checkout develop.svn.wordpress.org
         if: inputs.source == 'develop.svn.wordpress.org'
-        env:
-          TAG: ${{ steps.tag.outputs.short }}
-        run: | #shell
-          sudo apt-get install -y --no-install-recommends subversion
-          svn --version
-          svn export --quiet --force --ignore-externals "https://develop.svn.wordpress.org/tags/${TAG}" .
+        uses: johnbillion/rave-wordpress/.github/actions/svn-with-retry@svn-retry
+        with:
+          url: https://develop.svn.wordpress.org/tags/${{ steps.tag.outputs.short }}/
 
       - name: Download zip from core.trac.wordpress.org
         if: inputs.source == 'core.trac.wordpress.org'

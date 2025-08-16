@@ -1,5 +1,5 @@
 name: Download with retry
-description: Downloads a file with retry logic (3 attempts, 20s delay)
+description: Downloads a file with retry logic
 
 inputs:
   url:
@@ -17,7 +17,7 @@ runs:
       env:
         DOWNLOAD_URL: ${{ inputs.url }}
         OUTPUT_FILE: ${{ inputs.output }}
-      run: |
+      run: | #shell
         for attempt in 1 2 3; do
           echo "Attempt $attempt"
           if wget --output-document="${OUTPUT_FILE}" "${DOWNLOAD_URL}" \

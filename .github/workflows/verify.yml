@@ -387,10 +387,10 @@ jobs:
 
       - name: Fetch Akismet ${{ env.AKISMET_VERSION }} from source
         if: env.PACKAGE_INCLUDES_AKISMET == 'true'
-        run: | #shell
-          sudo apt-get install -y --no-install-recommends subversion
-          svn --version
-          svn export --quiet --force --ignore-externals "https://plugins.svn.wordpress.org/akismet/tags/$AKISMET_VERSION/" akismet-source
+        uses: johnbillion/rave-wordpress/.github/actions/svn-with-retry@svn-retry
+        with:
+          url: https://plugins.svn.wordpress.org/akismet/tags/${{ env.AKISMET_VERSION }}/
+          path: akismet-source
 
       - name: Verify Akismet
         if: env.PACKAGE_INCLUDES_AKISMET == 'true'

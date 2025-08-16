@@ -1,0 +1,52 @@
+name: SVN with retry
+description: Executes SVN export with retry logic
+
+inputs:
+  url:
+    description: SVN repository URL
+    required: true
+  path:
+    description: Export destination path (defaults to current directory)
+    required: false
+    default: '.'
+
+runs:
+  using: composite
+  steps:
+    - name: Install Subversion
+      shell: bash
+      run: | #shell
+        sudo apt-get install -y --no-install-recommends subversion
+        svn --version
+
+    - name: SVN export with retry
+      shell: bash
+      env:
+        SVN_URL: ${{ inputs.url }}
+        EXPORT_PATH: ${{ inputs.path }}
+      run: | #shell
+        MAX_ATTEMPTS=3
+        WAIT_TIME=20
+        SVN_CMD="svn export --quiet --force --ignore-externals \"${SVN_URL}\" \"${EXPORT_PATH}\""
+
+        for attempt in $(seq 1 $MAX_ATTEMPTS); do
+          echo "SVN export attempt $attempt of $MAX_ATTEMPTS"
+
+          # Execute with timeout (5 minutes per attempt)
+          if timeout 300 bash -c "$SVN_CMD"; then
+            echo "SVN export successful on attempt $attempt"
+            exit 0
+          else
+            EXIT_CODE=$?
+            echo "SVN export failed on attempt $attempt (exit code: $EXIT_CODE)"
+
+            if [ $attempt -lt $MAX_ATTEMPTS ]; then
+              echo "Waiting ${WAIT_TIME} seconds before retry..."
+              sleep $WAIT_TIME
+            else
+              echo "All SVN export attempts failed after $MAX_ATTEMPTS attempts"
+              echo "Last error code: $EXIT_CODE"
+              exit 1
+            fi
+          fi
+        done
