@@ -55,15 +55,20 @@ jobs:
           persist-credentials: true
 
       - name: Fetch offers from version check API
+        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        with:
+          url: https://api.wordpress.org/core/version-check/1.7/
+          output: offers-raw.json
+          user-agent: WordPress/6.8
+
+      - name: Process offers data
         run: | #shell
-          # Fetches the latest release
-          wget --quiet --output-document=- https://api.wordpress.org/core/version-check/1.7/ \
-            --user-agent='WordPress/6.8' \
-            | jq '
-              .offers
-              | map(select(.response == "autoupdate"))
-              | max_by(.version | split(".") | map(tonumber))
-            ' > offers.json
+          # Process the fetched data
+          jq '
+            .offers
+            | map(select(.response == "autoupdate"))
+            | max_by(.version | split(".") | map(tonumber))
+          ' offers-raw.json > offers.json
 
       - name: Get latest version from API data
         if: ${{ github.event_name != 'workflow_dispatch' }}

@@ -31,18 +31,23 @@ jobs:
           persist-credentials: true
 
       - name: Download checksums from wordpress.org
-        env:
-          TAG: ${{ steps.tag.outputs.short }}
-        run: | #shell
-          wget --output-document=checksums.json "https://api.wordpress.org/core/checksums/1.0/?version=${TAG}" \
-            --user-agent="WordPress/${TAG}"
+        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        with:
+          url: https://api.wordpress.org/core/checksums/1.0/?version=${{ steps.tag.outputs.short }}
+          output: checksums.json
+          user-agent: WordPress/${{ steps.tag.outputs.short }}
 
-      - name: Download and extract zip from wordpress.org
+      - name: Download zip from wordpress.org
+        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        with:
+          url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip
+          output: wordpress-${{ steps.tag.outputs.short }}.zip
+          user-agent: WordPress/${{ steps.tag.outputs.short }}
+
+      - name: Extract zip
         env:
           TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
-          wget "https://wordpress.org/wordpress-${TAG}.zip" \
-            --user-agent="WordPress/${TAG}"
           unzip -q "wordpress-${TAG}.zip"
 
       - name: Convert checksums.json into format that can be used by md5sum

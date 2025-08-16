@@ -23,14 +23,19 @@ jobs:
         with:
           tag: ${{ inputs.tag }}
 
-      - name: Download zip and MD5 hash from wordpress.org
-        env:
-          TAG: ${{ steps.tag.outputs.short }}
-        run: | #shell
-          wget --output-document=package.zip "https://wordpress.org/wordpress-${TAG}.zip" \
-            --user-agent="WordPress/${TAG}"
-          wget --output-document=package.zip.md5 "https://wordpress.org/wordpress-${TAG}.zip.md5" \
-            --user-agent="WordPress/${TAG}"
+      - name: Download zip from wordpress.org
+        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        with:
+          url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip
+          output: package.zip
+          user-agent: WordPress/${{ steps.tag.outputs.short }}
+
+      - name: Download MD5 hash from wordpress.org
+        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        with:
+          url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip.md5
+          output: package.zip.md5
+          user-agent: WordPress/${{ steps.tag.outputs.short }}
 
       - name: Check the MD5 hash
         run: | #shell
@@ -48,14 +53,19 @@ jobs:
         with:
           tag: ${{ inputs.tag }}
 
-      - name: Download zip and SHA-1 hash from wordpress.org
-        env:
-          TAG: ${{ steps.tag.outputs.short }}
-        run: | #shell
-          wget --output-document=package.zip "https://wordpress.org/wordpress-${TAG}.zip" \
-            --user-agent="WordPress/${TAG}"
-          wget --output-document=package.zip.sha1 "https://wordpress.org/wordpress-${TAG}.zip.sha1" \
-            --user-agent="WordPress/${TAG}"
+      - name: Download zip from wordpress.org
+        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        with:
+          url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip
+          output: package.zip
+          user-agent: WordPress/${{ steps.tag.outputs.short }}
+
+      - name: Download SHA-1 hash from wordpress.org
+        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        with:
+          url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip.sha1
+          output: package.zip.sha1
+          user-agent: WordPress/${{ steps.tag.outputs.short }}
 
       - name: Check the SHA-1 hash
         run: | #shell
@@ -73,14 +83,19 @@ jobs:
         with:
           tag: ${{ inputs.tag }}
 
-      - name: Download tar.gz and MD5 hash from wordpress.org
-        env:
-          TAG: ${{ steps.tag.outputs.short }}
-        run: | #shell
-          wget --output-document=package.tar.gz "https://wordpress.org/wordpress-${TAG}.tar.gz" \
-            --user-agent="WordPress/${TAG}"
-          wget --output-document=package.tar.gz.md5 "https://wordpress.org/wordpress-${TAG}.tar.gz.md5" \
-            --user-agent="WordPress/${TAG}"
+      - name: Download tar.gz from wordpress.org
+        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        with:
+          url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz
+          output: package.tar.gz
+          user-agent: WordPress/${{ steps.tag.outputs.short }}
+
+      - name: Download MD5 hash from wordpress.org
+        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        with:
+          url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz.md5
+          output: package.tar.gz.md5
+          user-agent: WordPress/${{ steps.tag.outputs.short }}
 
       - name: Check the MD5 hash
         run: | #shell
@@ -98,14 +113,19 @@ jobs:
         with:
           tag: ${{ inputs.tag }}
 
-      - name: Download tar.gz and SHA-1 hash from wordpress.org
-        env:
-          TAG: ${{ steps.tag.outputs.short }}
-        run: | #shell
-          wget --output-document=package.tar.gz "https://wordpress.org/wordpress-${TAG}.tar.gz" \
-            --user-agent="WordPress/${TAG}"
-          wget --output-document=package.tar.gz.sha1 "https://wordpress.org/wordpress-${TAG}.tar.gz.sha1" \
-            --user-agent="WordPress/${TAG}"
+      - name: Download tar.gz from wordpress.org
+        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        with:
+          url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz
+          output: package.tar.gz
+          user-agent: WordPress/${{ steps.tag.outputs.short }}
+
+      - name: Download SHA-1 hash from wordpress.org
+        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        with:
+          url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz.sha1
+          output: package.tar.gz.sha1
+          user-agent: WordPress/${{ steps.tag.outputs.short }}
 
       - name: Check the SHA-1 hash
         run: | #shell
