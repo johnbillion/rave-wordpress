@@ -52,6 +52,10 @@ RAVE stands for Reproduce And Verify.
 
 The GitHub Actions workflow runs once an hour. It verifies the latest WordPress release available when it runs.
 
+## When did RAVE start verifying WordPress releases?
+
+The RAVE project was started after the WordCamp US conference in 2024. The first version that it verified at time of release was 6.7.
+
 ## Why test the official package?
 
 There are several opportunities for the official WordPress package to be tampered with so that it differs from the actual source code in the source control repos. This could come via an attack on the build server, on wordpress.org or downloads.wordpress.org, from external hackers, from those in control of the wordpress.org CDN, from disgruntled members of the meta or systems teams, from anyone who gains access to accounts or credentials of such team members, or from the project lead.
