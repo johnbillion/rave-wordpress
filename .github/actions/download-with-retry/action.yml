@@ -24,6 +24,6 @@ runs:
           --tries=3 \
           --retry-connrefused \
           --retry-on-http-error=429,500,502,503,504 \
-          --waitretry=20 \
+          --wait=20 \
           --timeout=30 \
           "${DOWNLOAD_URL}"
