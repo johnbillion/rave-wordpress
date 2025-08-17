@@ -332,6 +332,7 @@ jobs:
           rm package/wp-content/themes/twentytwentyone/.stylelintignore
           rm package/wp-content/themes/twentytwentyone/.stylelintrc-css.json
           rm package/wp-content/themes/twentytwentyone/.stylelintrc.json
+          echo "Hello" > file.txt
 
       - name: Handle known differences in bundled themes
         if: inputs.package != 'github-zip' && inputs.package != 'build.trac.wordpress.org'
