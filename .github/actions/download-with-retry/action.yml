@@ -19,11 +19,14 @@ runs:
         OUTPUT_FILE: ${{ inputs.output }}
       run: | #shell
         echo "Downloading ${DOWNLOAD_URL} to ${OUTPUT_FILE}"
-        wget --output-document="${OUTPUT_FILE}" \
-          --user-agent="WordPress/6.8" \
-          --tries=3 \
-          --retry-connrefused \
-          --retry-on-http-error=429,500,502,503,504 \
-          --wait=20 \
-          --timeout=30 \
+        curl --output "${OUTPUT_FILE}" \
+          --user-agent "WordPress/6.8" \
+          --location \
+          --retry 2 \
+          --retry-delay 20 \
+          --retry-all-errors \
+          --connect-timeout 30 \
+          --max-time 120 \
+          --fail \
+          --show-error \
           "${DOWNLOAD_URL}"
