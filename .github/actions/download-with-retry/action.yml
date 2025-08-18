@@ -23,7 +23,7 @@ runs:
           --user-agent "WordPress/6.8" \
           --location \
           --retry 2 \
-          --retry-delay 20 \
+          --retry-delay 30 \
           --retry-all-errors \
           --connect-timeout 30 \
           --max-time 120 \
