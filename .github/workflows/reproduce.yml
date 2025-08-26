@@ -83,7 +83,7 @@ jobs:
 
       - name: Install npm dependencies
         run: | #shell
-          npm ci
+          npm ci --no-audit
 
       - name: Update Twemoji processing for debugging
         run: | #shell
