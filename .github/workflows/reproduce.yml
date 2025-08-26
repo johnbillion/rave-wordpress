@@ -85,10 +85,6 @@ jobs:
         run: | #shell
           npm ci --no-audit --no-fund --loglevel=error
 
-      - name: Update Twemoji processing for debugging
-        run: | #shell
-          sed -i "s/'Unable to fetch Twemoji file list'/files.stderr.toString()/" Gruntfile.js
-
       - name: Run emoji precommit task
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
