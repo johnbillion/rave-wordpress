@@ -273,6 +273,10 @@ jobs:
         package:
           - github-zip
           - docker-wordpress
+          - wordpress.org-zip
+          - wordpress.org-tar
+          - downloads.wordpress.org-zip
+          - downloads.wordpress.org-tar
           - wpengine-zip
           - aspirecloud-zip
           - fair-zip
