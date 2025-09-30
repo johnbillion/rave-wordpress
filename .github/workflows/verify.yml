@@ -122,6 +122,7 @@ jobs:
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract GitHub zip
         if: inputs.package == 'github-zip'
@@ -137,6 +138,7 @@ jobs:
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract wordpress.org zip
         if: inputs.package == 'wordpress.org-zip' && inputs.tag != 'latest'
@@ -150,6 +152,7 @@ jobs:
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.tar.gz
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract wordpress.org tar
         if: inputs.package == 'wordpress.org-tar' && inputs.tag != 'latest'
@@ -164,6 +167,7 @@ jobs:
         with:
           url: https://wordpress.org/latest.zip
           output: package.zip
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract latest wordpress.org zip
         if: inputs.package == 'wordpress.org-zip' && inputs.tag == 'latest'
@@ -177,6 +181,7 @@ jobs:
         with:
           url: https://wordpress.org/latest.tar.gz
           output: package.tar.gz
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract latest wordpress.org tar
         if: inputs.package == 'wordpress.org-tar' && inputs.tag == 'latest'
@@ -191,6 +196,7 @@ jobs:
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract downloads.wordpress.org zip
         if: inputs.package == 'downloads.wordpress.org-zip'
@@ -204,6 +210,7 @@ jobs:
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.tar.gz
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract downloads.wordpress.org tar
         if: inputs.package == 'downloads.wordpress.org-tar'
@@ -218,6 +225,7 @@ jobs:
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract downloads.w.org zip
         if: inputs.package == 'downloads.w.org-zip'
@@ -231,6 +239,7 @@ jobs:
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.tar.gz
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract downloads.w.org tar
         if: inputs.package == 'downloads.w.org-tar'
@@ -245,6 +254,7 @@ jobs:
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract build.trac.wordpress.org zip
         if: inputs.package == 'build.trac.wordpress.org'
@@ -273,6 +283,7 @@ jobs:
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract core-updates.wpengine.com zip
         if: inputs.package == 'wpengine-zip'
@@ -286,6 +297,7 @@ jobs:
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract api.aspirecloud.net zip
         if: inputs.package == 'aspirecloud-zip'
@@ -299,6 +311,7 @@ jobs:
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract FAIR zip
         if: inputs.package == 'fair-zip'

@@ -8,6 +8,10 @@ inputs:
   output:
     description: Output filename
     required: true
+  version:
+    description: Version being checked
+    required: false
+    default: "6.8.0"
 
 runs:
   using: composite
@@ -17,10 +21,11 @@ runs:
       env:
         DOWNLOAD_URL: ${{ inputs.url }}
         OUTPUT_FILE: ${{ inputs.output }}
+        VERSION: ${{ inputs.version }}
       run: | #shell
         echo "Downloading ${DOWNLOAD_URL} to ${OUTPUT_FILE}"
         curl --output "${OUTPUT_FILE}" \
-          --user-agent "WordPress/6.8" \
+          --user-agent "WordPress/${VERSION}; http://localhost:8889" \
           --location \
           --retry 2 \
           --retry-delay 30 \

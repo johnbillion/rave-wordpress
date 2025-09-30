@@ -46,6 +46,7 @@ jobs:
         with:
           url: https://repo.packagist.org/p2/roots/wordpress-full.json
           output: roots-wordpress-full.json
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Verify versions distributed by roots/wordpress-full
         if: inputs.package == 'roots-wordpress-full'
@@ -65,6 +66,7 @@ jobs:
         with:
           url: https://repo.packagist.org/p2/johnpbloch/wordpress.json
           output: johnpbloch-wordpress.json
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Verify versions distributed by johnpbloch/wordpress
         if: inputs.package == 'johnpbloch-wordpress'
@@ -109,6 +111,7 @@ jobs:
         with:
           url: https://api.aspirecloud.net/core/version-check/1.7/
           output: aspirecloud-versions.json
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Verify versions distributed by AspireCloud
         if: inputs.package == 'aspirecloud-zip'
@@ -206,6 +209,7 @@ jobs:
         with:
           url: https://api.wordpress.org/core/stable-check/1.0/
           output: stable-check.json
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Verify the stable-check endpoint
         if: inputs.package == 'stable-check'

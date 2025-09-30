@@ -28,12 +28,14 @@ jobs:
         with:
           url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip
           output: package.zip
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Download MD5 hash from wordpress.org
         uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
         with:
           url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip.md5
           output: package.zip.md5
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Check the MD5 hash
         run: | #shell
@@ -56,12 +58,14 @@ jobs:
         with:
           url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip
           output: package.zip
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Download SHA-1 hash from wordpress.org
         uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
         with:
           url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip.sha1
           output: package.zip.sha1
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Check the SHA-1 hash
         run: | #shell
@@ -84,12 +88,14 @@ jobs:
         with:
           url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz
           output: package.tar.gz
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Download MD5 hash from wordpress.org
         uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
         with:
           url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz.md5
           output: package.tar.gz.md5
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Check the MD5 hash
         run: | #shell
@@ -112,12 +118,14 @@ jobs:
         with:
           url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz
           output: package.tar.gz
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Download SHA-1 hash from wordpress.org
         uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
         with:
           url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz.sha1
           output: package.tar.gz.sha1
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Check the SHA-1 hash
         run: | #shell

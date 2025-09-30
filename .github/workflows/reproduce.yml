@@ -53,6 +53,7 @@ jobs:
         with:
           url: https://core.trac.wordpress.org/browser/tags/${{ steps.tag.outputs.short }}?format=zip
           output: package.zip
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract zip from core.trac.wordpress.org
         if: inputs.source == 'core.trac.wordpress.org'
