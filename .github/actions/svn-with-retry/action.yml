@@ -16,6 +16,7 @@ runs:
     - name: Install Subversion
       shell: bash
       run: | #shell
+        sudo rm -f /var/lib/man-db/auto-update
         sudo apt-get install -y --no-install-recommends subversion
         svn --version
 
