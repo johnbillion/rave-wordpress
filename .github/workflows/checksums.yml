@@ -17,7 +17,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-    timeout-minutes: 10
+    timeout-minutes: 1
     steps:
       - name: Prepare tag name
         id: tag

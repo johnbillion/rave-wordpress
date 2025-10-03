@@ -19,7 +19,7 @@ jobs:
     name: "${{ inputs.source }}"
     runs-on: ubuntu-latest
     permissions: {}
-    timeout-minutes: 10
+    timeout-minutes: 1
     steps:
       - name: Download canonical source artifact
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # 4.1.8

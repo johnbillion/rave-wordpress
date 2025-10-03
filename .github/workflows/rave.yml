@@ -35,7 +35,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-    timeout-minutes: 10
+    timeout-minutes: 1
     outputs:
       version: ${{ steps.fetch.outputs.version }}
     steps:

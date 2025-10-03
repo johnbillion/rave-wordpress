@@ -19,7 +19,7 @@ jobs:
     name: "${{ inputs.package }}"
     runs-on: ubuntu-latest
     permissions: {}
-    timeout-minutes: 10
+    timeout-minutes: 1
     steps:
       - name: Prepare tag name
         id: tag
