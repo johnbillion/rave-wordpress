@@ -71,7 +71,7 @@ jobs:
       - name: Verify versions distributed by johnpbloch/wordpress
         if: inputs.package == 'johnpbloch-wordpress'
         env:
-          TAG: ${{ steps.tag.outputs.short }}
+          TAG: ${{ steps.tag.outputs.long }}
         run: |
           set -e
           latest_version=$(jq --raw-output '.packages["johnpbloch/wordpress"] | map(.version) | sort_by(.) | last' johnpbloch-wordpress.json)
