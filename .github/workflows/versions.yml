@@ -133,8 +133,11 @@ jobs:
           set -e
           url="https://github.com/fairpm/fair-plugin/releases/latest/download/wordpress-${TAG}-fair.zip"
           status=$(curl -L -o /dev/null -s -w "%{http_code}" "$url")
-          if [ "$status" != "404" ]; then
+          if [ "$status" == "200" ]; then
             echo "Error: Found a release for next version ($TAG) at $url"
+            exit 1
+          elif [ "$status" != "404" ]; then
+            echo "Error: Unexpected HTTP status $status when checking for next version ($TAG) at $url"
             exit 1
           fi
 
@@ -146,8 +149,11 @@ jobs:
           set -e
           url="https://core-updates.wpengine.com/wordpress-${TAG}.zip"
           status=$(curl -o /dev/null -s -w "%{http_code}" "$url")
-          if [ "$status" != "404" ]; then
+          if [ "$status" == "200" ]; then
             echo "Error: Found a release for next version ($TAG) at $url"
+            exit 1
+          elif [ "$status" != "404" ]; then
+            echo "Error: Unexpected HTTP status $status when checking for next version ($TAG) at $url"
             exit 1
           fi
 
@@ -159,8 +165,11 @@ jobs:
           set -e
           url="https://wordpress.org/wordpress-${TAG}.zip"
           status=$(curl -o /dev/null -s -w "%{http_code}" "$url")
-          if [ "$status" != "404" ]; then
+          if [ "$status" == "200" ]; then
             echo "Error: Found a release for next version ($TAG) at $url"
+            exit 1
+          elif [ "$status" != "404" ]; then
+            echo "Error: Unexpected HTTP status $status when checking for next version ($TAG) at $url"
             exit 1
           fi
 
@@ -172,8 +181,11 @@ jobs:
           set -e
           url="https://wordpress.org/wordpress-${TAG}.tar.gz"
           status=$(curl -o /dev/null -s -w "%{http_code}" "$url")
-          if [ "$status" != "404" ]; then
+          if [ "$status" == "200" ]; then
             echo "Error: Found a release for next version ($TAG) at $url"
+            exit 1
+          elif [ "$status" != "404" ]; then
+            echo "Error: Unexpected HTTP status $status when checking for next version ($TAG) at $url"
             exit 1
           fi
 
@@ -185,8 +197,11 @@ jobs:
           set -e
           url="https://downloads.wordpress.org/release/wordpress-${TAG}.zip"
           status=$(curl -o /dev/null -s -w "%{http_code}" "$url")
-          if [ "$status" != "404" ]; then
+          if [ "$status" == "200" ]; then
             echo "Error: Found a release for next version ($TAG) at $url"
+            exit 1
+          elif [ "$status" != "404" ]; then
+            echo "Error: Unexpected HTTP status $status when checking for next version ($TAG) at $url"
             exit 1
           fi
 
@@ -198,8 +213,11 @@ jobs:
           set -e
           url="https://downloads.wordpress.org/release/wordpress-${TAG}.tar.gz"
           status=$(curl -o /dev/null -s -w "%{http_code}" "$url")
-          if [ "$status" != "404" ]; then
+          if [ "$status" == "200" ]; then
             echo "Error: Found a release for next version ($TAG) at $url"
+            exit 1
+          elif [ "$status" != "404" ]; then
+            echo "Error: Unexpected HTTP status $status when checking for next version ($TAG) at $url"
             exit 1
           fi
 
