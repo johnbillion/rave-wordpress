@@ -39,6 +39,8 @@ jobs:
 
       - name: Check the MD5 hash
         run: | #shell
+          echo "Expected: $(cat package.zip.md5)"
+          echo "Actual:   $(md5sum package.zip | cut -d ' ' -f 1)"
           echo "$(cat package.zip.md5) package.zip" | md5sum --check -
 
   zip-sha1:
@@ -69,6 +71,8 @@ jobs:
 
       - name: Check the SHA-1 hash
         run: | #shell
+          echo "Expected: $(cat package.zip.sha1)"
+          echo "Actual:   $(sha1sum package.zip | cut -d ' ' -f 1)"
           echo "$(cat package.zip.sha1) package.zip" | sha1sum --check -
 
   tar-md5:
@@ -99,6 +103,8 @@ jobs:
 
       - name: Check the MD5 hash
         run: | #shell
+          echo "Expected: $(cat package.tar.gz.md5)"
+          echo "Actual:   $(md5sum package.tar.gz | cut -d ' ' -f 1)"
           echo "$(cat package.tar.gz.md5) package.tar.gz" | md5sum --check -
 
   tar-sha1:
@@ -129,4 +135,6 @@ jobs:
 
       - name: Check the SHA-1 hash
         run: | #shell
+          echo "Expected: $(cat package.tar.gz.sha1)"
+          echo "Actual:   $(sha1sum package.tar.gz | cut -d ' ' -f 1)"
           echo "$(cat package.tar.gz.sha1) package.tar.gz" | sha1sum --check -
