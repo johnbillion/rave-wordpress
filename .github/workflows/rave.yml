@@ -132,10 +132,10 @@ jobs:
         with:
           tag: ${{ needs.versions.outputs.version }}
 
-      - name: Download wordpress.org zip
+      - name: Download build.trac.wordpress.org zip
         uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
         with:
-          url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip
+          url: https://build.trac.wordpress.org/browser/tags/${{ steps.tag.outputs.short }}?format=zip
           output: package.zip
           version: ${{ steps.tag.outputs.long }}
 
@@ -145,16 +145,20 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: | #shell
           if gh attestation verify package.zip --repo johnbillion/rave-wordpress --predicate-type "https://in-toto.io/attestation/release/v0.1"; then
-            echo "Attestation verified for wordpress.org zip"
+            echo "Attestation verified for build.trac.wordpress.org zip"
             echo "verified=true" >> "$GITHUB_OUTPUT"
           else
-            echo "No attestation found for wordpress.org zip"
+            echo "No attestation found for build.trac.wordpress.org zip"
             echo "verified=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Extract verified build
         if: steps.check.outputs.verified == 'true'
-        run: unzip -q package.zip
+        env:
+          TAG: ${{ steps.tag.outputs.short }}
+        run: | #shell
+          unzip -q package.zip
+          mv "${TAG}" wordpress
 
       - name: Upload verified build artifact
         if: steps.check.outputs.verified == 'true'
