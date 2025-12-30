@@ -115,11 +115,62 @@ jobs:
           base: trunk
           delete-branch: true
 
+  check-attestation:
+    name: Check for attestation
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    needs:
+      - versions
+    timeout-minutes: 2
+    outputs:
+      verified: ${{ steps.check.outputs.verified }}
+    steps:
+      - name: Prepare tag name
+        id: tag
+        uses: johnbillion/rave-wordpress/.github/actions/prepare-tag-name@trunk
+        with:
+          tag: ${{ needs.versions.outputs.version }}
+
+      - name: Download wordpress.org zip
+        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        with:
+          url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip
+          output: package.zip
+          version: ${{ steps.tag.outputs.long }}
+
+      - name: Check for existing attestation
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: | #shell
+          if gh attestation verify package.zip --repo johnbillion/rave-wordpress --predicate-type "https://in-toto.io/attestation/release/v0.1"; then
+            echo "Attestation verified for wordpress.org zip"
+            echo "verified=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No attestation found for wordpress.org zip"
+            echo "verified=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Extract verified build
+        if: steps.check.outputs.verified == 'true'
+        run: unzip -q package.zip
+
+      - name: Upload verified build artifact
+        if: steps.check.outputs.verified == 'true'
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # 4.5.0
+        with:
+          name: wordpress-${{ steps.tag.outputs.long }}-develop.svn.wordpress.org
+          path: wordpress
+          if-no-files-found: error
+
   reproduce:
     name: "Reproduce ${{ needs.versions.outputs.version }}"
+    if: needs.check-attestation.outputs.verified == 'false'
     permissions: {}
     needs:
       - versions
+      - check-attestation
     strategy:
       matrix:
         source:
@@ -135,9 +186,11 @@ jobs:
 
   fetch-build:
     name: ${{ matrix.label }}
+    if: needs.check-attestation.outputs.verified == 'false'
     permissions: {}
     needs:
       - versions
+      - check-attestation
     strategy:
       matrix:
         label:
@@ -153,9 +206,11 @@ jobs:
 
   compare:
     name: ${{ matrix.label }}
+    if: needs.check-attestation.outputs.verified == 'false'
     permissions: {}
     needs:
       - versions
+      - check-attestation
       - reproduce
       - fetch-build
     strategy:
@@ -186,12 +241,19 @@ jobs:
 
   verify-packages:
     name: ${{ matrix.label }}
+    # Run if either: attestation was verified, or full reproduction completed
+    if: |
+      always() && (
+        (needs.check-attestation.outputs.verified == 'true') ||
+        (needs.compare.result == 'success')
+      )
     permissions:
       contents: read
       id-token: write
       attestations: write
     needs:
       - versions
+      - check-attestation
       - reproduce
       - compare
     strategy:
@@ -223,13 +285,20 @@ jobs:
   # These packages are verified against the latest tag, they cannot be verified against a prior version.
   verify-latest-packages:
     name: ${{ matrix.label }}
-    if: ${{ github.event_name != 'workflow_dispatch' }}
+    # Run if not workflow_dispatch AND (attestation was verified OR full reproduction completed)
+    if: |
+      always() &&
+      github.event_name != 'workflow_dispatch' && (
+        (needs.check-attestation.outputs.verified == 'true') ||
+        (needs.compare.result == 'success')
+      )
     permissions:
       contents: read
       id-token: write
       attestations: write
     needs:
       - versions
+      - check-attestation
       - reproduce
       - compare
       - verify-packages
