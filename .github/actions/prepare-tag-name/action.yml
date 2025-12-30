@@ -1,9 +1,9 @@
 name: Prepare tag name
-description: Prepare the tag name given a WordPress version number
+description: Prepares tag name variants given a full semver version in `major.minor.patch` format
 
 inputs:
   tag:
-    description: Full semver tag name for WordPress release in `x.y.z` format
+    description: Full semver version in `major.minor.patch` format
     required: true
     type: string
 outputs:
@@ -16,9 +16,6 @@ outputs:
   branch:
     description: Branch number, eg. 6.7
     value: ${{ steps.tag.outputs.branch }}
-  major:
-    description: Major number, eg. 6
-    value: ${{ steps.tag.outputs.major }}
   next:
     description: Next patch version, eg. 6.7.2
     value: ${{ steps.tag.outputs.next }}
@@ -35,6 +32,5 @@ runs:
         echo short="${LONG_TAG%.0}" >> "$GITHUB_OUTPUT"
         echo long="${LONG_TAG}" >> "$GITHUB_OUTPUT"
         echo branch="${LONG_TAG%.*}" >> "$GITHUB_OUTPUT"
-        echo major="${LONG_TAG%%.*}" >> "$GITHUB_OUTPUT"
         PATCH_VERSION=$(echo "${LONG_TAG}" | awk -F. '{print $3 + 1}')
         echo next="${LONG_TAG%.*}.${PATCH_VERSION}" >> "$GITHUB_OUTPUT"
