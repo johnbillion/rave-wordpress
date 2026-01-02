@@ -236,9 +236,9 @@ jobs:
     strategy:
       matrix:
         include:
-          # - label: Verify packages
-          #   package: fair-zip
-          #   tag: ${{ needs.versions.outputs.version }}
+          - label: Verify packages
+            package: fair-zip
+            tag: ${{ needs.versions.outputs.version }}
           - label: Verify latest packages
             package: wordpress.org-zip
             tag: latest
