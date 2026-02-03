@@ -80,46 +80,6 @@ jobs:
             exit 1
           fi
 
-      - name: Verify versions distributed by Docker
-        if: inputs.package == 'docker-wordpress'
-        env:
-          TAG: ${{ steps.tag.outputs.long }}
-        run: |
-          set -e
-
-          page=1
-          all_tags=""
-
-          while [ $page -le 3 ]; do  # Fetch 3 pages to find stable tags
-            url="https://hub.docker.com/v2/repositories/library/wordpress/tags?page_size=100&page=$page"
-            response=$(curl -s -w "\n%{http_code}" "$url")
-            http_code=$(echo "$response" | tail -n1)
-            body=$(echo "$response" | sed '$d')
-
-            if [ "$http_code" != "200" ]; then
-              echo "Error: Docker Hub API returned HTTP $http_code"
-              exit 1
-            fi
-
-            if ! echo "$body" | jq -e . >/dev/null 2>&1; then
-              echo "Error: Docker Hub API returned invalid JSON"
-              exit 1
-            fi
-
-            tags=$(echo "$body" | jq --raw-output '.results[].name')
-
-            all_tags="$all_tags$tags"$'\n'
-
-            page=$((page + 1))
-          done
-
-          latest_tag=$(echo "$all_tags" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -n1)
-
-          if [ "$latest_tag" != "$TAG" ]; then
-            echo "Error: Found a newer tag ($latest_tag) than $TAG"
-            exit 1
-          fi
-
       - name: Fetch AspireCloud versions
         if: inputs.package == 'aspirecloud-zip'
         uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk

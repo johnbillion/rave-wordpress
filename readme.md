@@ -33,7 +33,6 @@ RAVE stands for Reproduce And Verify.
 
 ### Unofficial packages
 
-* ✅ `wordpress` image from Docker Hub
 * ✅ `core-updates.wpengine.com` from WPEngine
 * ✅ `api.aspirecloud.net` from AspireCloud
 * ✅ Bundle packages provided by FAIR
@@ -67,7 +66,7 @@ There are several opportunities for the official WordPress package to be tampere
   * Making the backdoor code immediately visible in the diff in the failing workflow
 * [In 2016 Wordfence identified a vulnerability in a webhook mechanism on api.wordpress.org](https://www.wordfence.com/blog/2016/11/hacking-27-web-via-wordpress-auto-update/) and demonstrated that a cracker could theoretically execute a shell command on the api.wordpress.org server. If a cracker exploited this vulnerability to modify an existing release or create a new one then RAVE would have successfully detected this by:
   * Identifying a new version that didn't exist in the source repos
-  * Identifying a modified package that didn't match the code built from the source repos and didn't match the versions published to Packagist and Docker Hub
+  * Identifying a modified package that didn't match the code built from the source repos and didn't match the versions published elsewhere
   * Identifying any attempt to serve an update from an unexpected host name or URL in the update API response
   * Identifying any discrepancies between the published SHA-1 and MD5 hashes, the published checksums, and the offers returned by the update API
 

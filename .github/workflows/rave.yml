@@ -206,7 +206,6 @@ jobs:
           - downloads.w.org-zip
           - downloads.w.org-tar
           - github-zip
-          - docker-wordpress
           - wpengine-zip
           - aspirecloud-zip
           - roots-wordpress-full
@@ -273,7 +272,6 @@ jobs:
           - Verify distributed versions
         package:
           - github-zip
-          - docker-wordpress
           - wordpress.org-zip
           - wordpress.org-tar
           - downloads.wordpress.org-zip
