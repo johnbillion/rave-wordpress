@@ -68,9 +68,6 @@ jobs:
               PACKAGE_URL="https://build.trac.wordpress.org/browser/tags/${TAG_SHORT}?format=zip"
               PACKAGE_INCLUDES_AKISMET=false
               ;;
-            docker-wordpress)
-              PACKAGE_URL="https://hub.docker.com/_/wordpress/tags?name=${TAG_LONG}&ordering=-name"
-              ;;
             wpengine-zip)
               PACKAGE_URL="https://core-updates.wpengine.com/wordpress-${TAG_SHORT}.zip"
               ;;
@@ -264,19 +261,6 @@ jobs:
           unzip -q package.zip -d wordpress
           mv "wordpress/${TAG}" package
 
-      - name: Download Docker image
-        if: inputs.package == 'docker-wordpress'
-        env:
-          TAG: ${{ steps.tag.outputs.long }}
-        run: | #shell
-          yq --null-input '{"services":{"wordpress":{"image":"wordpress:"+strenv(TAG),"container_name":"wordpress","volumes":["./package:/var/www/html:rw"]}}}' > docker-compose.yml
-          docker compose up --quiet-pull -d wordpress
-          docker compose run --rm wordpress -- ls -al /var/www/html
-          docker compose run --rm wordpress -- rm /var/www/html/.htaccess
-          docker compose run --rm wordpress -- rm /var/www/html/wp-config-docker.php
-          docker compose cp wordpress:/var/www/html/wp-content/plugins/akismet akismet-package
-          docker compose run --rm wordpress -- rm -rf /var/www/html/wp-content/plugins/akismet
-
       - name: Download zip from core-updates.wpengine.com
         if: inputs.package == 'wpengine-zip'
         uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
@@ -375,7 +359,7 @@ jobs:
           rm -rf package/wp-content/plugins/fair-plugin
 
       - name: Extract Akismet
-        if: env.PACKAGE_INCLUDES_AKISMET == 'true' && inputs.package != 'docker-wordpress'
+        if: env.PACKAGE_INCLUDES_AKISMET == 'true'
         run: | #shell
           mv package/wp-content/plugins/akismet akismet-package
 
