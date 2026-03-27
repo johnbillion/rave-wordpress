@@ -83,6 +83,9 @@ jobs:
             johnpbloch-wordpress)
               PACKAGE_URL="https://packagist.org/packages/johnpbloch/wordpress#${TAG_SHORT}"
               ;;
+            wp-core-wordpress)
+              PACKAGE_URL="https://api.wordpress.org/packages/p2/wp-core/wordpress.json"
+              ;;
           esac
           echo PACKAGE_URL="$PACKAGE_URL" >> "$GITHUB_ENV"
           echo PACKAGE_INCLUDES_AKISMET="$PACKAGE_INCLUDES_AKISMET" >> "$GITHUB_ENV"
@@ -319,6 +322,15 @@ jobs:
           composer require "johnpbloch/wordpress:${TAG}" --prefer-dist --no-progress --no-plugins
           mv vendor/johnpbloch/wordpress-core package
           rm package/composer.json
+
+      - name: Download wp-core/wordpress
+        if: inputs.package == 'wp-core-wordpress'
+        env:
+          TAG: ${{ steps.tag.outputs.long }}
+        run: | #shell
+          composer config repositories.wp-core composer https://api.wordpress.org/packages/
+          composer require "wp-core/wordpress:${TAG}" --prefer-dist --no-progress --no-plugins
+          mv vendor/wp-core/wordpress package
 
       - name: Handle anomalies with build files in TT and TT1
         if: inputs.package == 'github-zip' || inputs.package == 'build.trac.wordpress.org'

@@ -210,6 +210,7 @@ jobs:
           - aspirecloud-zip
           - roots-wordpress-full
           - johnpbloch-wordpress
+          - wp-core-wordpress
           - build.trac.wordpress.org
         tag:
           - ${{ needs.versions.outputs.version }}
@@ -281,6 +282,7 @@ jobs:
           - fair-zip
           - roots-wordpress-full
           - johnpbloch-wordpress
+          - wp-core-wordpress
           - stable-check
       fail-fast: false
     uses: ./.github/workflows/versions.yml

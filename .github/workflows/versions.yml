@@ -80,6 +80,26 @@ jobs:
             exit 1
           fi
 
+      - name: Fetch wp-core/wordpress versions
+        if: inputs.package == 'wp-core-wordpress'
+        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        with:
+          url: https://api.wordpress.org/packages/p2/wp-core/wordpress.json
+          output: wp-core-wordpress.json
+          version: ${{ steps.tag.outputs.long }}
+
+      - name: Verify versions distributed by wp-core/wordpress
+        if: inputs.package == 'wp-core-wordpress'
+        env:
+          TAG: ${{ steps.tag.outputs.short }}
+        run: |
+          set -e
+          latest_version=$(jq --raw-output '.packages["wp-core/wordpress"] | map(.version) | .[]' wp-core-wordpress.json | grep -Ev -- '-(RC|rc|beta|alpha|dev)' | sort -V | tail -n1)
+          if [ "$latest_version" != "$TAG" ]; then
+            echo "Error: Found a newer version ($latest_version) than $TAG"
+            exit 1
+          fi
+
       - name: Fetch AspireCloud versions
         if: inputs.package == 'aspirecloud-zip'
         uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
