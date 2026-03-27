@@ -72,7 +72,7 @@ jobs:
           ls -la
 
       - name: Set up Node.js
-        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # 4.1.0
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
         with:
           node-version-file: .nvmrc
 
@@ -101,7 +101,7 @@ jobs:
           grep --fixed-strings "://api.wordpress.org/core/version-check/1.7/" build/wp-includes/update.php
 
       - name: Upload artifact
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # 4.5.0
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: wordpress-${{ steps.tag.outputs.long }}-${{ inputs.source }}
           path: build
