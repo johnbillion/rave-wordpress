@@ -74,9 +74,6 @@ jobs:
             aspirecloud-zip)
               PACKAGE_URL="https://api.aspirecloud.net/download/wordpress-${TAG_SHORT}.zip"
               ;;
-            fair-zip)
-              PACKAGE_URL="https://github.com/fairpm/fair-plugin/releases/latest/download/wordpress-${TAG_SHORT}-fair.zip"
-              ;;
             roots-wordpress-full)
               PACKAGE_URL="https://packagist.org/packages/roots/wordpress-full#${TAG_SHORT}"
               ;;
@@ -289,20 +286,6 @@ jobs:
           unzip -q package.zip -d wordpress
           mv wordpress/wordpress package
 
-      - name: Download zip from FAIR
-        if: inputs.package == 'fair-zip'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
-        with:
-          url: ${{ env.PACKAGE_URL }}
-          output: package.zip
-          version: ${{ steps.tag.outputs.long }}
-
-      - name: Extract FAIR zip
-        if: inputs.package == 'fair-zip'
-        run: | #shell
-          unzip -q package.zip -d wordpress
-          mv wordpress/wordpress package
-
       - name: Download roots/wordpress-full
         if: inputs.package == 'roots-wordpress-full'
         env:
@@ -352,11 +335,6 @@ jobs:
           if [[ "${TAG}" == "latest" ]] || dpkg --compare-versions "${BRANCH}" ge "6.7"; then
             rm -rf source/wp-content/themes/twentytwentytwo
           fi
-
-      - name: Handle known differences in bundled plugins
-        if: inputs.package == 'fair-zip'
-        run: | #shell
-          rm -rf package/wp-content/plugins/fair-plugin
 
       - name: Extract Akismet
         if: env.PACKAGE_INCLUDES_AKISMET == 'true'
