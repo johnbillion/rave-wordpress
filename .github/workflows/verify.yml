@@ -328,6 +328,7 @@ jobs:
         env:
           TAG: ${{ steps.tag.outputs.long }}
         run: | #shell
+          composer init --no-interaction --name "johnbillion/rave-wordpress" --stability stable
           composer config repositories.wp-core composer https://api.wordpress.org/packages/
           composer require "wp-core/wordpress:${TAG}" --prefer-dist --no-progress --no-plugins
           mv vendor/wp-core/wordpress package
