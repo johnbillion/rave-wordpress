@@ -24,8 +24,8 @@ jobs:
     name: "${{ inputs.package }}"
     runs-on: ubuntu-latest
     permissions:
-      id-token: write
-      attestations: write
+      id-token: write     # Required to generate OIDC token for attestation
+      attestations: write # Required to create and upload attestations
     timeout-minutes: 10
     steps:
       - name: Prepare tag name
@@ -423,9 +423,6 @@ jobs:
           # Generate SHA256 of package file
           PACKAGE_SHA256=$(sha256sum "${PACKAGE_FILE}" | cut -d' ' -f1)
 
-          # Get current git commit SHA
-          COMMIT_SHA="${{ github.sha }}"
-
           # Generate the predicate
           cat > release-predicate.json <<EOF
           {
@@ -446,7 +443,7 @@ jobs:
                 "vcs": {
                   "type": "git",
                   "uri": "https://github.com/johnbillion/rave-wordpress",
-                  "revision": "${COMMIT_SHA}"
+                  "revision": "${GITHUB_SHA}"
                 }
               }
             }

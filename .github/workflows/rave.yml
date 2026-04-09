@@ -33,8 +33,8 @@ jobs:
     name: Determine latest version
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      pull-requests: write
+      contents: write      # Required to push the branch
+      pull-requests: write # Required to create a pull request
     timeout-minutes: 1
     outputs:
       version: ${{ steps.fetch.outputs.version }}
@@ -187,9 +187,9 @@ jobs:
   verify-packages:
     name: ${{ matrix.label }}
     permissions:
-      contents: read
-      id-token: write
-      attestations: write
+      contents: read      # Required to read repository contents
+      id-token: write     # Required to generate OIDC token for attestation
+      attestations: write # Required to create and upload attestations
     needs:
       - versions
       - reproduce
@@ -225,9 +225,9 @@ jobs:
     name: ${{ matrix.label }}
     if: ${{ github.event_name != 'workflow_dispatch' }}
     permissions:
-      contents: read
-      id-token: write
-      attestations: write
+      contents: read      # Required to read repository contents
+      id-token: write     # Required to generate OIDC token for attestation
+      attestations: write # Required to create and upload attestations
     needs:
       - versions
       - reproduce
@@ -261,7 +261,7 @@ jobs:
     name: ${{ matrix.label }}
     if: ${{ github.event_name != 'workflow_dispatch' }}
     permissions:
-      contents: read
+      contents: read # Required to read repository contents
     needs:
       - versions
     strategy:
@@ -289,8 +289,8 @@ jobs:
   verify-checksums:
     name: Verify checksums
     permissions:
-      contents: write
-      pull-requests: write
+      contents: write      # Required to push the branch
+      pull-requests: write # Required to create a pull request
     needs:
       - versions
     uses: ./.github/workflows/checksums.yml

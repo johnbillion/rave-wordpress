@@ -15,8 +15,8 @@ jobs:
     name: ${{ inputs.tag }}
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      pull-requests: write
+      contents: write      # Required to push the branch
+      pull-requests: write # Required to create a pull request
     timeout-minutes: 1
     steps:
       - name: Prepare tag name
