@@ -211,7 +211,7 @@ jobs:
           - roots-wordpress-full
           - johnpbloch-wordpress
           - wp-core-wordpress
-          - build.trac.wordpress.org
+          # - build.trac.wordpress.org
         tag:
           - ${{ needs.versions.outputs.version }}
       fail-fast: false

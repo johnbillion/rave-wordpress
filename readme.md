@@ -24,7 +24,7 @@ RAVE stands for Reproduce And Verify.
 * ✅ `downloads.wordpress.org/release/wordpress-{tag}.zip`
 * ✅ `downloads.w.org/release/wordpress-{tag}.zip`
 * ✅ `github.com/wordpress/wordpress`
-* ✅ `build.trac.wordpress.org`
+* ✅ ~~`build.trac.wordpress.org`~~ _Temporarily disabled_
 * ✅ `wp-core/wordpress`
 
 ### Official builds
