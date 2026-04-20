@@ -43,6 +43,7 @@ runs:
 
             if [ $attempt -lt $MAX_ATTEMPTS ]; then
               echo "Waiting ${WAIT_TIME} seconds before retry..."
+              rm -rf "${EXPORT_PATH}"
               sleep $WAIT_TIME
             else
               echo "All SVN export attempts failed after $MAX_ATTEMPTS attempts"
