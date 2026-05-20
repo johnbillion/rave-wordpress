@@ -35,7 +35,7 @@ jobs:
         run: |
           set -e
           latest_tag=$(gh api repos/WordPress/WordPress/tags --jq '.[0].name')
-          if [ "$latest_tag" != "$TAG" ]; then
+          if dpkg --compare-versions "$latest_tag" gt "$TAG"; then
             echo "Error: Found a newer tag ($latest_tag) than $TAG"
             exit 1
           fi
@@ -55,7 +55,7 @@ jobs:
         run: |
           set -e
           latest_version=$(jq --raw-output '.packages["roots/wordpress-full"] | map(.version) | .[]' roots-wordpress-full.json | grep -Ev -- '-(RC|rc|beta|alpha|dev)' | sort -V | tail -n1)
-          if [ "$latest_version" != "$TAG" ]; then
+          if dpkg --compare-versions "$latest_version" gt "$TAG"; then
             echo "Error: Found a newer version ($latest_version) than $TAG"
             exit 1
           fi
@@ -74,8 +74,8 @@ jobs:
           TAG: ${{ steps.tag.outputs.long }}
         run: |
           set -e
-          latest_version=$(jq --raw-output '.packages["johnpbloch/wordpress"] | map(.version) | sort_by(.) | last' johnpbloch-wordpress.json)
-          if [ "$latest_version" != "$TAG" ]; then
+          latest_version=$(jq --raw-output '.packages["johnpbloch/wordpress"] | map(.version) | .[]' johnpbloch-wordpress.json | grep -Ev -- '-(RC|rc|beta|alpha|dev)' | sort -V | tail -n1)
+          if dpkg --compare-versions "$latest_version" gt "$TAG"; then
             echo "Error: Found a newer version ($latest_version) than $TAG"
             exit 1
           fi
@@ -95,7 +95,7 @@ jobs:
         run: |
           set -e
           latest_version=$(jq --raw-output '.packages["wp-core/wordpress"] | map(.version) | .[]' wp-core-wordpress.json | grep -Ev -- '-(RC|rc|beta|alpha|dev)' | sort -V | tail -n1)
-          if [ "$latest_version" != "$TAG" ]; then
+          if dpkg --compare-versions "$latest_version" gt "$TAG"; then
             echo "Error: Found a newer version ($latest_version) than $TAG"
             exit 1
           fi
@@ -115,7 +115,7 @@ jobs:
         run: |
           set -e
           latest_version=$(jq --raw-output '.offers[].version' aspirecloud-versions.json | sort -V | tail -n1)
-          if [ "$latest_version" != "$TAG" ]; then
+          if dpkg --compare-versions "$latest_version" gt "$TAG"; then
             echo "Error: Found a newer version ($latest_version) than $TAG"
             exit 1
           fi
@@ -215,7 +215,7 @@ jobs:
         run: |
           set -e
           latest_version=$(jq --raw-output 'to_entries[].key' stable-check.json | sort -V | tail -n1)
-          if [ "$latest_version" != "$TAG" ]; then
+          if dpkg --compare-versions "$latest_version" gt "$TAG"; then
             echo "Error: Found a newer version ($latest_version) than $TAG"
             exit 1
           fi
