@@ -197,7 +197,6 @@ jobs:
     needs:
       - versions
       - reproduce
-      - compare
     strategy:
       matrix:
         label:
@@ -235,7 +234,6 @@ jobs:
     needs:
       - versions
       - reproduce
-      - compare
       - verify-packages
     strategy:
       matrix:
