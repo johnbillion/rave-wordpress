@@ -33,6 +33,18 @@ jobs:
           name: wordpress-${{ inputs.tag }}-${{ inputs.source }}
           path: ${{ inputs.source }}
 
+      - name: Remove files erroneously shipped in WordPress 7.0
+        env:
+          TAG: ${{ inputs.tag }}
+          SOURCE: ${{ inputs.source }}
+        run: | #shell
+          if dpkg --compare-versions "${TAG}" ge "7.0"; then
+            rm -rf "${SOURCE}/wp-includes/collaboration"
+            rm -f "${SOURCE}/wp-includes/collaboration.php"
+            rm -f "${SOURCE}/wp-includes/js/dist/sync.js"
+            rm -f "${SOURCE}/wp-includes/js/dist/sync.min.js"
+          fi
+
       - name: Compare files
         env:
           SOURCE: ${{ inputs.source }}

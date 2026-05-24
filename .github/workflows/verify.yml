@@ -349,6 +349,18 @@ jobs:
             rm -rf source/wp-content/themes/twentytwentytwo
           fi
 
+      - name: Remove files erroneously shipped in WordPress 7.0
+        env:
+          TAG: ${{ inputs.tag }}
+          BRANCH: ${{ steps.tag.outputs.branch }}
+        run: | #shell
+          if [[ "${TAG}" == "latest" ]] || dpkg --compare-versions "${BRANCH}" ge "7.0"; then
+            rm -rf package/wp-includes/collaboration
+            rm -f package/wp-includes/collaboration.php
+            rm -f package/wp-includes/js/dist/sync.js
+            rm -f package/wp-includes/js/dist/sync.min.js
+          fi
+
       - name: Extract Akismet
         if: env.PACKAGE_INCLUDES_AKISMET == 'true'
         run: | #shell
