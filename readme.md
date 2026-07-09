@@ -34,7 +34,7 @@ RAVE stands for Reproduce And Verify.
 
 ### Unofficial packages
 
-* ✅ `core-updates.wpengine.com` from WPEngine
+* ✅ `core-updates.wpengine.com` from WP Engine
 * ✅ `api.aspirecloud.net` from AspireCloud
 * ✅ `roots/wordpress-full` on Packagist
 * ✅ `johnpbloch/wordpress` on Packagist
@@ -94,7 +94,7 @@ To quote [reproducible-builds.org](https://reproducible-builds.org/):
 
 > Reproducible builds are a set of software development practices that create an independently-verifiable path from source to binary code.
 
-[The process that builds and packages WordPress](https://build.trac.wordpress.org/timeline) is reproducible as far as the built code is concerned, although I believe that the zip file generation does not result in a stable hash between invocations. Unfortunately the process itself is not open source. The process differs from the `npm run build` process in the source code because it makes some additions (eg. the Akismet plugin) and some exclusions (older default themes). The verifications performed by this repo take this into account.
+[The process that builds and packages WordPress](https://build.trac.wordpress.org/timeline) is reproducible as far as the built code is concerned, although I believe that the zip file generation does not result in a stable hash between invocations. Unfortunately the process itself is not open source. The process differs from the `npm run build` process in the source code because it makes some additions (e.g. the Akismet plugin) and some exclusions (older default themes). The verifications performed by this repo take this into account.
 
 ## Verifiable WordPress
 
@@ -127,7 +127,7 @@ gh attestation download "$file" --repo johnbillion/rave-wordpress
 jq -r '.dsseEnvelope.payload' "sha256:${hash}.jsonl" | base64 -d | jq .
 ```
 
-## Does this faciliate WordPress adhering to SLSA?
+## Does this facilitate WordPress adhering to SLSA?
 
 No. [SLSA](https://slsa.dev/) is a security framework that improves the supply chain resilience of a software package by generating a verifiable build provenance attestation during its build and release process. RAVE _independently reproduces_ the build for WordPress but is not part of the release process itself, therefore it is not appropriate for RAVE to generate an SLSA build provenance attestation.
 
