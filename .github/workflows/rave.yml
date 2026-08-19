@@ -171,7 +171,7 @@ jobs:
         source:
           - develop.git.wordpress.org
           - github-wordpress-develop
-          - core.git.wordpress.org
+          # - core.git.wordpress.org
           - core.svn.wordpress.org
           # - core.trac.wordpress.org
       fail-fast: false
