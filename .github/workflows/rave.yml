@@ -150,7 +150,7 @@ jobs:
           - Fetch builds
         build:
           - core.svn.wordpress.org
-          - core.git.wordpress.org
+          # - core.git.wordpress.org
       fail-fast: false
     uses: ./.github/workflows/fetch-build.yml
     with:
