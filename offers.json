@@ -1,16 +1,16 @@
 {
   "response": "autoupdate",
-  "download": "https://downloads.w.org/release/wordpress-7.0.4.zip",
+  "download": "https://downloads.w.org/release/wordpress-7.1.zip",
   "locale": "en_US",
   "packages": {
-    "full": "https://downloads.w.org/release/wordpress-7.0.4.zip",
-    "no_content": "https://downloads.w.org/release/wordpress-7.0.4-no-content.zip",
-    "new_bundled": "https://downloads.w.org/release/wordpress-7.0.4-new-bundled.zip",
+    "full": "https://downloads.w.org/release/wordpress-7.1.zip",
+    "no_content": "https://downloads.w.org/release/wordpress-7.1-no-content.zip",
+    "new_bundled": "https://downloads.w.org/release/wordpress-7.1-new-bundled.zip",
     "partial": false,
     "rollback": false
   },
-  "current": "7.0.4",
-  "version": "7.0.4",
+  "current": "7.1",
+  "version": "7.1",
   "php_version": "7.4",
   "mysql_version": "5.5.5",
   "new_bundled": "6.7",
