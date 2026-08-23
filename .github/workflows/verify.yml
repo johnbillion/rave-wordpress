@@ -306,13 +306,9 @@ jobs:
 
       - name: Handle anomalies with build files in TT and TT1
         if: inputs.package == 'github-zip' || inputs.package == 'build.trac.wordpress.org'
-        run: | #shell
-          rm package/wp-content/themes/twentytwenty/.npmrc
-          rm package/wp-content/themes/twentytwenty/.stylelintrc.json
-          rm package/wp-content/themes/twentytwentyone/.npmrc
-          rm package/wp-content/themes/twentytwentyone/.stylelintignore
-          rm package/wp-content/themes/twentytwentyone/.stylelintrc-css.json
-          rm package/wp-content/themes/twentytwentyone/.stylelintrc.json
+        uses: $/.github/actions/remove-build-anomalies
+        with:
+          path: package
 
       - name: Handle known differences in bundled themes
         if: inputs.package != 'github-zip' && inputs.package != 'build.trac.wordpress.org'

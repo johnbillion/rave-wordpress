@@ -128,7 +128,7 @@ jobs:
       attestations: read # Required to read existing attestations
     needs:
       - versions
-    timeout-minutes: 5
+    timeout-minutes: 10
     outputs:
       verified: ${{ steps.check.outputs.verified }}
     steps:
@@ -138,10 +138,13 @@ jobs:
         with:
           tag: ${{ needs.versions.outputs.version }}
 
-      - name: Download build.trac.wordpress.org zip
+      # github.com/WordPress/WordPress mirrors core.svn.wordpress.org, so it ships the
+      # same files as a build from source. build.trac.wordpress.org would serve the same
+      # purpose but it now sits behind a proof of work check that blocks automated access.
+      - name: Download github.com/WordPress/WordPress zip
         uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
-          url: https://build.trac.wordpress.org/browser/tags/${{ steps.tag.outputs.short }}?format=zip
+          url: https://github.com/WordPress/WordPress/archive/refs/tags/${{ steps.tag.outputs.short }}.zip
           output: package.zip
           version: ${{ steps.tag.outputs.long }}
 
@@ -151,10 +154,10 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: | #shell
           if gh attestation verify package.zip --repo johnbillion/rave-wordpress --predicate-type "https://in-toto.io/attestation/release/v0.1"; then
-            echo "Attestation verified for build.trac.wordpress.org zip"
+            echo "Attestation verified for github.com/WordPress/WordPress zip"
             echo "verified=true" >> "$GITHUB_OUTPUT"
           else
-            echo "No attestation found for build.trac.wordpress.org zip"
+            echo "No attestation found for github.com/WordPress/WordPress zip"
             echo "verified=false" >> "$GITHUB_OUTPUT"
           fi
 
@@ -164,12 +167,18 @@ jobs:
           TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
           unzip -q package.zip -d extracted
-          mv "extracted/${TAG}" wordpress
+          mv "extracted/WordPress-${TAG}" wordpress
 
-      # A prior run attested that this build.trac.wordpress.org package is byte
-      # identical to the build reproduced from develop.svn.wordpress.org, so it is
-      # uploaded under the same artifact name that the `reproduce` job would use.
-      # This lets the downstream jobs consume it without knowing which path ran.
+      - name: Handle anomalies with build files in TT and TT1
+        if: steps.check.outputs.verified == 'true'
+        uses: $/.github/actions/remove-build-anomalies
+        with:
+          path: wordpress
+
+      # A prior run attested that this package is byte identical to the build reproduced
+      # from develop.svn.wordpress.org, so it is uploaded under the same artifact name
+      # that the `reproduce` job would use. This lets the downstream jobs consume it
+      # without knowing which path ran.
       - name: Upload verified build artifact
         if: steps.check.outputs.verified == 'true'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
