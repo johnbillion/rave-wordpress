@@ -40,6 +40,19 @@ jobs:
             exit 1
           fi
 
+      - name: Verify versions distributed by Pantheon
+        if: inputs.package == 'pantheon-zip'
+        env:
+          TAG: ${{ steps.tag.outputs.short }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -e
+          latest_tag=$(gh api repos/pantheon-systems/WordPress/tags --jq '.[0].name')
+          if dpkg --compare-versions "$latest_tag" gt "$TAG"; then
+            echo "Error: Found a newer tag ($latest_tag) than $TAG"
+            exit 1
+          fi
+
       - name: Fetch roots/wordpress-full versions
         if: inputs.package == 'roots-wordpress-full'
         uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7

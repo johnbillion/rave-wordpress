@@ -74,6 +74,10 @@ jobs:
             aspirecloud-zip)
               PACKAGE_URL="https://api.aspirecloud.net/download/wordpress-${TAG_SHORT}.zip"
               ;;
+            pantheon-zip)
+              PACKAGE_URL="https://github.com/pantheon-systems/WordPress/archive/refs/tags/${TAG_SHORT}.zip"
+              PACKAGE_INCLUDES_AKISMET=false
+              ;;
             roots-wordpress-full)
               PACKAGE_URL="https://packagist.org/packages/roots/wordpress-full#${TAG_SHORT}"
               ;;
@@ -277,6 +281,21 @@ jobs:
           unzip -q package.zip -d wordpress
           mv wordpress/wordpress package
 
+      - name: Download zip from pantheon-systems/WordPress
+        if: inputs.package == 'pantheon-zip'
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
+        with:
+          url: ${{ env.PACKAGE_URL }}
+          output: package.zip
+
+      - name: Extract pantheon-systems/WordPress zip
+        if: inputs.package == 'pantheon-zip'
+        env:
+          TAG: ${{ steps.tag.outputs.short }}
+        run: | #shell
+          unzip -q package.zip -d wordpress
+          mv "wordpress/WordPress-${TAG}" package
+
       - name: Download roots/wordpress-full
         if: inputs.package == 'roots-wordpress-full'
         env:
@@ -313,6 +332,20 @@ jobs:
           rm package/wp-content/themes/twentytwentyone/.stylelintignore
           rm package/wp-content/themes/twentytwentyone/.stylelintrc-css.json
           rm package/wp-content/themes/twentytwentyone/.stylelintrc.json
+
+      # Pantheon adds its own platform files, and its wp-content directory
+      # stays frozen at the versions first committed to the repo.
+      - name: Handle the Pantheon upstream's platform files and untracked wp-content
+        if: inputs.package == 'pantheon-zip'
+        run: | #shell
+          rm -r source/wp-content
+          rm -r package/wp-content
+          rm package/.gitignore
+          rm package/README.md
+          rm package/pantheon.upstream.yml
+          rm package/wp-config.php
+          rm package/wp-config-pantheon.php
+          rm package/wp-config-local-sample.php
 
       - name: Handle known differences in the source
         uses: $/.github/actions/handle-known-differences
@@ -366,8 +399,14 @@ jobs:
 
       - name: Check for package files
         id: package-check
+        env:
+          PACKAGE: ${{ inputs.package }}
         run: | #shell
-          if [ -f "package.zip" ]; then
+          # Only the core files in the Pantheon upstream are verified, so its archive
+          # is deliberately left unattested.
+          if [ "$PACKAGE" = "pantheon-zip" ]; then
+            echo "package_file=false" >> "$GITHUB_OUTPUT"
+          elif [ -f "package.zip" ]; then
             echo "package_file=package.zip" >> "$GITHUB_OUTPUT"
             echo "package_extension=zip" >> "$GITHUB_OUTPUT"
           elif [ -f "package.tar.gz" ]; then
