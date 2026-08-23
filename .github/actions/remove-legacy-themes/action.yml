@@ -1,0 +1,43 @@
+name: Remove legacy bundled themes
+description: Removes the older bundled themes that are present in a build from source but are not shipped in the distributed packages
+
+inputs:
+  path:
+    description: Path to the directory containing the WordPress files
+    required: true
+    type: string
+  tag:
+    description: Tag name for the WordPress release
+    required: true
+    type: string
+  branch:
+    description: Branch number for the WordPress release, eg. 6.7
+    required: true
+    type: string
+
+runs:
+  using: composite
+  steps:
+    - name: Remove legacy bundled themes
+      shell: bash
+      env:
+        WP_PATH: ${{ inputs.path }}
+        TAG: ${{ inputs.tag }}
+        BRANCH: ${{ inputs.branch }}
+      run: | #shell
+        rm -rf "${WP_PATH}/wp-content/themes/twentyten"
+        rm -rf "${WP_PATH}/wp-content/themes/twentyeleven"
+        rm -rf "${WP_PATH}/wp-content/themes/twentytwelve"
+        rm -rf "${WP_PATH}/wp-content/themes/twentythirteen"
+        rm -rf "${WP_PATH}/wp-content/themes/twentyfourteen"
+        rm -rf "${WP_PATH}/wp-content/themes/twentyfifteen"
+        rm -rf "${WP_PATH}/wp-content/themes/twentysixteen"
+        rm -rf "${WP_PATH}/wp-content/themes/twentyseventeen"
+        if [[ "${TAG}" == "latest" ]] || dpkg --compare-versions "${BRANCH}" ge "6.4"; then
+          rm -rf "${WP_PATH}/wp-content/themes/twentynineteen"
+          rm -rf "${WP_PATH}/wp-content/themes/twentytwenty"
+          rm -rf "${WP_PATH}/wp-content/themes/twentytwentyone"
+        fi
+        if [[ "${TAG}" == "latest" ]] || dpkg --compare-versions "${BRANCH}" ge "6.7"; then
+          rm -rf "${WP_PATH}/wp-content/themes/twentytwentytwo"
+        fi

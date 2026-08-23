@@ -11,6 +11,11 @@ on:
         description: Package for WordPress release
         required: true
         type: string
+      source-from-distribution:
+        description: Whether the canonical build was taken from an attested distribution package rather than reproduced from source
+        required: false
+        default: false
+        type: boolean
 
 permissions: {}
 
@@ -306,32 +311,29 @@ jobs:
 
       - name: Handle anomalies with build files in TT and TT1
         if: inputs.package == 'github-zip' || inputs.package == 'build.trac.wordpress.org'
-        uses: $/.github/actions/remove-build-anomalies
-        with:
-          path: package
+        run: | #shell
+          rm package/wp-content/themes/twentytwenty/.npmrc
+          rm package/wp-content/themes/twentytwenty/.stylelintrc.json
+          rm package/wp-content/themes/twentytwentyone/.npmrc
+          rm package/wp-content/themes/twentytwentyone/.stylelintignore
+          rm package/wp-content/themes/twentytwentyone/.stylelintrc-css.json
+          rm package/wp-content/themes/twentytwentyone/.stylelintrc.json
 
       - name: Handle known differences in bundled themes
         if: inputs.package != 'github-zip' && inputs.package != 'build.trac.wordpress.org'
-        env:
-          TAG: ${{ inputs.tag }}
-          BRANCH: ${{ steps.tag.outputs.branch }}
-        run: | #shell
-          rm -rf source/wp-content/themes/twentyten
-          rm -rf source/wp-content/themes/twentyeleven
-          rm -rf source/wp-content/themes/twentytwelve
-          rm -rf source/wp-content/themes/twentythirteen
-          rm -rf source/wp-content/themes/twentyfourteen
-          rm -rf source/wp-content/themes/twentyfifteen
-          rm -rf source/wp-content/themes/twentysixteen
-          rm -rf source/wp-content/themes/twentyseventeen
-          if [[ "${TAG}" == "latest" ]] || dpkg --compare-versions "${BRANCH}" ge "6.4"; then
-            rm -rf source/wp-content/themes/twentynineteen
-            rm -rf source/wp-content/themes/twentytwenty
-            rm -rf source/wp-content/themes/twentytwentyone
-          fi
-          if [[ "${TAG}" == "latest" ]] || dpkg --compare-versions "${BRANCH}" ge "6.7"; then
-            rm -rf source/wp-content/themes/twentytwentytwo
-          fi
+        uses: $/.github/actions/remove-legacy-themes
+        with:
+          path: source
+          tag: ${{ inputs.tag }}
+          branch: ${{ steps.tag.outputs.branch }}
+
+      - name: Handle known differences in bundled themes in the canonical build
+        if: (inputs.package == 'github-zip' || inputs.package == 'build.trac.wordpress.org') && inputs.source-from-distribution
+        uses: $/.github/actions/remove-legacy-themes
+        with:
+          path: package
+          tag: ${{ inputs.tag }}
+          branch: ${{ steps.tag.outputs.branch }}
 
       - name: Remove files erroneously shipped in WordPress 7.0
         env:
