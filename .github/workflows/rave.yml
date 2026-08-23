@@ -59,11 +59,10 @@ jobs:
           persist-credentials: false
 
       - name: Fetch offers from version check API
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
         with:
           url: https://api.wordpress.org/core/version-check/1.7/
           output: offers-raw.json
-          version: ${{ inputs.version }}
 
       - name: Process offers data
         run: | #shell

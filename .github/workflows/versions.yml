@@ -42,11 +42,10 @@ jobs:
 
       - name: Fetch roots/wordpress-full versions
         if: inputs.package == 'roots-wordpress-full'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
         with:
           url: https://repo.packagist.org/p2/roots/wordpress-full.json
           output: roots-wordpress-full.json
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Verify versions distributed by roots/wordpress-full
         if: inputs.package == 'roots-wordpress-full'
@@ -62,11 +61,10 @@ jobs:
 
       - name: Fetch johnpbloch/wordpress versions
         if: inputs.package == 'johnpbloch-wordpress'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
         with:
           url: https://repo.packagist.org/p2/johnpbloch/wordpress.json
           output: johnpbloch-wordpress.json
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Verify versions distributed by johnpbloch/wordpress
         if: inputs.package == 'johnpbloch-wordpress'
@@ -82,11 +80,10 @@ jobs:
 
       - name: Fetch wp-core/wordpress versions
         if: inputs.package == 'wp-core-wordpress'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
         with:
           url: https://api.wordpress.org/packages/p2/wp-core/wordpress.json
           output: wp-core-wordpress.json
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Verify versions distributed by wp-core/wordpress
         if: inputs.package == 'wp-core-wordpress'
@@ -102,11 +99,10 @@ jobs:
 
       - name: Fetch AspireCloud versions
         if: inputs.package == 'aspirecloud-zip'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
         with:
           url: https://api.aspirecloud.net/core/version-check/1.7/
           output: aspirecloud-versions.json
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Verify versions distributed by AspireCloud
         if: inputs.package == 'aspirecloud-zip'
@@ -202,11 +198,10 @@ jobs:
 
       - name: Fetch stable-check data
         if: inputs.package == 'stable-check'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
         with:
           url: https://api.wordpress.org/core/stable-check/1.0/
           output: stable-check.json
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Verify the stable-check endpoint
         if: inputs.package == 'stable-check'

@@ -115,11 +115,10 @@ jobs:
 
       - name: Get zip file from GitHub
         if: inputs.package == 'github-zip'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract GitHub zip
         if: inputs.package == 'github-zip'
@@ -131,11 +130,10 @@ jobs:
 
       - name: Get zip file from wordpress.org
         if: inputs.package == 'wordpress.org-zip' && inputs.tag != 'latest'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract wordpress.org zip
         if: inputs.package == 'wordpress.org-zip' && inputs.tag != 'latest'
@@ -145,11 +143,10 @@ jobs:
 
       - name: Get tar file from wordpress.org
         if: inputs.package == 'wordpress.org-tar' && inputs.tag != 'latest'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.tar.gz
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract wordpress.org tar
         if: inputs.package == 'wordpress.org-tar' && inputs.tag != 'latest'
@@ -160,11 +157,10 @@ jobs:
 
       - name: Get latest zip file from wordpress.org
         if: inputs.package == 'wordpress.org-zip' && inputs.tag == 'latest'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
         with:
           url: https://wordpress.org/latest.zip
           output: package.zip
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract latest wordpress.org zip
         if: inputs.package == 'wordpress.org-zip' && inputs.tag == 'latest'
@@ -174,11 +170,10 @@ jobs:
 
       - name: Get latest tar file from wordpress.org
         if: inputs.package == 'wordpress.org-tar' && inputs.tag == 'latest'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
         with:
           url: https://wordpress.org/latest.tar.gz
           output: package.tar.gz
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract latest wordpress.org tar
         if: inputs.package == 'wordpress.org-tar' && inputs.tag == 'latest'
@@ -189,11 +184,10 @@ jobs:
 
       - name: Get zip file from downloads.wordpress.org
         if: inputs.package == 'downloads.wordpress.org-zip'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract downloads.wordpress.org zip
         if: inputs.package == 'downloads.wordpress.org-zip'
@@ -203,11 +197,10 @@ jobs:
 
       - name: Get tar file from downloads.wordpress.org
         if: inputs.package == 'downloads.wordpress.org-tar'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.tar.gz
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract downloads.wordpress.org tar
         if: inputs.package == 'downloads.wordpress.org-tar'
@@ -218,11 +211,10 @@ jobs:
 
       - name: Get zip file from downloads.w.org
         if: inputs.package == 'downloads.w.org-zip'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract downloads.w.org zip
         if: inputs.package == 'downloads.w.org-zip'
@@ -232,11 +224,10 @@ jobs:
 
       - name: Get tar file from downloads.w.org
         if: inputs.package == 'downloads.w.org-tar'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.tar.gz
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract downloads.w.org tar
         if: inputs.package == 'downloads.w.org-tar'
@@ -247,11 +238,10 @@ jobs:
 
       - name: Download zip from build.trac.wordpress.org
         if: inputs.package == 'build.trac.wordpress.org'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract build.trac.wordpress.org zip
         if: inputs.package == 'build.trac.wordpress.org'
@@ -263,11 +253,10 @@ jobs:
 
       - name: Download zip from core-updates.wpengine.com
         if: inputs.package == 'wpengine-zip'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract core-updates.wpengine.com zip
         if: inputs.package == 'wpengine-zip'
@@ -277,11 +266,10 @@ jobs:
 
       - name: Download zip from api.aspirecloud.net
         if: inputs.package == 'aspirecloud-zip'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract api.aspirecloud.net zip
         if: inputs.package == 'aspirecloud-zip'
