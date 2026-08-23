@@ -118,83 +118,38 @@ jobs:
 
       - name: Verify versions distributed by WPEngine
         if: inputs.package == 'wpengine-zip'
-        env:
-          TAG: ${{ steps.tag.outputs.next }}
-        run: |
-          set -e
-          url="https://core-updates.wpengine.com/wordpress-${TAG}.zip"
-          status=$(curl -o /dev/null -s -w "%{http_code}" "$url")
-          if [ "$status" == "200" ]; then
-            echo "Error: Found a release for next version ($TAG) at $url"
-            exit 1
-          elif [ "$status" != "404" ]; then
-            echo "Error: Unexpected HTTP status $status when checking for next version ($TAG) at $url"
-            exit 1
-          fi
+        uses: johnbillion/rave-wordpress/.github/actions/check-not-released@trunk
+        with:
+          url: https://core-updates.wpengine.com/wordpress-${{ steps.tag.outputs.next }}.zip
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Verify versions distributed by wordpress.org (zip)
         if: inputs.package == 'wordpress.org-zip'
-        env:
-          TAG: ${{ steps.tag.outputs.next }}
-        run: |
-          set -e
-          url="https://wordpress.org/wordpress-${TAG}.zip"
-          status=$(curl -o /dev/null -s -w "%{http_code}" "$url")
-          if [ "$status" == "200" ]; then
-            echo "Error: Found a release for next version ($TAG) at $url"
-            exit 1
-          elif [ "$status" != "404" ]; then
-            echo "Error: Unexpected HTTP status $status when checking for next version ($TAG) at $url"
-            exit 1
-          fi
+        uses: johnbillion/rave-wordpress/.github/actions/check-not-released@trunk
+        with:
+          url: https://wordpress.org/wordpress-${{ steps.tag.outputs.next }}.zip
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Verify versions distributed by wordpress.org (tar)
         if: inputs.package == 'wordpress.org-tar'
-        env:
-          TAG: ${{ steps.tag.outputs.next }}
-        run: |
-          set -e
-          url="https://wordpress.org/wordpress-${TAG}.tar.gz"
-          status=$(curl -o /dev/null -s -w "%{http_code}" "$url")
-          if [ "$status" == "200" ]; then
-            echo "Error: Found a release for next version ($TAG) at $url"
-            exit 1
-          elif [ "$status" != "404" ]; then
-            echo "Error: Unexpected HTTP status $status when checking for next version ($TAG) at $url"
-            exit 1
-          fi
+        uses: johnbillion/rave-wordpress/.github/actions/check-not-released@trunk
+        with:
+          url: https://wordpress.org/wordpress-${{ steps.tag.outputs.next }}.tar.gz
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Verify versions distributed by downloads.wordpress.org (zip)
         if: inputs.package == 'downloads.wordpress.org-zip'
-        env:
-          TAG: ${{ steps.tag.outputs.next }}
-        run: |
-          set -e
-          url="https://downloads.wordpress.org/release/wordpress-${TAG}.zip"
-          status=$(curl -o /dev/null -s -w "%{http_code}" "$url")
-          if [ "$status" == "200" ]; then
-            echo "Error: Found a release for next version ($TAG) at $url"
-            exit 1
-          elif [ "$status" != "404" ]; then
-            echo "Error: Unexpected HTTP status $status when checking for next version ($TAG) at $url"
-            exit 1
-          fi
+        uses: johnbillion/rave-wordpress/.github/actions/check-not-released@trunk
+        with:
+          url: https://downloads.wordpress.org/release/wordpress-${{ steps.tag.outputs.next }}.zip
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Verify versions distributed by downloads.wordpress.org (tar)
         if: inputs.package == 'downloads.wordpress.org-tar'
-        env:
-          TAG: ${{ steps.tag.outputs.next }}
-        run: |
-          set -e
-          url="https://downloads.wordpress.org/release/wordpress-${TAG}.tar.gz"
-          status=$(curl -o /dev/null -s -w "%{http_code}" "$url")
-          if [ "$status" == "200" ]; then
-            echo "Error: Found a release for next version ($TAG) at $url"
-            exit 1
-          elif [ "$status" != "404" ]; then
-            echo "Error: Unexpected HTTP status $status when checking for next version ($TAG) at $url"
-            exit 1
-          fi
+        uses: johnbillion/rave-wordpress/.github/actions/check-not-released@trunk
+        with:
+          url: https://downloads.wordpress.org/release/wordpress-${{ steps.tag.outputs.next }}.tar.gz
+          version: ${{ steps.tag.outputs.long }}
 
       - name: Fetch stable-check data
         if: inputs.package == 'stable-check'
