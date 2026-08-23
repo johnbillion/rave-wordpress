@@ -124,21 +124,22 @@ jobs:
     name: Check for attestation
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: read     # Required to read repository contents
+      attestations: read # Required to read existing attestations
     needs:
       - versions
-    timeout-minutes: 2
+    timeout-minutes: 5
     outputs:
       verified: ${{ steps.check.outputs.verified }}
     steps:
       - name: Prepare tag name
         id: tag
-        uses: johnbillion/rave-wordpress/.github/actions/prepare-tag-name@trunk
+        uses: $/.github/actions/prepare-tag-name
         with:
           tag: ${{ needs.versions.outputs.version }}
 
       - name: Download build.trac.wordpress.org zip
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://build.trac.wordpress.org/browser/tags/${{ steps.tag.outputs.short }}?format=zip
           output: package.zip
@@ -162,12 +163,16 @@ jobs:
         env:
           TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
-          unzip -q package.zip
-          mv "${TAG}" wordpress
+          unzip -q package.zip -d extracted
+          mv "extracted/${TAG}" wordpress
 
+      # A prior run attested that this build.trac.wordpress.org package is byte
+      # identical to the build reproduced from develop.svn.wordpress.org, so it is
+      # uploaded under the same artifact name that the `reproduce` job would use.
+      # This lets the downstream jobs consume it without knowing which path ran.
       - name: Upload verified build artifact
         if: steps.check.outputs.verified == 'true'
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # 4.5.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: wordpress-${{ steps.tag.outputs.long }}-develop.svn.wordpress.org
           path: wordpress
@@ -175,7 +180,7 @@ jobs:
 
   reproduce:
     name: "Reproduce ${{ needs.versions.outputs.version }}"
-    if: needs.check-attestation.outputs.verified == 'false'
+    if: ${{ !cancelled() && needs.check-attestation.outputs.verified != 'true' }}
     permissions: {}
     needs:
       - versions
@@ -195,7 +200,7 @@ jobs:
 
   fetch-build:
     name: ${{ matrix.label }}
-    if: needs.check-attestation.outputs.verified == 'false'
+    if: ${{ !cancelled() && needs.check-attestation.outputs.verified != 'true' }}
     permissions: {}
     needs:
       - versions
@@ -215,11 +220,9 @@ jobs:
 
   compare:
     name: ${{ matrix.label }}
-    if: needs.check-attestation.outputs.verified == 'false'
     permissions: {}
     needs:
       - versions
-      - check-attestation
       - reproduce
       - fetch-build
     strategy:
@@ -250,11 +253,12 @@ jobs:
 
   verify-packages:
     name: ${{ matrix.label }}
-    # Run if either: attestation was verified, or full reproduction completed
+    # Run when the canonical build came from either path: an existing attestation,
+    # or a fresh reproduction.
     if: |
-      always() && (
-        (needs.check-attestation.outputs.verified == 'true') ||
-        (needs.compare.result == 'success')
+      !cancelled() && (
+        needs.check-attestation.outputs.verified == 'true' ||
+        needs.reproduce.result == 'success'
       )
     permissions:
       contents: read      # Required to read repository contents
@@ -293,21 +297,16 @@ jobs:
   # These packages are verified against the latest tag, they cannot be verified against a prior version.
   verify-latest-packages:
     name: ${{ matrix.label }}
-    # Run if not workflow_dispatch AND (attestation was verified OR full reproduction completed)
     if: |
-      always() &&
-      github.event_name != 'workflow_dispatch' && (
-        (needs.check-attestation.outputs.verified == 'true') ||
-        (needs.compare.result == 'success')
-      )
+      !cancelled() &&
+      github.event_name != 'workflow_dispatch' &&
+      needs.verify-packages.result == 'success'
     permissions:
       contents: read      # Required to read repository contents
       id-token: write     # Required to generate OIDC token for attestation
       attestations: write # Required to create and upload attestations
     needs:
       - versions
-      - check-attestation
-      - reproduce
       - verify-packages
     strategy:
       matrix:
