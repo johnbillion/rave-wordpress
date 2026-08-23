@@ -314,34 +314,19 @@ jobs:
           rm package/wp-content/themes/twentytwentyone/.stylelintrc-css.json
           rm package/wp-content/themes/twentytwentyone/.stylelintrc.json
 
-      # The distributed packages do not ship the older bundled themes, so they come off
-      # both sides. Doing this unconditionally keeps the comparison the same whether the
-      # canonical build was reproduced from source or taken from an attested package.
-      - name: Handle known differences in bundled themes in the source
-        uses: $/.github/actions/remove-legacy-themes
+      - name: Handle known differences in the source
+        uses: $/.github/actions/handle-known-differences
         with:
           path: source
           tag: ${{ inputs.tag }}
           branch: ${{ steps.tag.outputs.branch }}
 
-      - name: Handle known differences in bundled themes in the package
-        uses: $/.github/actions/remove-legacy-themes
+      - name: Handle known differences in the package
+        uses: $/.github/actions/handle-known-differences
         with:
           path: package
           tag: ${{ inputs.tag }}
           branch: ${{ steps.tag.outputs.branch }}
-
-      - name: Remove files erroneously shipped in WordPress 7.0
-        env:
-          TAG: ${{ inputs.tag }}
-          BRANCH: ${{ steps.tag.outputs.branch }}
-        run: | #shell
-          if [[ "${TAG}" == "latest" ]] || dpkg --compare-versions "${BRANCH}" ge "7.0"; then
-            rm -rf package/wp-includes/collaboration
-            rm -f package/wp-includes/collaboration.php
-            rm -f package/wp-includes/js/dist/sync.js
-            rm -f package/wp-includes/js/dist/sync.min.js
-          fi
 
       - name: Extract Akismet
         if: env.PACKAGE_INCLUDES_AKISMET == 'true'

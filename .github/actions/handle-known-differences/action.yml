@@ -1,5 +1,5 @@
-name: Remove legacy bundled themes
-description: Removes the older bundled themes that are present in a build from source but are not shipped in the distributed packages
+name: Handle known differences
+description: Removes files that are known to differ between a build from source and the distributed packages
 
 inputs:
   path:
@@ -19,6 +19,9 @@ runs:
   using: composite
   steps:
     - name: Remove legacy bundled themes
+      # The distributed packages do not ship the older bundled themes, so they come off
+      # both sides. Doing this unconditionally keeps the comparison the same whether the
+      # canonical build was reproduced from source or taken from an attested package.
       shell: bash
       env:
         WP_PATH: ${{ inputs.path }}
@@ -40,4 +43,17 @@ runs:
         fi
         if [[ "${TAG}" == "latest" ]] || dpkg --compare-versions "${BRANCH}" ge "6.7"; then
           rm -rf "${WP_PATH}/wp-content/themes/twentytwentytwo"
+        fi
+
+    - name: Remove files erroneously shipped in WordPress 7.0
+      shell: bash
+      env:
+        WP_PATH: ${{ inputs.path }}
+        BRANCH: ${{ inputs.branch }}
+      run: | #shell
+        if [[ "${BRANCH}" == "7.0" ]]; then
+          rm -rf "${WP_PATH}/wp-includes/collaboration"
+          rm -f "${WP_PATH}/wp-includes/collaboration.php"
+          rm -f "${WP_PATH}/wp-includes/js/dist/sync.js"
+          rm -f "${WP_PATH}/wp-includes/js/dist/sync.min.js"
         fi
