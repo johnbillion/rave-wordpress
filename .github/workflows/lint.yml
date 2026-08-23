@@ -4,14 +4,18 @@ name: Lint
 on:
   pull_request:
     paths:
-      # Only run when changes are made to workflow files.
+      # Only run when changes are made to workflow files, action files, or linter config.
       - '.github/workflows/**'
+      - '.github/actions/**'
+      - '.github/actionlint.yaml'
   push:
     branches:
       - trunk
     paths:
-      # Only run when changes are made to workflow files.
+      # Only run when changes are made to workflow files, action files, or linter config.
       - '.github/workflows/**'
+      - '.github/actions/**'
+      - '.github/actionlint.yaml'
 
 permissions: {}
 
