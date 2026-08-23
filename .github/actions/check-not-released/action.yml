@@ -1,0 +1,53 @@
+name: Check not released
+description: Probes a URL and passes on 404, fails on 200, retries on other responses
+
+inputs:
+  url:
+    description: URL to probe
+    required: true
+  version:
+    description: Version being checked (used in the user agent)
+    required: false
+    default: "6.8.0"
+
+runs:
+  using: composite
+  steps:
+    - name: Probe URL with retry
+      shell: bash
+      env:
+        PROBE_URL: ${{ inputs.url }}
+        VERSION: ${{ inputs.version }}
+      run: | #shell
+        MAX_ATTEMPTS=3
+        WAIT_TIME=20
+
+        for attempt in $(seq 1 $MAX_ATTEMPTS); do
+          echo "Probe attempt $attempt of $MAX_ATTEMPTS for ${PROBE_URL}"
+
+          status=$(curl -o /dev/null -s -w "%{http_code}" \
+            --user-agent "WordPress/${VERSION}; http://localhost:8889" \
+            --location \
+            --connect-timeout 30 \
+            --max-time 120 \
+            "${PROBE_URL}" || echo "000")
+
+          if [ "$status" == "404" ]; then
+            echo "Got 404 as expected; no release found at ${PROBE_URL}"
+            exit 0
+          elif [ "$status" == "200" ]; then
+            echo "Error: Found a release at ${PROBE_URL}"
+            exit 1
+          else
+            echo "Unexpected HTTP status $status when probing ${PROBE_URL}"
+
+            if [ $attempt -lt $MAX_ATTEMPTS ]; then
+              echo "Waiting ${WAIT_TIME} seconds before retry..."
+              sleep $WAIT_TIME
+            else
+              echo "All probe attempts failed after $MAX_ATTEMPTS attempts"
+              echo "Last HTTP status: $status"
+              exit 1
+            fi
+          fi
+        done

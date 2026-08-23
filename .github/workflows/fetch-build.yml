@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: Prepare tag name
         id: tag
-        uses: johnbillion/rave-wordpress/.github/actions/prepare-tag-name@trunk
+        uses: $/.github/actions/prepare-tag-name
         with:
           tag: ${{ inputs.tag }}
 
@@ -36,7 +36,7 @@ jobs:
 
       - name: SVN checkout core.svn.wordpress.org
         if: inputs.build == 'core.svn.wordpress.org'
-        uses: johnbillion/plugin-infrastructure/actions/svn-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
+        uses: johnbillion/plugin-infrastructure/actions/svn-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://core.svn.wordpress.org/tags/${{ steps.tag.outputs.short }}/
 
