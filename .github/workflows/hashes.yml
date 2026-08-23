@@ -24,13 +24,13 @@ jobs:
           tag: ${{ inputs.tag }}
 
       - name: Download zip from wordpress.org
-        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip
           output: package.zip
 
       - name: Download MD5 hash from wordpress.org
-        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip.md5
           output: package.zip.md5
@@ -54,13 +54,13 @@ jobs:
           tag: ${{ inputs.tag }}
 
       - name: Download zip from wordpress.org
-        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip
           output: package.zip
 
       - name: Download SHA-1 hash from wordpress.org
-        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip.sha1
           output: package.zip.sha1
@@ -84,13 +84,13 @@ jobs:
           tag: ${{ inputs.tag }}
 
       - name: Download tar.gz from wordpress.org
-        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz
           output: package.tar.gz
 
       - name: Download MD5 hash from wordpress.org
-        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz.md5
           output: package.tar.gz.md5
@@ -114,13 +114,13 @@ jobs:
           tag: ${{ inputs.tag }}
 
       - name: Download tar.gz from wordpress.org
-        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz
           output: package.tar.gz
 
       - name: Download SHA-1 hash from wordpress.org
-        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz.sha1
           output: package.tar.gz.sha1

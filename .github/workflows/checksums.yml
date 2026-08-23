@@ -31,13 +31,13 @@ jobs:
           persist-credentials: false
 
       - name: Download checksums from wordpress.org
-        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://api.wordpress.org/core/checksums/1.0/?version=${{ steps.tag.outputs.short }}
           output: checksums.json
 
       - name: Download zip from wordpress.org
-        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip
           output: wordpress-${{ steps.tag.outputs.short }}.zip

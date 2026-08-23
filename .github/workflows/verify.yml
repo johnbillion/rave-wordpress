@@ -115,7 +115,7 @@ jobs:
 
       - name: Get zip file from GitHub
         if: inputs.package == 'github-zip'
-        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
@@ -130,7 +130,7 @@ jobs:
 
       - name: Get zip file from wordpress.org
         if: inputs.package == 'wordpress.org-zip' && inputs.tag != 'latest'
-        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
@@ -143,7 +143,7 @@ jobs:
 
       - name: Get tar file from wordpress.org
         if: inputs.package == 'wordpress.org-tar' && inputs.tag != 'latest'
-        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.tar.gz
@@ -157,7 +157,7 @@ jobs:
 
       - name: Get latest zip file from wordpress.org
         if: inputs.package == 'wordpress.org-zip' && inputs.tag == 'latest'
-        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://wordpress.org/latest.zip
           output: package.zip
@@ -170,7 +170,7 @@ jobs:
 
       - name: Get latest tar file from wordpress.org
         if: inputs.package == 'wordpress.org-tar' && inputs.tag == 'latest'
-        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://wordpress.org/latest.tar.gz
           output: package.tar.gz
@@ -184,7 +184,7 @@ jobs:
 
       - name: Get zip file from downloads.wordpress.org
         if: inputs.package == 'downloads.wordpress.org-zip'
-        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
@@ -197,7 +197,7 @@ jobs:
 
       - name: Get tar file from downloads.wordpress.org
         if: inputs.package == 'downloads.wordpress.org-tar'
-        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.tar.gz
@@ -211,7 +211,7 @@ jobs:
 
       - name: Get zip file from downloads.w.org
         if: inputs.package == 'downloads.w.org-zip'
-        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
@@ -224,7 +224,7 @@ jobs:
 
       - name: Get tar file from downloads.w.org
         if: inputs.package == 'downloads.w.org-tar'
-        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.tar.gz
@@ -238,7 +238,7 @@ jobs:
 
       - name: Download zip from build.trac.wordpress.org
         if: inputs.package == 'build.trac.wordpress.org'
-        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
@@ -253,7 +253,7 @@ jobs:
 
       - name: Download zip from core-updates.wpengine.com
         if: inputs.package == 'wpengine-zip'
-        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
@@ -266,7 +266,7 @@ jobs:
 
       - name: Download zip from api.aspirecloud.net
         if: inputs.package == 'aspirecloud-zip'
-        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
@@ -375,7 +375,7 @@ jobs:
 
       - name: Fetch Akismet ${{ env.AKISMET_VERSION }} from source
         if: env.PACKAGE_INCLUDES_AKISMET == 'true'
-        uses: johnbillion/plugin-infrastructure/actions/svn-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
+        uses: johnbillion/plugin-infrastructure/actions/svn-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://plugins.svn.wordpress.org/akismet/tags/${{ env.AKISMET_VERSION }}/
           path: akismet-source

@@ -42,7 +42,7 @@ jobs:
 
       - name: Fetch roots/wordpress-full versions
         if: inputs.package == 'roots-wordpress-full'
-        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://repo.packagist.org/p2/roots/wordpress-full.json
           output: roots-wordpress-full.json
@@ -61,7 +61,7 @@ jobs:
 
       - name: Fetch johnpbloch/wordpress versions
         if: inputs.package == 'johnpbloch-wordpress'
-        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://repo.packagist.org/p2/johnpbloch/wordpress.json
           output: johnpbloch-wordpress.json
@@ -80,7 +80,7 @@ jobs:
 
       - name: Fetch wp-core/wordpress versions
         if: inputs.package == 'wp-core-wordpress'
-        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://api.wordpress.org/packages/p2/wp-core/wordpress.json
           output: wp-core-wordpress.json
@@ -99,7 +99,7 @@ jobs:
 
       - name: Fetch AspireCloud versions
         if: inputs.package == 'aspirecloud-zip'
-        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://api.aspirecloud.net/core/version-check/1.7/
           output: aspirecloud-versions.json
@@ -153,7 +153,7 @@ jobs:
 
       - name: Fetch stable-check data
         if: inputs.package == 'stable-check'
-        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@d9a465cfe7c3e582d8712658ff653cc9e259f1ba # 2.9.6
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://api.wordpress.org/core/stable-check/1.0/
           output: stable-check.json
