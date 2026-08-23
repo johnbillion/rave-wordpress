@@ -44,16 +44,3 @@ runs:
         if [[ "${TAG}" == "latest" ]] || dpkg --compare-versions "${BRANCH}" ge "6.7"; then
           rm -rf "${WP_PATH}/wp-content/themes/twentytwentytwo"
         fi
-
-    - name: Remove files erroneously shipped in WordPress 7.0
-      shell: bash
-      env:
-        WP_PATH: ${{ inputs.path }}
-        BRANCH: ${{ inputs.branch }}
-      run: | #shell
-        if [[ "${BRANCH}" == "7.0" ]]; then
-          rm -rf "${WP_PATH}/wp-includes/collaboration"
-          rm -f "${WP_PATH}/wp-includes/collaboration.php"
-          rm -f "${WP_PATH}/wp-includes/js/dist/sync.js"
-          rm -f "${WP_PATH}/wp-includes/js/dist/sync.min.js"
-        fi
