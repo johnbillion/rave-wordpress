@@ -1,0 +1,23 @@
+name: Remove build anomalies
+description: Removes the build files that Twenty Twenty and Twenty Twenty-One erroneously ship in core but which are not present in a build from source
+
+inputs:
+  path:
+    description: Path to the directory containing the WordPress files
+    required: true
+    type: string
+
+runs:
+  using: composite
+  steps:
+    - name: Remove build anomalies in TT and TT1
+      shell: bash
+      env:
+        WP_PATH: ${{ inputs.path }}
+      run: | #shell
+        rm "${WP_PATH}/wp-content/themes/twentytwenty/.npmrc"
+        rm "${WP_PATH}/wp-content/themes/twentytwenty/.stylelintrc.json"
+        rm "${WP_PATH}/wp-content/themes/twentytwentyone/.npmrc"
+        rm "${WP_PATH}/wp-content/themes/twentytwentyone/.stylelintignore"
+        rm "${WP_PATH}/wp-content/themes/twentytwentyone/.stylelintrc-css.json"
+        rm "${WP_PATH}/wp-content/themes/twentytwentyone/.stylelintrc.json"

@@ -138,10 +138,13 @@ jobs:
         with:
           tag: ${{ needs.versions.outputs.version }}
 
+      # github.com/WordPress/WordPress mirrors core.svn.wordpress.org, so it ships the
+      # same files as a build from source. build.trac.wordpress.org would serve the same
+      # purpose but it now sits behind a proof of work check that blocks automated access.
       - name: Download the package zip
         uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
-          url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip
+          url: https://github.com/WordPress/WordPress/archive/refs/tags/${{ steps.tag.outputs.short }}.zip
           output: package.zip
           version: ${{ steps.tag.outputs.long }}
 
@@ -151,25 +154,26 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: | #shell
           if gh attestation verify package.zip --repo johnbillion/rave-wordpress --predicate-type "https://in-toto.io/attestation/release/v0.1"; then
-            echo "Attestation verified for package zip"
+            echo "Attestation verified for github.com/WordPress/WordPress zip"
             echo "verified=true" >> "$GITHUB_OUTPUT"
           else
-            echo "No attestation found for package zip"
+            echo "No attestation found for github.com/WordPress/WordPress zip"
             echo "verified=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Extract verified build
         if: steps.check.outputs.verified == 'true'
+        env:
+          TAG: ${{ steps.tag.outputs.short }}
         run: | #shell
           unzip -q package.zip -d extracted
-          mv extracted/wordpress wordpress
+          mv "extracted/WordPress-${TAG}" wordpress
 
-      # Akismet is bundled into the distributed packages rather than being part of the
-      # build, and the verify workflow compares it separately.
-      - name: Remove Akismet
+      - name: Handle anomalies with build files in TT and TT1
         if: steps.check.outputs.verified == 'true'
-        run: | #shell
-          rm -rf wordpress/wp-content/plugins/akismet
+        uses: $/.github/actions/remove-build-anomalies
+        with:
+          path: wordpress
 
       # A prior run attested that this package is byte identical to the build reproduced
       # from develop.svn.wordpress.org, so it is uploaded under the same artifact name
@@ -298,7 +302,6 @@ jobs:
     with:
       tag: ${{ matrix.tag }}
       package: ${{ matrix.package }}
-      source-from-distribution: ${{ needs.check-attestation.outputs.verified == 'true' }}
 
   # These packages are verified against the latest tag, they cannot be verified against a prior version.
   verify-latest-packages:
@@ -313,7 +316,6 @@ jobs:
       attestations: write # Required to create and upload attestations
     needs:
       - versions
-      - check-attestation
       - verify-packages
     strategy:
       matrix:
@@ -329,7 +331,6 @@ jobs:
     with:
       tag: ${{ matrix.tag }}
       package: ${{ matrix.package }}
-      source-from-distribution: ${{ needs.check-attestation.outputs.verified == 'true' }}
 
   verify-hashes:
     name: Verify hashes
