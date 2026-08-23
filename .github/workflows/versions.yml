@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: Prepare tag name
         id: tag
-        uses: johnbillion/rave-wordpress/.github/actions/prepare-tag-name@trunk
+        uses: $/.github/actions/prepare-tag-name
         with:
           tag: ${{ inputs.tag }}
 
@@ -118,35 +118,35 @@ jobs:
 
       - name: Verify versions distributed by WPEngine
         if: inputs.package == 'wpengine-zip'
-        uses: johnbillion/rave-wordpress/.github/actions/check-not-released@check-not-released
+        uses: $/.github/actions/check-not-released
         with:
           url: https://core-updates.wpengine.com/wordpress-${{ steps.tag.outputs.next }}.zip
           version: ${{ steps.tag.outputs.long }}
 
       - name: Verify versions distributed by wordpress.org (zip)
         if: inputs.package == 'wordpress.org-zip'
-        uses: johnbillion/rave-wordpress/.github/actions/check-not-released@check-not-released
+        uses: $/.github/actions/check-not-released
         with:
           url: https://wordpress.org/wordpress-${{ steps.tag.outputs.next }}.zip
           version: ${{ steps.tag.outputs.long }}
 
       - name: Verify versions distributed by wordpress.org (tar)
         if: inputs.package == 'wordpress.org-tar'
-        uses: johnbillion/rave-wordpress/.github/actions/check-not-released@check-not-released
+        uses: $/.github/actions/check-not-released
         with:
           url: https://wordpress.org/wordpress-${{ steps.tag.outputs.next }}.tar.gz
           version: ${{ steps.tag.outputs.long }}
 
       - name: Verify versions distributed by downloads.wordpress.org (zip)
         if: inputs.package == 'downloads.wordpress.org-zip'
-        uses: johnbillion/rave-wordpress/.github/actions/check-not-released@check-not-released
+        uses: $/.github/actions/check-not-released
         with:
           url: https://downloads.wordpress.org/release/wordpress-${{ steps.tag.outputs.next }}.zip
           version: ${{ steps.tag.outputs.long }}
 
       - name: Verify versions distributed by downloads.wordpress.org (tar)
         if: inputs.package == 'downloads.wordpress.org-tar'
-        uses: johnbillion/rave-wordpress/.github/actions/check-not-released@check-not-released
+        uses: $/.github/actions/check-not-released
         with:
           url: https://downloads.wordpress.org/release/wordpress-${{ steps.tag.outputs.next }}.tar.gz
           version: ${{ steps.tag.outputs.long }}
