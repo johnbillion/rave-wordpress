@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: Prepare tag name
         id: tag
-        uses: johnbillion/rave-wordpress/.github/actions/prepare-tag-name@trunk
+        uses: $/.github/actions/prepare-tag-name
         with:
           tag: ${{ inputs.tag }}
 
@@ -43,17 +43,16 @@ jobs:
 
       - name: SVN checkout develop.svn.wordpress.org
         if: inputs.source == 'develop.svn.wordpress.org'
-        uses: johnbillion/rave-wordpress/.github/actions/svn-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/svn-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://develop.svn.wordpress.org/tags/${{ steps.tag.outputs.short }}/
 
       - name: Download zip from core.trac.wordpress.org
         if: inputs.source == 'core.trac.wordpress.org'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://core.trac.wordpress.org/browser/tags/${{ steps.tag.outputs.short }}?format=zip
           output: package.zip
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract zip from core.trac.wordpress.org
         if: inputs.source == 'core.trac.wordpress.org'
@@ -72,7 +71,7 @@ jobs:
           ls -la
 
       - name: Set up Node.js
-        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # 4.1.0
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version-file: .nvmrc
 
@@ -101,7 +100,7 @@ jobs:
           grep --fixed-strings "://api.wordpress.org/core/version-check/1.7/" build/wp-includes/update.php
 
       - name: Upload artifact
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # 4.5.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: wordpress-${{ steps.tag.outputs.long }}-${{ inputs.source }}
           path: build

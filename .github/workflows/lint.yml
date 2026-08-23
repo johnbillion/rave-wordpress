@@ -4,14 +4,18 @@ name: Lint
 on:
   pull_request:
     paths:
-      # Only run when changes are made to workflow files.
+      # Only run when changes are made to workflow files, action files, or linter config.
       - '.github/workflows/**'
+      - '.github/actions/**'
+      - '.github/actionlint.yaml'
   push:
     branches:
       - trunk
     paths:
-      # Only run when changes are made to workflow files.
+      # Only run when changes are made to workflow files, action files, or linter config.
       - '.github/workflows/**'
+      - '.github/actions/**'
+      - '.github/actionlint.yaml'
 
 permissions: {}
 
@@ -23,7 +27,7 @@ jobs:
   lint:
     name: Lint
     permissions:
-      security-events: write
-      actions: read
-      contents: read
-    uses: johnbillion/plugin-infrastructure/.github/workflows/reusable-workflow-lint.yml@1264303fa2e8b81ac9b49265cd96c96947eaacd0
+      security-events: write # Required for codeql-action/upload-sarif to upload SARIF files.
+      actions: read          # Needed for codeql-action/upload-sarif to read workflow run info.
+      contents: read         # Needed to clone the repo.
+    uses: johnbillion/plugin-infrastructure/.github/workflows/reusable-workflow-lint.yml@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7

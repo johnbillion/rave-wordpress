@@ -19,23 +19,21 @@ jobs:
     steps:
       - name: Prepare tag name
         id: tag
-        uses: johnbillion/rave-wordpress/.github/actions/prepare-tag-name@trunk
+        uses: $/.github/actions/prepare-tag-name
         with:
           tag: ${{ inputs.tag }}
 
       - name: Download zip from wordpress.org
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip
           output: package.zip
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Download MD5 hash from wordpress.org
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip.md5
           output: package.zip.md5
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Check the MD5 hash
         run: | #shell
@@ -51,23 +49,21 @@ jobs:
     steps:
       - name: Prepare tag name
         id: tag
-        uses: johnbillion/rave-wordpress/.github/actions/prepare-tag-name@trunk
+        uses: $/.github/actions/prepare-tag-name
         with:
           tag: ${{ inputs.tag }}
 
       - name: Download zip from wordpress.org
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip
           output: package.zip
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Download SHA-1 hash from wordpress.org
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip.sha1
           output: package.zip.sha1
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Check the SHA-1 hash
         run: | #shell
@@ -83,23 +79,21 @@ jobs:
     steps:
       - name: Prepare tag name
         id: tag
-        uses: johnbillion/rave-wordpress/.github/actions/prepare-tag-name@trunk
+        uses: $/.github/actions/prepare-tag-name
         with:
           tag: ${{ inputs.tag }}
 
       - name: Download tar.gz from wordpress.org
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz
           output: package.tar.gz
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Download MD5 hash from wordpress.org
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz.md5
           output: package.tar.gz.md5
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Check the MD5 hash
         run: | #shell
@@ -115,23 +109,21 @@ jobs:
     steps:
       - name: Prepare tag name
         id: tag
-        uses: johnbillion/rave-wordpress/.github/actions/prepare-tag-name@trunk
+        uses: $/.github/actions/prepare-tag-name
         with:
           tag: ${{ inputs.tag }}
 
       - name: Download tar.gz from wordpress.org
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz
           output: package.tar.gz
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Download SHA-1 hash from wordpress.org
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.tar.gz.sha1
           output: package.tar.gz.sha1
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Check the SHA-1 hash
         run: | #shell

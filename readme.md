@@ -15,7 +15,7 @@ RAVE stands for Reproduce And Verify.
 * ✅ `develop.svn.wordpress.org`
 * ✅ `develop.git.wordpress.org`
 * ✅ `github.com/wordpress/wordpress-develop`
-* ✅ `core.trac.wordpress.org`
+* ✅ ~~`core.trac.wordpress.org`~~ _Temporarily disabled_
 
 ### Official packages
 
@@ -24,7 +24,8 @@ RAVE stands for Reproduce And Verify.
 * ✅ `downloads.wordpress.org/release/wordpress-{tag}.zip`
 * ✅ `downloads.w.org/release/wordpress-{tag}.zip`
 * ✅ `github.com/wordpress/wordpress`
-* ✅ `build.trac.wordpress.org`
+* ✅ ~~`build.trac.wordpress.org`~~ _Temporarily disabled_
+* ✅ `wp-core/wordpress`
 
 ### Official builds
 
@@ -33,10 +34,8 @@ RAVE stands for Reproduce And Verify.
 
 ### Unofficial packages
 
-* ✅ `wordpress` image from Docker Hub
-* ✅ `core-updates.wpengine.com` from WPEngine
+* ✅ `core-updates.wpengine.com` from WP Engine
 * ✅ `api.aspirecloud.net` from AspireCloud
-* ✅ Bundle packages provided by FAIR
 * ✅ `roots/wordpress-full` on Packagist
 * ✅ `johnpbloch/wordpress` on Packagist
 
@@ -67,7 +66,7 @@ There are several opportunities for the official WordPress package to be tampere
   * Making the backdoor code immediately visible in the diff in the failing workflow
 * [In 2016 Wordfence identified a vulnerability in a webhook mechanism on api.wordpress.org](https://www.wordfence.com/blog/2016/11/hacking-27-web-via-wordpress-auto-update/) and demonstrated that a cracker could theoretically execute a shell command on the api.wordpress.org server. If a cracker exploited this vulnerability to modify an existing release or create a new one then RAVE would have successfully detected this by:
   * Identifying a new version that didn't exist in the source repos
-  * Identifying a modified package that didn't match the code built from the source repos and didn't match the versions published to Packagist and Docker Hub
+  * Identifying a modified package that didn't match the code built from the source repos and didn't match the versions published elsewhere
   * Identifying any attempt to serve an update from an unexpected host name or URL in the update API response
   * Identifying any discrepancies between the published SHA-1 and MD5 hashes, the published checksums, and the offers returned by the update API
 
@@ -95,7 +94,7 @@ To quote [reproducible-builds.org](https://reproducible-builds.org/):
 
 > Reproducible builds are a set of software development practices that create an independently-verifiable path from source to binary code.
 
-[The process that builds and packages WordPress](https://build.trac.wordpress.org/timeline) is reproducible as far as the built code is concerned, although I believe that the zip file generation does not result in a stable hash between invocations. Unfortunately the process itself is not open source. The process differs from the `npm run build` process in the source code because it makes some additions (eg. the Akismet plugin) and some exclusions (older default themes). The verifications performed by this repo take this into account.
+[The process that builds and packages WordPress](https://build.trac.wordpress.org/timeline) is reproducible as far as the built code is concerned, although I believe that the zip file generation does not result in a stable hash between invocations. Unfortunately the process itself is not open source. The process differs from the `npm run build` process in the source code because it makes some additions (e.g. the Akismet plugin) and some exclusions (older default themes). The verifications performed by this repo take this into account.
 
 ## Verifiable WordPress
 
@@ -128,7 +127,7 @@ gh attestation download "$file" --repo johnbillion/rave-wordpress
 jq -r '.dsseEnvelope.payload' "sha256:${hash}.jsonl" | base64 -d | jq .
 ```
 
-## Does this faciliate WordPress adhering to SLSA?
+## Does this facilitate WordPress adhering to SLSA?
 
 No. [SLSA](https://slsa.dev/) is a security framework that improves the supply chain resilience of a software package by generating a verifiable build provenance attestation during its build and release process. RAVE _independently reproduces_ the build for WordPress but is not part of the release process itself, therefore it is not appropriate for RAVE to generate an SLSA build provenance attestation.
 

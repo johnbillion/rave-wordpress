@@ -28,13 +28,17 @@ on:
 
 permissions: {}
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   versions:
     name: Determine latest version
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      pull-requests: write
+      contents: write      # Required to push the branch
+      pull-requests: write # Required to create a pull request
     timeout-minutes: 1
     outputs:
       version: ${{ steps.fetch.outputs.version }}
@@ -50,16 +54,15 @@ jobs:
           fi
 
       - name: Checkout repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          persist-credentials: true
+          persist-credentials: false
 
       - name: Fetch offers from version check API
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://api.wordpress.org/core/version-check/1.7/
           output: offers-raw.json
-          version: ${{ inputs.version }}
 
       - name: Process offers data
         run: | #shell
@@ -90,22 +93,24 @@ jobs:
           echo version="$(cat version.txt)" >> "$GITHUB_OUTPUT"
 
       - name: Save version.txt
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # 4.5.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: version
           path: version.txt
+          archive: false
           if-no-files-found: error
 
       - name: Save offers.json
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # 4.5.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: offers
           path: offers.json
+          archive: false
           if-no-files-found: error
 
       - name: Create pull request if there are changes to offers.json
         if: github.ref == 'refs/heads/trunk'
-        uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7.0.8
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1 # zizmor: ignore[superfluous-actions]
         with:
           add-paths: offers.json
           title: "Update offers.json"
@@ -181,7 +186,7 @@ jobs:
           - develop.svn.wordpress.org
           - develop.git.wordpress.org
           - github-wordpress-develop
-          - core.trac.wordpress.org
+          # - core.trac.wordpress.org
       fail-fast: false
     uses: ./.github/workflows/reproduce.yml
     with:
@@ -201,7 +206,7 @@ jobs:
           - Fetch builds
         build:
           - core.svn.wordpress.org
-          - core.git.wordpress.org
+          # - core.git.wordpress.org
       fail-fast: false
     uses: ./.github/workflows/fetch-build.yml
     with:
@@ -224,9 +229,9 @@ jobs:
         source:
           - develop.git.wordpress.org
           - github-wordpress-develop
-          - core.git.wordpress.org
+          # - core.git.wordpress.org
           - core.svn.wordpress.org
-          - core.trac.wordpress.org
+          # - core.trac.wordpress.org
       fail-fast: false
     uses: ./.github/workflows/compare.yml
     with:
@@ -252,14 +257,13 @@ jobs:
         (needs.compare.result == 'success')
       )
     permissions:
-      contents: read
-      id-token: write
-      attestations: write
+      contents: read      # Required to read repository contents
+      id-token: write     # Required to generate OIDC token for attestation
+      attestations: write # Required to create and upload attestations
     needs:
       - versions
       - check-attestation
       - reproduce
-      - compare
     strategy:
       matrix:
         label:
@@ -272,12 +276,12 @@ jobs:
           - downloads.w.org-zip
           - downloads.w.org-tar
           - github-zip
-          - docker-wordpress
           - wpengine-zip
           - aspirecloud-zip
           - roots-wordpress-full
           - johnpbloch-wordpress
-          - build.trac.wordpress.org
+          - wp-core-wordpress
+          # - build.trac.wordpress.org
         tag:
           - ${{ needs.versions.outputs.version }}
       fail-fast: false
@@ -297,21 +301,17 @@ jobs:
         (needs.compare.result == 'success')
       )
     permissions:
-      contents: read
-      id-token: write
-      attestations: write
+      contents: read      # Required to read repository contents
+      id-token: write     # Required to generate OIDC token for attestation
+      attestations: write # Required to create and upload attestations
     needs:
       - versions
       - check-attestation
       - reproduce
-      - compare
       - verify-packages
     strategy:
       matrix:
         include:
-          # - label: Verify packages
-          #   package: fair-zip
-          #   tag: ${{ needs.versions.outputs.version }}
           - label: Verify latest packages
             package: wordpress.org-zip
             tag: latest
@@ -337,7 +337,7 @@ jobs:
     name: ${{ matrix.label }}
     if: ${{ github.event_name != 'workflow_dispatch' }}
     permissions:
-      contents: read
+      contents: read # Required to read repository contents
     needs:
       - versions
     strategy:
@@ -346,16 +346,15 @@ jobs:
           - Verify distributed versions
         package:
           - github-zip
-          - docker-wordpress
           - wordpress.org-zip
           - wordpress.org-tar
           - downloads.wordpress.org-zip
           - downloads.wordpress.org-tar
           - wpengine-zip
           - aspirecloud-zip
-          - fair-zip
           - roots-wordpress-full
           - johnpbloch-wordpress
+          - wp-core-wordpress
           - stable-check
       fail-fast: false
     uses: ./.github/workflows/versions.yml
@@ -366,8 +365,8 @@ jobs:
   verify-checksums:
     name: Verify checksums
     permissions:
-      contents: write
-      pull-requests: write
+      contents: write      # Required to push the branch
+      pull-requests: write # Required to create a pull request
     needs:
       - versions
     uses: ./.github/workflows/checksums.yml

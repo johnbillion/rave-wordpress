@@ -15,34 +15,32 @@ jobs:
     name: ${{ inputs.tag }}
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      pull-requests: write
+      contents: write      # Required to push the branch
+      pull-requests: write # Required to create a pull request
     timeout-minutes: 1
     steps:
       - name: Prepare tag name
         id: tag
-        uses: johnbillion/rave-wordpress/.github/actions/prepare-tag-name@trunk
+        uses: $/.github/actions/prepare-tag-name
         with:
           tag: ${{ inputs.tag }}
 
       - name: Checkout repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          persist-credentials: true
+          persist-credentials: false
 
       - name: Download checksums from wordpress.org
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://api.wordpress.org/core/checksums/1.0/?version=${{ steps.tag.outputs.short }}
           output: checksums.json
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Download zip from wordpress.org
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://wordpress.org/wordpress-${{ steps.tag.outputs.short }}.zip
           output: wordpress-${{ steps.tag.outputs.short }}.zip
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract zip
         env:
@@ -64,7 +62,7 @@ jobs:
 
       - name: Create pull request if there are additions or changes
         if: github.ref == 'refs/heads/trunk'
-        uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7.0.8
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1 # zizmor: ignore[superfluous-actions]
         with:
           add-paths: checksums
           title: "Update checksums for WordPress ${{ steps.tag.outputs.short }}"

@@ -24,13 +24,13 @@ jobs:
     name: "${{ inputs.package }}"
     runs-on: ubuntu-latest
     permissions:
-      id-token: write
-      attestations: write
+      id-token: write     # Required to generate OIDC token for attestation
+      attestations: write # Required to create and upload attestations
     timeout-minutes: 10
     steps:
       - name: Prepare tag name
         id: tag
-        uses: johnbillion/rave-wordpress/.github/actions/prepare-tag-name@trunk
+        uses: $/.github/actions/prepare-tag-name
         with:
           tag: ${{ inputs.tag }}
 
@@ -68,17 +68,11 @@ jobs:
               PACKAGE_URL="https://build.trac.wordpress.org/browser/tags/${TAG_SHORT}?format=zip"
               PACKAGE_INCLUDES_AKISMET=false
               ;;
-            docker-wordpress)
-              PACKAGE_URL="https://hub.docker.com/_/wordpress/tags?name=${TAG_LONG}&ordering=-name"
-              ;;
             wpengine-zip)
               PACKAGE_URL="https://core-updates.wpengine.com/wordpress-${TAG_SHORT}.zip"
               ;;
             aspirecloud-zip)
               PACKAGE_URL="https://api.aspirecloud.net/download/wordpress-${TAG_SHORT}.zip"
-              ;;
-            fair-zip)
-              PACKAGE_URL="https://github.com/fairpm/fair-plugin/releases/latest/download/wordpress-${TAG_SHORT}-fair.zip"
               ;;
             roots-wordpress-full)
               PACKAGE_URL="https://packagist.org/packages/roots/wordpress-full#${TAG_SHORT}"
@@ -86,22 +80,25 @@ jobs:
             johnpbloch-wordpress)
               PACKAGE_URL="https://packagist.org/packages/johnpbloch/wordpress#${TAG_SHORT}"
               ;;
+            wp-core-wordpress)
+              PACKAGE_URL="https://api.wordpress.org/packages/p2/wp-core/wordpress.json"
+              ;;
           esac
           echo PACKAGE_URL="$PACKAGE_URL" >> "$GITHUB_ENV"
           echo PACKAGE_INCLUDES_AKISMET="$PACKAGE_INCLUDES_AKISMET" >> "$GITHUB_ENV"
 
       - name: Download artifact of the reproduced build
         if: inputs.tag != 'latest'
-        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # 4.1.8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: wordpress-${{ steps.tag.outputs.long }}-develop.svn.wordpress.org
           path: source
 
-      - name: Download version artifact # is this needed?
+      - name: Download version artifact
         if: inputs.tag == 'latest'
-        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # 4.1.8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
-          name: version
+          name: version.txt
 
       - name: Extract the latest version number from version.txt
         if: inputs.tag == 'latest'
@@ -111,18 +108,17 @@ jobs:
 
       - name: Download artifact of the reproduced build
         if: inputs.tag == 'latest'
-        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # 4.1.8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: "wordpress-${{ steps.extract.outputs.latest }}-develop.svn.wordpress.org"
           path: source
 
       - name: Get zip file from GitHub
         if: inputs.package == 'github-zip'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract GitHub zip
         if: inputs.package == 'github-zip'
@@ -134,11 +130,10 @@ jobs:
 
       - name: Get zip file from wordpress.org
         if: inputs.package == 'wordpress.org-zip' && inputs.tag != 'latest'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract wordpress.org zip
         if: inputs.package == 'wordpress.org-zip' && inputs.tag != 'latest'
@@ -148,11 +143,10 @@ jobs:
 
       - name: Get tar file from wordpress.org
         if: inputs.package == 'wordpress.org-tar' && inputs.tag != 'latest'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.tar.gz
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract wordpress.org tar
         if: inputs.package == 'wordpress.org-tar' && inputs.tag != 'latest'
@@ -163,11 +157,10 @@ jobs:
 
       - name: Get latest zip file from wordpress.org
         if: inputs.package == 'wordpress.org-zip' && inputs.tag == 'latest'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://wordpress.org/latest.zip
           output: package.zip
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract latest wordpress.org zip
         if: inputs.package == 'wordpress.org-zip' && inputs.tag == 'latest'
@@ -177,11 +170,10 @@ jobs:
 
       - name: Get latest tar file from wordpress.org
         if: inputs.package == 'wordpress.org-tar' && inputs.tag == 'latest'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://wordpress.org/latest.tar.gz
           output: package.tar.gz
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract latest wordpress.org tar
         if: inputs.package == 'wordpress.org-tar' && inputs.tag == 'latest'
@@ -192,11 +184,10 @@ jobs:
 
       - name: Get zip file from downloads.wordpress.org
         if: inputs.package == 'downloads.wordpress.org-zip'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract downloads.wordpress.org zip
         if: inputs.package == 'downloads.wordpress.org-zip'
@@ -206,11 +197,10 @@ jobs:
 
       - name: Get tar file from downloads.wordpress.org
         if: inputs.package == 'downloads.wordpress.org-tar'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.tar.gz
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract downloads.wordpress.org tar
         if: inputs.package == 'downloads.wordpress.org-tar'
@@ -221,11 +211,10 @@ jobs:
 
       - name: Get zip file from downloads.w.org
         if: inputs.package == 'downloads.w.org-zip'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract downloads.w.org zip
         if: inputs.package == 'downloads.w.org-zip'
@@ -235,11 +224,10 @@ jobs:
 
       - name: Get tar file from downloads.w.org
         if: inputs.package == 'downloads.w.org-tar'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.tar.gz
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract downloads.w.org tar
         if: inputs.package == 'downloads.w.org-tar'
@@ -250,11 +238,10 @@ jobs:
 
       - name: Download zip from build.trac.wordpress.org
         if: inputs.package == 'build.trac.wordpress.org'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract build.trac.wordpress.org zip
         if: inputs.package == 'build.trac.wordpress.org'
@@ -264,26 +251,12 @@ jobs:
           unzip -q package.zip -d wordpress
           mv "wordpress/${TAG}" package
 
-      - name: Download Docker image
-        if: inputs.package == 'docker-wordpress'
-        env:
-          TAG: ${{ steps.tag.outputs.long }}
-        run: | #shell
-          yq --null-input '{"services":{"wordpress":{"image":"wordpress:"+strenv(TAG),"container_name":"wordpress","volumes":["./package:/var/www/html:rw"]}}}' > docker-compose.yml
-          docker compose up --quiet-pull -d wordpress
-          docker compose run --rm wordpress -- ls -al /var/www/html
-          docker compose run --rm wordpress -- rm /var/www/html/.htaccess
-          docker compose run --rm wordpress -- rm /var/www/html/wp-config-docker.php
-          docker compose cp wordpress:/var/www/html/wp-content/plugins/akismet akismet-package
-          docker compose run --rm wordpress -- rm -rf /var/www/html/wp-content/plugins/akismet
-
       - name: Download zip from core-updates.wpengine.com
         if: inputs.package == 'wpengine-zip'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract core-updates.wpengine.com zip
         if: inputs.package == 'wpengine-zip'
@@ -293,28 +266,13 @@ jobs:
 
       - name: Download zip from api.aspirecloud.net
         if: inputs.package == 'aspirecloud-zip'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: ${{ env.PACKAGE_URL }}
           output: package.zip
-          version: ${{ steps.tag.outputs.long }}
 
       - name: Extract api.aspirecloud.net zip
         if: inputs.package == 'aspirecloud-zip'
-        run: | #shell
-          unzip -q package.zip -d wordpress
-          mv wordpress/wordpress package
-
-      - name: Download zip from FAIR
-        if: inputs.package == 'fair-zip'
-        uses: johnbillion/rave-wordpress/.github/actions/download-with-retry@trunk
-        with:
-          url: ${{ env.PACKAGE_URL }}
-          output: package.zip
-          version: ${{ steps.tag.outputs.long }}
-
-      - name: Extract FAIR zip
-        if: inputs.package == 'fair-zip'
         run: | #shell
           unzip -q package.zip -d wordpress
           mv wordpress/wordpress package
@@ -335,6 +293,16 @@ jobs:
           composer require "johnpbloch/wordpress:${TAG}" --prefer-dist --no-progress --no-plugins
           mv vendor/johnpbloch/wordpress-core package
           rm package/composer.json
+
+      - name: Download wp-core/wordpress
+        if: inputs.package == 'wp-core-wordpress'
+        env:
+          TAG: ${{ steps.tag.outputs.long }}
+        run: | #shell
+          composer init --no-interaction --name "johnbillion/rave-wordpress" --stability stable
+          composer config repositories.wp-core composer https://api.wordpress.org/packages/
+          composer require "wp-core/wordpress:${TAG}" --prefer-dist --no-progress --no-plugins
+          mv vendor/wp-core/wordpress package
 
       - name: Handle anomalies with build files in TT and TT1
         if: inputs.package == 'github-zip' || inputs.package == 'build.trac.wordpress.org'
@@ -369,13 +337,20 @@ jobs:
             rm -rf source/wp-content/themes/twentytwentytwo
           fi
 
-      - name: Handle known differences in bundled plugins
-        if: inputs.package == 'fair-zip'
+      - name: Remove files erroneously shipped in WordPress 7.0
+        env:
+          TAG: ${{ inputs.tag }}
+          BRANCH: ${{ steps.tag.outputs.branch }}
         run: | #shell
-          rm -rf package/wp-content/plugins/fair-plugin
+          if [[ "${TAG}" == "latest" ]] || dpkg --compare-versions "${BRANCH}" ge "7.0"; then
+            rm -rf package/wp-includes/collaboration
+            rm -f package/wp-includes/collaboration.php
+            rm -f package/wp-includes/js/dist/sync.js
+            rm -f package/wp-includes/js/dist/sync.min.js
+          fi
 
       - name: Extract Akismet
-        if: env.PACKAGE_INCLUDES_AKISMET == 'true' && inputs.package != 'docker-wordpress'
+        if: env.PACKAGE_INCLUDES_AKISMET == 'true'
         run: | #shell
           mv package/wp-content/plugins/akismet akismet-package
 
@@ -400,7 +375,7 @@ jobs:
 
       - name: Fetch Akismet ${{ env.AKISMET_VERSION }} from source
         if: env.PACKAGE_INCLUDES_AKISMET == 'true'
-        uses: johnbillion/rave-wordpress/.github/actions/svn-with-retry@trunk
+        uses: johnbillion/plugin-infrastructure/actions/svn-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
         with:
           url: https://plugins.svn.wordpress.org/akismet/tags/${{ env.AKISMET_VERSION }}/
           path: akismet-source
@@ -448,9 +423,6 @@ jobs:
           # Generate SHA256 of package file
           PACKAGE_SHA256=$(sha256sum "${PACKAGE_FILE}" | cut -d' ' -f1)
 
-          # Get current git commit SHA
-          COMMIT_SHA="${{ github.sha }}"
-
           # Generate the predicate
           cat > release-predicate.json <<EOF
           {
@@ -471,7 +443,7 @@ jobs:
                 "vcs": {
                   "type": "git",
                   "uri": "https://github.com/johnbillion/rave-wordpress",
-                  "revision": "${COMMIT_SHA}"
+                  "revision": "${GITHUB_SHA}"
                 }
               }
             }
@@ -480,7 +452,7 @@ jobs:
 
       - name: Generate attestation
         if: steps.package-check.outputs.package_file != 'false' && steps.attestation-check.outputs.attestation_exists == 'false' && inputs.tag != 'latest'
-        uses: actions/attest@ce27ba3b4a9a139d9a20a4a07d69fabb52f1e5bc # v2.4.0
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
         with:
           subject-path: ${{ steps.package-check.outputs.package_file }}
           subject-name: 'wordpress-${{ steps.tag.outputs.short }}.${{ steps.package-check.outputs.package_extension }}'
