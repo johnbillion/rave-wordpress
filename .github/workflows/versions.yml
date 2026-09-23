@@ -110,6 +110,25 @@ jobs:
             exit 1
           fi
 
+      - name: Fetch solidbunch/wordpress-core versions
+        if: inputs.package == 'solidbunch-wordpress-core'
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
+        with:
+          url: https://solidbunch.github.io/wordpress-core/packages.json
+          output: solidbunch-wordpress-core.json
+
+      - name: Verify versions distributed by solidbunch/wordpress-core
+        if: inputs.package == 'solidbunch-wordpress-core'
+        env:
+          TAG: ${{ steps.tag.outputs.short }}
+        run: |
+          set -e
+          latest_version=$(jq --raw-output '.packages["solidbunch/wordpress-core"] | map(.version) | .[]' solidbunch-wordpress-core.json | grep -Ev -- '-(RC|rc|beta|alpha|dev)' | sort -V | tail -n1)
+          if dpkg --compare-versions "$latest_version" gt "$TAG"; then
+            echo "Error: Found a newer version ($latest_version) than $TAG"
+            exit 1
+          fi
+
       - name: Fetch AspireCloud versions
         if: inputs.package == 'aspirecloud-zip'
         uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7

@@ -39,6 +39,7 @@ RAVE stands for Reproduce And Verify.
 * ✅ `github.com/pantheon-systems/WordPress` from Pantheon
 * ✅ `roots/wordpress-full` on Packagist
 * ✅ `johnpbloch/wordpress` on Packagist
+* ✅ `solidbunch/wordpress-core` from SolidBunch
 
 ### Other verifications
 

@@ -291,6 +291,7 @@ jobs:
           - roots-wordpress-full
           - johnpbloch-wordpress
           - wp-core-wordpress
+          - solidbunch-wordpress-core
           # - build.trac.wordpress.org
         tag:
           - ${{ needs.versions.outputs.version }}
@@ -361,6 +362,7 @@ jobs:
           - roots-wordpress-full
           - johnpbloch-wordpress
           - wp-core-wordpress
+          - solidbunch-wordpress-core
           - stable-check
       fail-fast: false
     uses: ./.github/workflows/versions.yml
