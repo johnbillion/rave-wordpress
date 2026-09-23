@@ -282,6 +282,8 @@ jobs:
           - wordpress.org-tar
           - downloads.wordpress.org-zip
           - downloads.wordpress.org-tar
+          - downloads.wordpress.org-no-content-zip
+          - downloads.wordpress.org-new-bundled-zip
           - downloads.w.org-zip
           - downloads.w.org-tar
           - github-zip
@@ -289,6 +291,7 @@ jobs:
           - aspirecloud-zip
           - pantheon-zip
           - roots-wordpress-full
+          - roots-wordpress-no-content
           - johnpbloch-wordpress
           - wp-core-wordpress
           - solidbunch-wordpress-core
@@ -356,10 +359,13 @@ jobs:
           - wordpress.org-tar
           - downloads.wordpress.org-zip
           - downloads.wordpress.org-tar
+          - downloads.wordpress.org-no-content-zip
+          - downloads.wordpress.org-new-bundled-zip
           - wpengine-zip
           - aspirecloud-zip
           - pantheon-zip
           - roots-wordpress-full
+          - roots-wordpress-no-content
           - johnpbloch-wordpress
           - wp-core-wordpress
           - solidbunch-wordpress-core

@@ -72,6 +72,25 @@ jobs:
             exit 1
           fi
 
+      - name: Fetch roots/wordpress-no-content versions
+        if: inputs.package == 'roots-wordpress-no-content'
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
+        with:
+          url: https://repo.packagist.org/p2/roots/wordpress-no-content.json
+          output: roots-wordpress-no-content.json
+
+      - name: Verify versions distributed by roots/wordpress-no-content
+        if: inputs.package == 'roots-wordpress-no-content'
+        env:
+          TAG: ${{ steps.tag.outputs.short }}
+        run: |
+          set -e
+          latest_version=$(jq --raw-output '.packages["roots/wordpress-no-content"] | map(.version) | .[]' roots-wordpress-no-content.json | grep -Ev -- '-(RC|rc|beta|alpha|dev)' | sort -V | tail -n1)
+          if dpkg --compare-versions "$latest_version" gt "$TAG"; then
+            echo "Error: Found a newer version ($latest_version) than $TAG"
+            exit 1
+          fi
+
       - name: Fetch johnpbloch/wordpress versions
         if: inputs.package == 'johnpbloch-wordpress'
         uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
@@ -181,6 +200,20 @@ jobs:
         uses: $/.github/actions/check-not-released
         with:
           url: https://downloads.wordpress.org/release/wordpress-${{ steps.tag.outputs.next }}.tar.gz
+          version: ${{ steps.tag.outputs.long }}
+
+      - name: Verify versions distributed by downloads.wordpress.org (no-content zip)
+        if: inputs.package == 'downloads.wordpress.org-no-content-zip'
+        uses: $/.github/actions/check-not-released
+        with:
+          url: https://downloads.wordpress.org/release/wordpress-${{ steps.tag.outputs.next }}-no-content.zip
+          version: ${{ steps.tag.outputs.long }}
+
+      - name: Verify versions distributed by downloads.wordpress.org (new-bundled zip)
+        if: inputs.package == 'downloads.wordpress.org-new-bundled-zip'
+        uses: $/.github/actions/check-not-released
+        with:
+          url: https://downloads.wordpress.org/release/wordpress-${{ steps.tag.outputs.next }}-new-bundled.zip
           version: ${{ steps.tag.outputs.long }}
 
       - name: Fetch stable-check data
