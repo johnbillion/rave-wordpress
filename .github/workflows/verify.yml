@@ -431,9 +431,14 @@ jobs:
           rm package/.gitignore
           rm package/README.md
           rm package/pantheon.upstream.yml
-          rm package/wp-config.php
           rm package/wp-config-pantheon.php
           rm package/wp-config-local-sample.php
+
+      # The Composer package does not ship the upstream's wp-config.php.
+      - name: Handle the Pantheon upstream's wp-config.php
+        if: inputs.package == 'pantheon-zip'
+        run: | #shell
+          rm package/wp-config.php
 
       - name: Handle known differences in the source
         uses: $/.github/actions/handle-known-differences
