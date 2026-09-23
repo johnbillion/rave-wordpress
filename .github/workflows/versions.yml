@@ -53,6 +53,25 @@ jobs:
             exit 1
           fi
 
+      - name: Fetch pantheon-systems/wordpress-composer versions
+        if: inputs.package == 'pantheon-wordpress-composer'
+        uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7
+        with:
+          url: https://repo.packagist.org/p2/pantheon-systems/wordpress-composer.json
+          output: pantheon-wordpress-composer.json
+
+      - name: Verify versions distributed by pantheon-systems/wordpress-composer
+        if: inputs.package == 'pantheon-wordpress-composer'
+        env:
+          TAG: ${{ steps.tag.outputs.short }}
+        run: |
+          set -e
+          latest_version=$(jq --raw-output '.packages["pantheon-systems/wordpress-composer"] | map(.version) | .[]' pantheon-wordpress-composer.json | grep -Ev -- '-(RC|rc|beta|alpha|dev)' | sort -V | tail -n1)
+          if dpkg --compare-versions "$latest_version" gt "$TAG"; then
+            echo "Error: Found a newer version ($latest_version) than $TAG"
+            exit 1
+          fi
+
       - name: Fetch roots/wordpress-full versions
         if: inputs.package == 'roots-wordpress-full'
         uses: johnbillion/plugin-infrastructure/actions/download-with-retry@5da00cd003a94ef534a553d48b78a20ef4fadf0d # 2.9.7

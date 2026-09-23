@@ -290,6 +290,7 @@ jobs:
           - wpengine-zip
           - aspirecloud-zip
           - pantheon-zip
+          - pantheon-wordpress-composer
           - roots-wordpress-full
           - roots-wordpress-no-content
           - johnpbloch-wordpress
@@ -364,6 +365,7 @@ jobs:
           - wpengine-zip
           - aspirecloud-zip
           - pantheon-zip
+          - pantheon-wordpress-composer
           - roots-wordpress-full
           - roots-wordpress-no-content
           - johnpbloch-wordpress
