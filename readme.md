@@ -39,6 +39,7 @@ RAVE stands for Reproduce And Verify.
 * ✅ `core-updates.wpengine.com` from WP Engine
 * ✅ `api.aspirecloud.net` from AspireCloud
 * ✅ `github.com/pantheon-systems/WordPress` from Pantheon
+* ✅ `pantheon-systems/wordpress-composer` on Packagist
 * ✅ `roots/wordpress-full` on Packagist
 * ✅ `roots/wordpress-no-content` on Packagist
 * ✅ `johnpbloch/wordpress` on Packagist

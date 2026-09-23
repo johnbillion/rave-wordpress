@@ -89,6 +89,10 @@ jobs:
               PACKAGE_URL="https://github.com/pantheon-systems/WordPress/archive/refs/tags/${TAG_SHORT}.zip"
               PACKAGE_INCLUDES_AKISMET=false
               ;;
+            pantheon-wordpress-composer)
+              PACKAGE_URL="https://packagist.org/packages/pantheon-systems/wordpress-composer#${TAG_SHORT}"
+              PACKAGE_INCLUDES_AKISMET=false
+              ;;
             roots-wordpress-full)
               PACKAGE_URL="https://packagist.org/packages/roots/wordpress-full#${TAG_SHORT}"
               ;;
@@ -343,6 +347,15 @@ jobs:
           unzip -q package.zip -d wordpress
           mv "wordpress/WordPress-${TAG}" package
 
+      - name: Download pantheon-systems/wordpress-composer
+        if: inputs.package == 'pantheon-wordpress-composer'
+        env:
+          TAG: ${{ steps.tag.outputs.long }}
+        run: | #shell
+          composer require "pantheon-systems/wordpress-composer:${TAG}" --prefer-dist --no-progress --no-plugins
+          mv vendor/pantheon-systems/wordpress-composer package
+          rm package/composer.json
+
       - name: Download roots/wordpress-full
         if: inputs.package == 'roots-wordpress-full'
         env:
@@ -411,7 +424,7 @@ jobs:
       # Pantheon adds its own platform files, and its wp-content directory
       # stays frozen at the versions first committed to the repo.
       - name: Handle the Pantheon upstream's platform files and untracked wp-content
-        if: inputs.package == 'pantheon-zip'
+        if: inputs.package == 'pantheon-zip' || inputs.package == 'pantheon-wordpress-composer'
         run: | #shell
           rm -r source/wp-content
           rm -r package/wp-content
