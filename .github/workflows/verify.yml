@@ -87,6 +87,9 @@ jobs:
             wp-core-wordpress)
               PACKAGE_URL="https://api.wordpress.org/packages/p2/wp-core/wordpress.json"
               ;;
+            solidbunch-wordpress-core)
+              PACKAGE_URL="https://solidbunch.github.io/wordpress-core/packages.json"
+              ;;
           esac
           echo PACKAGE_URL="$PACKAGE_URL" >> "$GITHUB_ENV"
           echo PACKAGE_INCLUDES_AKISMET="$PACKAGE_INCLUDES_AKISMET" >> "$GITHUB_ENV"
@@ -322,6 +325,16 @@ jobs:
           composer config repositories.wp-core composer https://api.wordpress.org/packages/
           composer require "wp-core/wordpress:${TAG}" --prefer-dist --no-progress --no-plugins
           mv vendor/wp-core/wordpress package
+
+      - name: Download solidbunch/wordpress-core
+        if: inputs.package == 'solidbunch-wordpress-core'
+        env:
+          TAG: ${{ steps.tag.outputs.long }}
+        run: | #shell
+          composer init --no-interaction --name "johnbillion/rave-wordpress" --stability stable
+          composer config repositories.solidbunch composer https://solidbunch.github.io/wordpress-core
+          composer require "solidbunch/wordpress-core:${TAG}" --prefer-dist --no-progress --no-plugins
+          mv vendor/solidbunch/wordpress-core package
 
       - name: Handle anomalies with build files in TT and TT1
         if: inputs.package == 'github-zip' || inputs.package == 'build.trac.wordpress.org'
