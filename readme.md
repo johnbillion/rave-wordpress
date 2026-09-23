@@ -22,6 +22,8 @@ RAVE stands for Reproduce And Verify.
 * ✅ `wordpress.org/latest.zip`
 * ✅ `wordpress.org/wordpress-{tag}.zip`
 * ✅ `downloads.wordpress.org/release/wordpress-{tag}.zip`
+* ✅ `downloads.wordpress.org/release/wordpress-{tag}-no-content.zip`
+* ✅ `downloads.wordpress.org/release/wordpress-{tag}-new-bundled.zip`
 * ✅ `downloads.w.org/release/wordpress-{tag}.zip`
 * ✅ `github.com/wordpress/wordpress`
 * ✅ ~~`build.trac.wordpress.org`~~ _Temporarily disabled_
@@ -38,6 +40,7 @@ RAVE stands for Reproduce And Verify.
 * ✅ `api.aspirecloud.net` from AspireCloud
 * ✅ `github.com/pantheon-systems/WordPress` from Pantheon
 * ✅ `roots/wordpress-full` on Packagist
+* ✅ `roots/wordpress-no-content` on Packagist
 * ✅ `johnpbloch/wordpress` on Packagist
 * ✅ `solidbunch/wordpress-core` from SolidBunch
 
