@@ -43,7 +43,6 @@ RAVE stands for Reproduce And Verify.
 * ✅ `roots/wordpress-full` on Packagist
 * ✅ `roots/wordpress-no-content` on Packagist
 * ✅ `johnpbloch/wordpress` on Packagist
-* ✅ `solidbunch/wordpress-core` from SolidBunch
 
 ### Other verifications
 
