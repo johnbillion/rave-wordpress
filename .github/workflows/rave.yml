@@ -131,6 +131,7 @@ jobs:
     timeout-minutes: 10
     outputs:
       verified: ${{ steps.check.outputs.verified }}
+      sources: ${{ steps.sources.outputs.sources }}
     steps:
       - name: Prepare tag name
         id: tag
@@ -158,6 +159,22 @@ jobs:
             echo "verified=false" >> "$GITHUB_OUTPUT"
           fi
 
+      # Pull requests verify against both the reproduced build and the attested package,
+      # so a change can't pass on one path and then fail on trunk on the other.
+      - name: Determine verification sources
+        id: sources
+        env:
+          VERIFIED: ${{ steps.check.outputs.verified }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: | #shell
+          if [ "$VERIFIED" != "true" ]; then
+            echo 'sources=["reproduced"]' >> "$GITHUB_OUTPUT"
+          elif [ "$EVENT_NAME" = "pull_request" ]; then
+            echo 'sources=["reproduced","attested"]' >> "$GITHUB_OUTPUT"
+          else
+            echo 'sources=["attested"]' >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Extract verified build
         if: steps.check.outputs.verified == 'true'
         run: | #shell
@@ -172,20 +189,20 @@ jobs:
           rm -rf wordpress/wp-content/plugins/akismet
 
       # A prior run attested that this package is byte identical to the build reproduced
-      # from develop.svn.wordpress.org, so it is uploaded under the same artifact name
-      # that the `reproduce` job would use. This lets the downstream jobs consume it
-      # without knowing which path ran.
+      # from develop.svn.wordpress.org, so the verify jobs can use it in place of a fresh
+      # reproduction.
       - name: Upload verified build artifact
         if: steps.check.outputs.verified == 'true'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: wordpress-${{ steps.tag.outputs.long }}-develop.svn.wordpress.org
+          name: wordpress-${{ steps.tag.outputs.long }}-attested
           path: wordpress
           if-no-files-found: error
+          include-hidden-files: true
 
   reproduce:
     name: "Reproduce ${{ needs.versions.outputs.version }}"
-    if: ${{ !cancelled() && needs.check-attestation.outputs.verified != 'true' }}
+    if: ${{ !cancelled() && (github.event_name == 'pull_request' || needs.check-attestation.outputs.verified != 'true') }}
     permissions: {}
     needs:
       - versions
@@ -205,7 +222,7 @@ jobs:
 
   fetch-build:
     name: ${{ matrix.label }}
-    if: ${{ !cancelled() && needs.check-attestation.outputs.verified != 'true' }}
+    if: ${{ !cancelled() && (github.event_name == 'pull_request' || needs.check-attestation.outputs.verified != 'true') }}
     permissions: {}
     needs:
       - versions
@@ -298,11 +315,13 @@ jobs:
           # - build.trac.wordpress.org
         tag:
           - ${{ needs.versions.outputs.version }}
+        source: ${{ fromJSON(needs.check-attestation.outputs.sources || '["reproduced"]') }}
       fail-fast: false
     uses: ./.github/workflows/verify.yml
     with:
       tag: ${{ matrix.tag }}
       package: ${{ matrix.package }}
+      source: ${{ matrix.source }}
 
   # These packages are verified against the latest tag, they cannot be verified against a prior version.
   verify-latest-packages:
@@ -317,21 +336,24 @@ jobs:
       attestations: write # Required to create and upload attestations
     needs:
       - versions
+      - check-attestation
       - verify-packages
     strategy:
       matrix:
-        include:
-          - label: Verify latest packages
-            package: wordpress.org-zip
-            tag: latest
-          - label: Verify latest packages
-            package: wordpress.org-tar
-            tag: latest
+        label:
+          - Verify latest packages
+        package:
+          - wordpress.org-zip
+          - wordpress.org-tar
+        tag:
+          - latest
+        source: ${{ fromJSON(needs.check-attestation.outputs.sources || '["reproduced"]') }}
       fail-fast: false
     uses: ./.github/workflows/verify.yml
     with:
       tag: ${{ matrix.tag }}
       package: ${{ matrix.package }}
+      source: ${{ matrix.source }}
 
   verify-hashes:
     name: Verify hashes

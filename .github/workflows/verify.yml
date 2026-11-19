@@ -11,6 +11,11 @@ on:
         description: Package for WordPress release
         required: true
         type: string
+      source:
+        description: Canonical build to verify against, either `reproduced` or `attested`
+        required: false
+        type: string
+        default: reproduced
 
 permissions: {}
 
@@ -22,7 +27,7 @@ env:
 
 jobs:
   verify:
-    name: "${{ inputs.package }}"
+    name: "${{ inputs.package }}${{ inputs.source == 'attested' && ' (attested)' || '' }}"
     runs-on: ubuntu-latest
     permissions:
       id-token: write     # Required to generate OIDC token for attestation
@@ -117,7 +122,7 @@ jobs:
         if: inputs.tag != 'latest'
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
-          name: wordpress-${{ steps.tag.outputs.long }}-develop.svn.wordpress.org
+          name: wordpress-${{ steps.tag.outputs.long }}-${{ inputs.source == 'attested' && 'attested' || 'develop.svn.wordpress.org' }}
           path: source
 
       - name: Download version artifact
@@ -136,7 +141,7 @@ jobs:
         if: inputs.tag == 'latest'
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
-          name: "wordpress-${{ steps.extract.outputs.latest }}-develop.svn.wordpress.org"
+          name: "wordpress-${{ steps.extract.outputs.latest }}-${{ inputs.source == 'attested' && 'attested' || 'develop.svn.wordpress.org' }}"
           path: source
 
       - name: Get zip file from GitHub
@@ -486,8 +491,10 @@ jobs:
             echo "package_file=false" >> "$GITHUB_OUTPUT"
           fi
 
+      # Attestations are only created from trunk, never from unmerged code. Skipping this
+      # step on pull requests also skips the attestation steps that depend on its output.
       - name: Check for existing attestation
-        if: steps.package-check.outputs.package_file != 'false' && inputs.tag != 'latest'
+        if: steps.package-check.outputs.package_file != 'false' && inputs.tag != 'latest' && github.event_name != 'pull_request'
         id: attestation-check
         env:
           GH_TOKEN: ${{ github.token }}
