@@ -105,3 +105,4 @@ jobs:
           name: wordpress-${{ steps.tag.outputs.long }}-${{ inputs.source }}
           path: build
           if-no-files-found: error
+          include-hidden-files: true

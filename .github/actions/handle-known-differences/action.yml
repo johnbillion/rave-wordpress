@@ -44,3 +44,16 @@ runs:
         if [[ "${TAG}" == "latest" ]] || dpkg --compare-versions "${BRANCH}" ge "6.7"; then
           rm -rf "${WP_PATH}/wp-content/themes/twentytwentytwo"
         fi
+
+    - name: Remove build files from TT and TT1
+      # The build includes these but the zip and tar packages do not.
+      shell: bash
+      env:
+        WP_PATH: ${{ inputs.path }}
+      run: | #shell
+        rm -f "${WP_PATH}/wp-content/themes/twentytwenty/.npmrc"
+        rm -f "${WP_PATH}/wp-content/themes/twentytwenty/.stylelintrc.json"
+        rm -f "${WP_PATH}/wp-content/themes/twentytwentyone/.npmrc"
+        rm -f "${WP_PATH}/wp-content/themes/twentytwentyone/.stylelintignore"
+        rm -f "${WP_PATH}/wp-content/themes/twentytwentyone/.stylelintrc-css.json"
+        rm -f "${WP_PATH}/wp-content/themes/twentytwentyone/.stylelintrc.json"
